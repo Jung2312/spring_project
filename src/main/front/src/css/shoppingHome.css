@@ -1,0 +1,191 @@
+@font-face {
+    font-family: 'Dovemayo_gothic';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.1/Dovemayo_gothic.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+*{
+    font-family: 'Pretendard-Regular';
+    font-weight: normal;
+}
+
+body {
+    font-family: 'Pretendard-Regular', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f9f9f9;
+}
+
+.shoppingHome {
+    width: 1080px;
+}
+
+.banner-img {
+    width: 100%;
+}
+
+.category-section {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+    margin-bottom: 50px;
+}
+
+/* 제목 스타일 */
+.category-title .title-text {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* 카테고리 파트 */
+.category-part {
+    display: flex;
+    gap: 40px; /* 카테고리 간 간격 */
+}
+
+/* 각 카테고리 컨텐츠 */
+.category-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* 카테고리 이미지 */
+.category-content .categoty-img {
+    width: 100px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+/* 카테고리 이름 */
+.category-content .category-name {
+    font-size: 16px;
+    color: #333;
+}
+
+.recommend-section {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+    margin-bottom: 50px;
+}
+
+.recommend-title {
+    display: flex;
+    justify-content: space-between
+}
+
+.recommend-title .title-text {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    display: block;
+}
+
+/* 상품 리스트 스타일 */
+.recommend-part {
+    display: flex;
+    gap: 25px; /* 카테고리 간 간격 */
+}
+
+.recommend-content {
+    width: 23%; /* 4개의 상품을 균등하게 분배 */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden; /* 이미지 확대 시 내용이 튀어나가지 않도록 */
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    position: relative;
+    cursor: pointer;
+}
+
+.recommend-img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s; /* 이미지 확대 효과 */
+}
+
+.recommend-content:hover .recommend-img {
+    transform: scale(1.1); /* 이미지 확대 비율 */
+}
+
+.recommend-text {
+    padding: 10px;
+    text-align: left;
+}
+
+.store-name {
+    font-size: 14px;
+    color: #888;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.product-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    display: block;
+}
+
+.product-price {
+    font-size: 18px;
+    color: #e74c3c;
+    font-weight: bold;
+    display: block;
+}
+
+.product-review {
+    font-size: 12px;
+    color: #555;
+}
+
+.product-section {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+    margin-bottom: 50px;
+    margin-left: auto; /* 수평 중앙 정렬 */
+    margin-right: auto; /* 수평 중앙 정렬 */
+}
+
+/* 상품 리스트 스타일 */
+.product-part {
+    display: flex;
+    flex-wrap: wrap; /* 줄 바꿈을 허용 */
+    gap: 20px; /* 아이템 간의 간격 */
+}
+
+.product-content {
+    width: calc((1080px - 60px) / 3); /* 4개의 카드 + 간격 20px * 3 = 60px */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    position: relative;
+    cursor: pointer;
+}
+
+.product-img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s;
+}
+
+.product-content:hover .product-img {
+    transform: scale(1.1);
+}
+
+.product-text {
+    padding: 10px;
+    text-align: left;
+}
