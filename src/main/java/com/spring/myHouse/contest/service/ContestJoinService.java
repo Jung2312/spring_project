@@ -13,10 +13,10 @@ public class ContestJoinService {
     private final ContestJoinRepository contestJoinRepository;
 
     public List<Contestjoin> getContestJoin() {
-        return contestJoinRepository.findByJoinnum(1L);
+        return contestJoinRepository.findContestjoinByContestnum(1L);
     }
 
-    public boolean updateContestJoinLike(Long contestjoinnum) {
-        return contestJoinRepository.updateContestJoinLike(contestjoinnum);
+    public void incrementLike(Long joinnum) {
+        contestJoinRepository.incrementLike(joinnum);
     }
 }
