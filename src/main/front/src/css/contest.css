@@ -2,16 +2,11 @@
     font-family: 'Pretendard';
 }
 
-body {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .contestBg {
     width: 1280px;
     position: relative;
+    display: flex;
+    justify-content: center;
 }
 
 .contestSubjectText {

@@ -13,7 +13,7 @@ public class Contestjoin {
 
     private String userid;
 
-    private String joinlike;
+    private Long joinlike;
 
     private String joinimg;
 

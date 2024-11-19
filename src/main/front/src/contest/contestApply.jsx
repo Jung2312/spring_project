@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import contestBg from '../img/contest_bg.png';
 import likeBtn from '../img/likeBtn.png';
 import "../css/contest.css";
+import { useNavigate } from 'react-router-dom';
 
 function ContestApply() {
+    const navigate = useNavigate();
     const [contestData, setContestData] = useState([]);
     const [joinData, setJoinData] = useState([]);
 
@@ -14,10 +16,10 @@ function ContestApply() {
                 if (!res.ok) {
                     throw new Error('response error');
                 }
-                return res.json(); // Read the response body once
+                return res.json();
             })
             .then(data => {
-                console.log(data);  // Now you can safely use `data`
+                console.log(data);
                 setContestData(data);
             })
             .catch(err => {
@@ -33,10 +35,10 @@ function ContestApply() {
                 if (!res.ok) {
                     throw new Error('response error');
                 }
-                return res.json(); // Read the response body once
+                return res.json();
             })
             .then(data => {
-                console.log(data);  // Now you can safely use `data`
+                console.log(data);
                 setJoinData(data);
             })
             .catch(err => {
@@ -44,9 +46,11 @@ function ContestApply() {
                 setJoinData('Error fetching data');
             });
     }, []);
-
+    const handleParticipate = () => {
+        navigate('/login');
+    };
     return (
-        <form action="">
+        <div className="contestApplyContainer">
             <div className="contestBg">
                 <div>
                     <img src={contestBg} alt="Contest Background" />
@@ -54,7 +58,12 @@ function ContestApply() {
                     <span className="contestDateText">
                         {contestData[0]?.conteststartdate || '시작일'} - {contestData[0]?.contestenddate || '종료일'}
                     </span>
-                    <input type="button" className="contestApplyPageBtn" value="참여하기" />
+                    <input
+                        type="button"
+                        className="contestApplyPageBtn"
+                        value="참여하기"
+                        onClick={handleParticipate}
+                    />
                 </div>
             </div>
 
@@ -67,13 +76,16 @@ function ContestApply() {
                         <div className="contentWork"
                              style={{backgroundImage: 'url("profileImg/20241113_162515_075.jpg")'}}>
                             <div className="contestProfileDiv">
-                                <img src={joinData[0]?.joinimg || ''} className="contestProfileImg" alt="profileImg"/>
-                                <span id="contestUserId"
-                                      className="contestProfileText">{joinData[0]?.userid || '없음'}</span>
+                                <img src={joinData[0]?.joinimg || ''} className="contestProfileImg" alt="profileImg" />
+                                <span id="contestUserId" className="contestProfileText">{joinData[0]?.userid || '없음'}</span>
                             </div>
                             <div className="contestLikeDiv">
-                                <button type="button" className="contestLikeBtn" onClick="">
-                                    <img src={likeBtn} alt="like"/>
+                                <button
+                                    type="button"
+                                    className="contestLikeBtn"
+                                    onClick={() => clickContestLike(joinData[0]?.joinnum)}
+                                >
+                                    <img src={likeBtn} alt="like" />
                                 </button>
                                 <span className="contestProfileText">{joinData[0]?.joinlike || 0}</span>
                             </div>
@@ -81,9 +93,28 @@ function ContestApply() {
                     </a>
                 </div>
             )}
-
-        </form>
+        </div>
     );
 }
+
+const clickContestLike = (joinnum) => {
+    fetch(`http://localhost:80/contest/like/${joinnum}`, {
+        method: "POST",
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Failed to update like");
+            }
+            return response.text();
+        })
+        .then((data) => {
+            console.log(data);
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+        });
+};
+
+
 
 export default ContestApply;
