@@ -1,0 +1,131 @@
+@font-face {
+    font-family: 'Dovemayo_gothic';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.1/Dovemayo_gothic.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+*{
+    font-family: 'Pretendard-Regular';
+    font-weight: normal;
+}
+
+body {
+    font-family: 'Pretendard-Regular', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f9f9f9;
+}
+
+.container {
+    width: 400px;
+    margin: 20px;
+    padding: 20px;
+    padding-bottom: 5px;
+    background: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.logo img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.logo-name {
+    font-family: 'Dovemayo_gothic';
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.signup {
+    margin-bottom: 30px;
+}
+
+.signup-text {
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.text {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    text-align: left;
+}
+
+p {
+    font-size: 12px;
+    color: #666;
+    margin: 0 0 10px 0;
+    text-align: left;
+}
+
+input[type="text"], input[type="password"], input[type="email"] {
+    width: 94%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    height: 15px;
+}
+
+button[type="button"] {
+    background-color: #00c3ff;
+    color: white;
+    padding: 5px 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    width: 30%;
+    margin-right: 10px;
+    margin-bottom: 20px;
+}
+
+button[type="submit"] {
+    background-color: #00c3ff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+button[type="button"]:hover, button[type="submit"]:hover {
+    background-color: #0099cc;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.post-field {
+    display: flex;
+    justify-content: space-between;
+}
+
+#post-field {
+    width: 60%;
+}

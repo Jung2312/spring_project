@@ -1,0 +1,386 @@
+@font-face {
+    font-family: 'Dovemayo_gothic';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.1/Dovemayo_gothic.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+*{
+    font-family: 'Pretendard-Regular';
+    font-weight: normal;
+}
+
+body {
+    font-family: 'Pretendard-Regular', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f9f9f9;
+}
+
+.mainPage {
+    width: 1080px;
+}
+
+.banner-img {
+    width: 100%;
+}
+
+.recommend-section {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.recommend-part {
+    display: flex;
+    gap: 15px; /* 카테고리 간 간격 */
+}
+
+.recommend-content {
+    width: 229px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+}
+
+/* 프로필 섹션 */
+.profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.profile-img img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.profile-text {
+    font-size: 14px;
+    color: #333;
+}
+
+.follow {
+    color: #00c3ff;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.follow:hover {
+    color: #0099cc;
+}
+
+.one-liner_text {
+    font-size: 12px;
+    color: #999;
+}
+
+/* 이미지 섹션 */
+.image img {
+    width: 100%;
+    height: 200px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+/* 좋아요/댓글 섹션 */
+.like_comment {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.like, .comment {
+    display: flex;
+    align-items: center;
+}
+
+.like-img, .comment-img {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+}
+
+/* 좋아요 호버 효과 */
+.like:hover .like-img {
+    filter: invert(23%) sepia(75%) saturate(6754%) hue-rotate(355deg) brightness(113%) contrast(125%);
+}
+
+/* 본문 내용 섹션 */
+.cotent {
+    margin-bottom: 10px;
+}
+
+.cotent-text {
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+}
+
+/* 댓글 섹션 */
+.comment {
+    display: flex;
+    align-items: center;
+}
+
+.comment-profile-img img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.comment-content .comment-text {
+    font-size: 12px;
+    color: #666;
+}
+
+.comment-profile {
+    display: flex;
+    margin-top: 10px;
+}
+
+/* 전체 섹션 */
+.category-section, .mostView-section {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+    margin-bottom: 50px;
+}
+
+/* 제목 스타일 */
+.mostView-title .title-text, .category-title .title-text {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.mostView-title {
+    display: flex;
+    justify-content: space-between
+}
+
+.title-more{
+    color: #00c3ff;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.title-more:hover{
+    color: #0099cc;
+}
+
+.best-title {
+    display: flex;
+    justify-content: space-between
+}
+
+/* 카테고리 파트 */
+.category-part {
+    display: flex;
+    gap: 40px; /* 카테고리 간 간격 */
+}
+
+/* 각 카테고리 컨텐츠 */
+.category-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* 카테고리 이미지 */
+.category-content .categoty-img {
+    width: 100px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+/* 카테고리 이름 */
+.category-content .category-name {
+    font-size: 16px;
+    color: #333;
+}
+
+/* 제목 스타일 */
+.mostView-title .title-text {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    display: block;
+}
+
+/* 상품 리스트 스타일 */
+.mostView-part {
+    display: flex;
+    gap: 25px; /* 카테고리 간 간격 */
+}
+
+.mostView-content {
+    width: 23%; /* 4개의 상품을 균등하게 분배 */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden; /* 이미지 확대 시 내용이 튀어나가지 않도록 */
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    position: relative;
+    cursor: pointer;
+}
+
+.mostView-img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s; /* 이미지 확대 효과 */
+}
+
+.mostView-content:hover .mostView-img {
+    transform: scale(1.1); /* 이미지 확대 비율 */
+}
+
+.mostView-text {
+    padding: 10px;
+    text-align: left;
+}
+
+.store-name {
+    font-size: 14px;
+    color: #888;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.product-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    display: block;
+}
+
+.product-price {
+    font-size: 18px;
+    color: #e74c3c;
+    font-weight: bold;
+    display: block;
+}
+
+.product-review {
+    font-size: 12px;
+    color: #555;
+}
+
+.best-title .title-text {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.best-section {
+    margin-bottom: 50px;
+}
+
+/* 상품 리스트 스타일 */
+.best-part {
+    display: flex;
+    gap: 25px; /* 카테고리 간 간격 */
+}
+
+.best-content {
+    width: 32%; /* 4개의 상품을 균등하게 분배 */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden; /* 이미지 확대 시 내용이 튀어나가지 않도록 */
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    position: relative;
+    cursor: pointer;
+}
+
+.best-img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s; /* 이미지 확대 효과 */
+}
+
+.best-content:hover .best-img {
+    transform: scale(1.1); /* 이미지 확대 비율 */
+}
+
+.best-text {
+    padding: 10px;
+    text-align: left;
+}
+
+.tab-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px;
+    background-color: #f1f1f1;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.tab-button.active {
+    background-color: #00aaff;
+    color: white;
+}
+
+.tab-button:hover {
+    background-color: #ddd;
+}
+
+.tab-content {
+    display: none; /* 기본적으로 숨김 */
+}
+
+.tab-content.show {
+    display: block; /* 활성화된 탭만 보이도록 */
+}
+
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.rank-badge {
+    position: absolute;
+    top: 0px;
+    left: 20px;
+    background-color: #35C5F0; /* 배경색 */
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    padding: 5px 10px;
+}
+
+/* 삼각형 모양 추가 */
+.rank-badge::after {
+    content: '';
+    position: absolute;
+    bottom: -5px; /* 배지 아래로 살짝 나옴 */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #35C5F0; /* 배경색과 동일 */
+}
