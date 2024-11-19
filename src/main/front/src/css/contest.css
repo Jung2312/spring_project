@@ -1,0 +1,110 @@
+*{
+    font-family: 'Pretendard';
+}
+
+body {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contestBg {
+    width: 1280px;
+    position: relative;
+}
+
+.contestSubjectText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate( -50%, -320% );
+    color: #A2A2A2;
+    font-size: 32px;
+}
+
+.contestDateText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate( -50%, 100% );
+    color: #ffffff;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.contestApplyPageBtn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate( 700%, 560% );
+    color: #ffffff;
+    font-size: 14px;
+    background-color: #35C5F0;
+    border: none;
+    width: 76px;
+    height: 37px;
+    border-radius: 4px;
+}
+
+.contestApplyTitleText{
+    margin-left: 114px;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 80px;
+}
+
+.contestApplyContentText{
+    margin-left: 114px;
+    font-size: 16px;
+    color: #32434C;
+}
+
+.contestLikeBtn{
+    background-color: transparent;
+    border: none;
+}
+
+.contestProfileImg{
+    width: 26px;
+    height: 26px;
+    border-radius: 70%;
+    overflow: hidden;
+}
+
+.contestContent{
+    margin-left: 114px;
+    display: flex;
+}
+
+.contentWork{
+    width: 249px;
+    height: 230px;
+    border-radius: 7px;
+    margin-right: 20px;
+    margin-bottom: 40px;
+}
+
+.contestProfileText{
+    font-size: 18px;
+    color: #ffffff;
+    text-shadow: 3px 5px 5px #32434C;
+}
+
+#contestUserId{
+    margin-left: 10px;
+}
+
+.contestProfileDiv{
+    display: flex;
+    margin-left: 20px;
+    padding-top: 20px;
+    align-items: center;
+}
+
+.contestLikeDiv{
+    display: flex;
+    margin-left: 12px;
+    margin-top: 140px;
+    align-items: center;
+}
