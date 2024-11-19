@@ -1,5 +1,5 @@
 import React from 'react';
-import Login from "./user/login";
+import ContestApply from "./contest/contestApply";
 function App() {
     /*const [data, setData] = useState('');
 
@@ -24,7 +24,7 @@ function App() {
         </div>
     );*/
     return (
-        <Login />
+        <ContestApply />
     )
 }
 
