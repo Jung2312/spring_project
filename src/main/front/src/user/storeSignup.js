@@ -38,14 +38,15 @@ function StoreSignup() {
                 <span className="text">이메일</span>
                 <input type="email" name="email" id="email-field" placeholder="이메일"/>
             </div>
-            <div className="post-field" style={{ marginBottom: '0px' }}>
-                <button type="button" style={{ marginBottom: '10px' }}>우편번호 검색</button>
-                <input style={{ marginBottom: '10px' }} type="text" name="post" id="post-field" placeholder="우편번호"/>
+            <div className="post-field" style={{marginBottom: '0px'}}>
+                <button className="post-btn" type="button" style={{marginBottom: '10px'}}>우편번호 검색</button>
+                <input style={{marginBottom: '10px'}} type="text" name="post" id="post-field"
+                       placeholder="우편번호"/>
             </div>
             <div className="address-field">
                 <input type="text" name="address" id="address-field" placeholder="주소"/>
             </div>
-            <button type="submit">가입하기</button>
+            <button className="submit-btn" type="submit">가입하기</button>
         </div>
     );
 }
