@@ -18,7 +18,8 @@ public class UserController {
     // 사용자 정보 조회 API
     @GetMapping("/user/info")
     public List<User> getUser(Model model) {
-        List<User> userList = userService.getUserById();
+        String userid = "aaa";
+        List<User> userList = userService.getUserById(userid);
         model.addAttribute("userList", userList);
         return userList;
     }
