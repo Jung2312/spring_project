@@ -19,8 +19,11 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/storeSignup" element={<StoreSignup />} />
+                <Route path="/recommend" element={<Recommend />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/myPageSet" element={<MyPageSet />} />
+                <Route path="/shoppingHome" element={<ShoppingHome />} />
                 <Route path="/main" element={<MainPage />} />
-                <Route path="/ShoppingHome" element={<ShoppingHome />} />
             </Routes>
         </BrowserRouter>
     );
