@@ -10,17 +10,13 @@
     font-weight: normal;
 }
 
-body {
-    font-family: 'Pretendard-Regular', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-}
-
 .mainPage {
-    width: 1080px;
+    display: flex;
+    position: relative;
+    justify-content: center;
+    flex-direction: column;
+    margin: auto;
+    width: 1280px;
 }
 
 .banner-img {
@@ -30,22 +26,22 @@ body {
 .recommend-section {
     display: flex;
     flex-wrap: wrap;
-    max-width: 1200px;
+    max-width: 1280px;
     margin-top: 50px;
     margin-bottom: 50px;
 }
 
 .recommend-part {
     display: flex;
-    gap: 15px; /* 카테고리 간 간격 */
+    gap: 80px; /* 카테고리 간 간격 */
 }
 
 .recommend-content {
-    width: 229px;
-    background-color: #fff;
+    width: 240px;
+    /*height: 380px;*/
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    padding: 15px;
+    padding: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 선으로 할 지 그림자로 할 지 정하기 */
 }
 
 /* 프로필 섹션 */
@@ -222,15 +218,14 @@ body {
 .mostView-part {
     display: flex;
     gap: 25px; /* 카테고리 간 간격 */
+    justify-content: space-between;
 }
 
 .mostView-content {
     width: 23%; /* 4개의 상품을 균등하게 분배 */
-    border: 1px solid #ddd;
     border-radius: 10px;
     overflow: hidden; /* 이미지 확대 시 내용이 튀어나가지 않도록 */
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
     position: relative;
     cursor: pointer;
@@ -244,6 +239,10 @@ body {
 
 .mostView-content:hover .mostView-img {
     transform: scale(1.1); /* 이미지 확대 비율 */
+}
+
+.mostView-content:hover .mostView-text .product-name {
+    color: #ABADAE;
 }
 
 .mostView-text {
@@ -292,15 +291,14 @@ body {
 .best-part {
     display: flex;
     gap: 25px; /* 카테고리 간 간격 */
+    justify-content: space-between;
 }
 
 .best-content {
-    width: 32%; /* 4개의 상품을 균등하게 분배 */
-    border: 1px solid #ddd;
+    width: 32%; /* 3개의 상품을 균등하게 분배 */
     border-radius: 10px;
     overflow: hidden; /* 이미지 확대 시 내용이 튀어나가지 않도록 */
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
     position: relative;
     cursor: pointer;
@@ -314,6 +312,10 @@ body {
 
 .best-content:hover .best-img {
     transform: scale(1.1); /* 이미지 확대 비율 */
+}
+
+.best-content:hover .best-text .product-name {
+    color: #ABADAE;
 }
 
 .best-text {
