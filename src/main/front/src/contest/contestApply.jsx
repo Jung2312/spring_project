@@ -47,7 +47,7 @@ function ContestApply() {
             });
     }, []);
     const handleParticipate = () => {
-        navigate('/login');
+        navigate('/contest/post');
     };
     return (
         <div className="contestApplyContainer">
@@ -72,11 +72,11 @@ function ContestApply() {
 
             {joinData.length > 0 && (
                 <div className="contestContent">
-                    <a href="">
-                        <div className="contentWork"
-                             style={{backgroundImage: 'url("profileImg/20241113_162515_075.jpg")'}}>
+                    <a href="/contest/postDetail">
+                        <div className="contentWork" style={{backgroundImage: `url("${process.env.PUBLIC_URL}/${joinData[0]?.joinimg}")`}}>
                             <div className="contestProfileDiv">
-                                <img src={joinData[0]?.joinimg || ''} className="contestProfileImg" alt="profileImg" />
+                                {/*프로필 사진 넣기*/}
+                                <img src={`${process.env.PUBLIC_URL}/${joinData[0]?.joinimg}` || ''} className="contestProfileImg" alt="profileImg" />
                                 <span id="contestUserId" className="contestProfileText">{joinData[0]?.userid || '없음'}</span>
                             </div>
                             <div className="contestLikeDiv">

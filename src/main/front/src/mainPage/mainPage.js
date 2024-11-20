@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import banner from '../img/banner.png';
 import like from '../img/like.png';
 import comment from '../img/comment.png';
-import nongdamgom  from '../img/nongdamgom .png';
-import blacknongdamgom  from '../img/blacknongdamgom .png';
+import nongdamgom  from '../img/nongdamgom.png';
+import blacknongdamgom  from '../img/blacknongdamgom.png';
 import furniture from '../img/furniture.png';
 import css from '../css/mainPage.css';
 
