@@ -1,7 +1,107 @@
-.logo-name{
-    font-size: 50px;
+@font-face {
+    font-family: 'Dovemayo_gothic';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.1/Dovemayo_gothic.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
 }
 
-#id-field{
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-style: normal;
+}
 
+*{
+    font-family: 'Pretendard-Regular';
+    font-size: 18px;
+}
+
+a{
+    text-decoration: none;
+    color: #000000;
+}
+
+img{
+    vertical-align: middle;
+}
+
+.login-container{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.logo{
+    margin-bottom: 30px;
+    #logo-img{
+        width: 80px;
+        margin-right: 20px;
+    }
+
+    .logo-name{
+        font-family: 'Dovemayo_gothic';
+        font-size: 50px;
+        vertical-align: middle;
+    }
+}
+
+.login-field-box{
+    display: grid;
+    grid-template-rows: repeat(1, 1fr);
+    align-items: center;
+    justify-items: center;
+    margin-bottom: 20px;
+    .textField{
+        width: 300px;
+        height: 30px;
+        padding: 10px;
+    }
+
+    #id-field{
+        border: 1px #b3b3b3 solid;
+        border-radius: 5px 5px 0 0;
+    }
+
+    #pw-field{
+        border: 1px #b3b3b3 solid;
+        border-top: none;
+        border-radius: 0 0 5px 5px;
+    }
+}
+
+.login-btn-box{
+    margin-bottom: 30px;
+    .login-btn{
+        border: none;
+        background-color: #35C5F0;
+        color: #ffffff;
+        width: 160px;
+        height: 50px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .login-user{
+        border-radius: 5px 0 0 5px;
+        border-right: 1px #ffffff solid;
+    }
+
+    .login-seller{
+        border-radius: 0 5px 5px 0;
+        border-left: 1px #ffffff solid;
+    }
+}
+
+.register-box{
+    a{
+        color: #555555;
+    }
+    #register-user{
+        margin-right: 20px;
+    }
+    #register-user::after{
+        content: "|";
+        margin-left: 20px;
+    }
 }

@@ -1,0 +1,127 @@
+@font-face {
+    font-family: 'Dovemayo_gothic';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.1/Dovemayo_gothic.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-style: normal;
+}
+
+*{
+    font-family: 'Pretendard-Regular';
+    font-size: 18px;
+}
+
+a{
+    text-decoration: none;
+    color: #000000;
+}
+
+.store-header{
+    display: flex;
+    margin: 10px 0;
+    align-items: center;
+    .logo-box{
+        margin: 0 50px 0 80px;
+        a{
+            font-family: 'Dovemayo_gothic';
+            font-size: 30px;
+        }
+    }
+}
+
+.main-contents{
+    display: flex;
+}
+
+.store-item:nth-child(1){
+    flex-shrink: 0;
+    width: 310px;
+}
+
+.store-item:nth-child(2) {
+    flex-grow: 1;
+}
+
+.floating-banner-box{
+    height: 100vh;
+    left: 0;
+    background-color: #000000;
+    li{
+        list-style: none;
+        width: 80%;
+        border-bottom: 1px #ffffff solid;
+        padding: 30px 0;
+        a{
+            color: #ffffff;
+        }
+    }
+}
+
+.product-container, .inventory-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .insert-btn, .delete-btn{
+        width: 80px;
+        height: 40px;
+        background-color: #35C5F0;
+        border: none;
+        border-radius: 5px;
+        color: #ffffff;
+        margin: 30px 0;
+        margin-right: 20px;
+        cursor: pointer;
+    }
+
+    .insert-btn:hover{
+        background-color: #2FB0D7;
+    }
+
+    .delete-btn{
+        background-color: #ff1010;
+    }
+
+    .delete-btn:hover{
+        background-color: #dd1414
+    }
+
+    .product-main-box, .inventory-main-box{
+        width: 80%;
+    }
+
+    .product-count-box, .inventory-count-box{
+        margin: 30px 0;
+        color: #595D60;
+    }
+
+    .product-table-box, .inventory-table-box{
+        border-radius: 10px;
+        .product-table, .inventory-table{
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 0 0 1px #B9B9B9;
+            border-radius: 5px;
+            border: hidden;
+            th{
+                background: #d9d9d9;
+                padding: 10px;
+                border: 1px #B9B9B9 solid;
+            }
+            th:first-child{
+                border-radius: 5px 0 0 0;
+            }
+            th:last-child{
+                border-radius: 0 5px 0 0;
+            }
+            td{
+                border: 1px #B9B9B9 solid;
+                padding: 10px;
+            }
+        }
+    }
+}
