@@ -19,6 +19,6 @@ public class User {
     @Column(nullable = true) // NULL 값 허용
     private String introduce;
     private String profileimage;
-    private int admin;
-    private int gradenum;
+    private Long admin;
+    private Long gradenum;
 }
