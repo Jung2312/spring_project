@@ -6,6 +6,7 @@ import nongdamgom  from '../img/nongdamgom .png';
 import blacknongdamgom  from '../img/blacknongdamgom .png';
 import furniture from '../img/furniture.png';
 import css from '../css/mainPage.css';
+import Header from '../header.js'
 
 function MainPage() {
     const [likeCount, setLikeCount] = useState(0); // 좋아요 초기값
@@ -24,6 +25,7 @@ function MainPage() {
 
     return (
         <div className="mainPage">
+            <Header/>
             <div className="banner-section">
                 <div className="banner">
                     <img className="banner-img" src={banner} alt="배너(광고)"/>
