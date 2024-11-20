@@ -76,7 +76,7 @@
 }
 
 
-#id-field, #name-field, #phone-field, #pwd-field, #pwdchk-field, #email-field, #post-field, #address-field, #store-name-field {
+#id-field, #name-field, #phone-field, #pwd-field, #pwdchk-field, #email-field, #post-field, #address-field, #store-name-field, #address-detail-field {
     width: 94%;
     padding: 10px;
     margin-bottom: 20px;
