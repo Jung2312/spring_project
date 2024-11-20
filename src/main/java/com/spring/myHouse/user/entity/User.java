@@ -14,9 +14,11 @@ public class User {
     private String address;
     private String postcode;
     private String phone;
+    private String email;
+
+    @Column(nullable = true) // NULL 값 허용
     private String introduce;
     private String profileimage;
-    private String email;
     private Long admin;
     private Long gradenum;
 }

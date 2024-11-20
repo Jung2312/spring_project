@@ -1,13 +1,10 @@
-*{
-    font-family: 'Pretendard';
-}
-
 /* 박스 */
 .set-container {
     font-size: 18px;
     width: 350px;
     padding: 50px 200px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    margin: auto;
 }
 
 /* 회원 정보 */
@@ -55,7 +52,7 @@
 
 
 /* 탈퇴하기 */
-a {
+.leave {
     font-size: 15px;
 }
 
