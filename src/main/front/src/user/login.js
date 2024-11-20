@@ -1,6 +1,7 @@
 import React from 'react';
 import logo from '../img/myhouse_logo.png'
 import css from '../css/login.css'
+import StoreManagement from "../store/storeManagement";
 
 function Login() {
     return (
@@ -29,5 +30,4 @@ function Login() {
         </div>
     )
 }
-
 export default Login;
