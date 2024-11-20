@@ -1,7 +1,9 @@
 import React from 'react';
+
 import Recommend from "./community/recommend";
 import Cart from "./shopping/cart";
 import MyPageSet from "./user/myPageSet";
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from "./user/login";
 import Signup from './user/signup';
@@ -9,6 +11,7 @@ import MainPage from "./mainPage/mainPage";
 import StoreSignup from "./user/storeSignup";
 import ShoppingHome from "./mainPage/shoppingHome";
 import ContestApply from "./contest/contestApply";
+import StoreManagement from "./store/storeManagement";
 
 function App() {
     return (
@@ -21,6 +24,7 @@ function App() {
                 <Route path="/storeSignup" element={<StoreSignup />} />
                 <Route path="/main" element={<MainPage />} />
                 <Route path="/ShoppingHome" element={<ShoppingHome />} />
+                <Route path="/storeManagement" element={<StoreManagement />} />
             </Routes>
         </BrowserRouter>
     );
