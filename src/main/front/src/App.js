@@ -1,6 +1,8 @@
 import React from 'react';
+import Recommend from "./community/recommend";
+import Cart from "./shopping/cart";
+import MyPageSet from "./user/myPageSet";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
 import Login from "./user/login";
 import Signup from './user/signup';
 import MainPage from "./mainPage/mainPage";

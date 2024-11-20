@@ -1,0 +1,130 @@
+*{
+    font-family: 'Pretendard';
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ----- 추천 ----- */
+.recommend-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+/* 추천 게시글 */
+.recommend {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* 게시글 한 개 */
+.recommend-section {
+    width: 225px;
+    /*height: 380px;*/
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 선으로 할 지 그림자로 할 지 정하기 */
+}
+
+/* 프로필 */
+.profile-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* 프로필 사진 */
+.profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    margin-right: 10px;
+}
+
+/* 프로필사진 옆 상단부 */
+.profile-name {
+    display: flex;
+    font-size: 14px;
+    /* 닉네임 */
+    span {
+        margin-right: 5px;
+    }
+    /* 팔로우 버튼 */
+    .follow {
+        color: #35C5F0;
+        font-weight: bold;
+        border: none;
+        background-color: white;
+        cursor: pointer;
+    }
+}
+
+/* 회원 자기 소개 */
+.profile-text {
+    font-size: 12px;
+    color: #999;
+}
+
+/* 게시글 이미지 */
+.post-img {
+    width: 100%;
+    height: 200px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+/* 마음/댓글 */
+.like-comment {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+    align-items: center;
+    .like, .comment {
+        display: flex;
+        cursor: pointer;
+    }
+    /* 마음, 댓글 사진 */
+    .like-img, .comment-img {
+        width: 18px;
+        height: 18px;
+        margin-right: 5px;
+    }
+    span {
+        font-size: 14px;
+    }
+}
+
+/* 게시글 내용 */
+.cotent-section {
+    padding: 5px;
+    .cotent-text {
+        font-size: 14px;
+    }
+}
+
+/* 댓글 */
+.comment {
+    display: flex;
+    align-items: center;
+    /* 댓글 프로필 사진 */
+    .comment-profile {
+        display: flex;
+        margin-top: 10px;
+        width: 30px;
+        height: 30px;
+        border-radius: 50px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+    /* 댓글 */
+    .comment-text {
+        font-size: 12px;
+        color: #676767;
+    }
+}

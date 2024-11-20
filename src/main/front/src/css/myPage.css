@@ -1,0 +1,72 @@
+*{
+    font-family: 'Pretendard';
+}
+
+/* 전체 중앙 정렬 */
+body {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 회원 정보 */
+.user-box {
+    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    .user {
+        padding-bottom: 10px;
+    }
+}
+
+/* 프로필 사진*/
+.set-image {
+    text-align: center;
+    padding: 40px;
+    img {
+        border-radius: 50px;
+        width: 130px;
+        height: 130px;
+    }
+}
+
+/* 박스 */
+.set-container {
+    font-size: 18px;
+    width: 350px;
+}
+
+/* text 박스 */
+input[type="text"] {
+    font-size: 16px;
+    width: 100%;
+    height: 40px;
+    padding-left: 10px;
+    border: 1px darkgray solid;
+    border-radius: 5px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+/* 탈퇴하기 */
+a {
+    font-size: 15px;
+}
+
+/* 저장 버튼*/
+.save {
+    background: #35C5F0;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 18px;
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.save:hover {
+    background: #008fba;
+}
