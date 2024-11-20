@@ -8,7 +8,6 @@ import lombok.Data;
 @Table(name = "user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String userid;
     private String password;
     private String name;
@@ -18,6 +17,6 @@ public class User {
     private String introduce;
     private String profileimage;
     private String email;
-    private int admin;
-    private int gradenum;
+    private Long admin;
+    private Long gradenum;
 }
