@@ -15,42 +15,42 @@ function ShoppingHome() {
                     <img className="banner-img" src={banner} alt="배너(광고)"/>
                 </div>
             </div>
-            <div className="recommend-section">
-                <div className="recommend-title">
+            <div className="recommend-product-section">
+                <div className="recommend-product-title">
                     <span className="title-text">추천 상품</span>
                     <span className="title-more">더보기</span>
                 </div>
-                <div className="recommend-part">
-                    <div className="recommend-content">
-                        <img className="recommend-img" src={furniture} alt="가구"/>
-                        <div className="recommend-text">
+                <div className="recommend-product-part">
+                    <div className="recommend-product-content">
+                        <img className="recommend-product-img" src={furniture} alt="가구"/>
+                        <div className="recommend-product-text">
                             <span className="store-name">아임홈</span>
                             <span className="product-name">맞춤 원목 서랍장</span>
                             <span className="product-price">49,000</span>
                             <span className="product-review">리뷰 37,213</span>
                         </div>
                     </div>
-                    <div className="recommend-content">
-                        <img className="recommend-img" src={furniture} alt="가구"/>
-                        <div className="recommend-text">
+                    <div className="recommend-product-content">
+                        <img className="recommend-product-img" src={furniture} alt="가구"/>
+                        <div className="recommend-product-text">
                             <span className="store-name">아임홈</span>
                             <span className="product-name">맞춤 원목 서랍장</span>
                             <span className="product-price">49,000</span>
                             <span className="product-review">리뷰 37,213</span>
                         </div>
                     </div>
-                    <div className="recommend-content">
-                        <img className="recommend-img" src={furniture} alt="가구"/>
-                        <div className="recommend-text">
+                    <div className="recommend-product-content">
+                        <img className="recommend-product-img" src={furniture} alt="가구"/>
+                        <div className="recommend-product-text">
                             <span className="store-name">아임홈</span>
                             <span className="product-name">맞춤 원목 서랍장</span>
                             <span className="product-price">49,000</span>
                             <span className="product-review">리뷰 37,213</span>
                         </div>
                     </div>
-                    <div className="recommend-content">
-                        <img className="recommend-img" src={furniture} alt="가구"/>
-                        <div className="recommend-text">
+                    <div className="recommend-product-content">
+                        <img className="recommend-product-img" src={furniture} alt="가구"/>
+                        <div className="recommend-product-text">
                             <span className="store-name">아임홈</span>
                             <span className="product-name">맞춤 원목 서랍장</span>
                             <span className="product-price">49,000</span>

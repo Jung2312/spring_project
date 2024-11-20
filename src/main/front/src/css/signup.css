@@ -10,8 +10,7 @@
     font-weight: normal;
 }
 
-body {
-    font-family: 'Pretendard-Regular', sans-serif;
+.signup-page {
     display: flex;
     justify-content: center;
     align-items: center;
