@@ -23,6 +23,7 @@ function App() {
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/myPageSet" element={<MyPageSet />} />
                 <Route path="/shoppingHome" element={<ShoppingHome />} />
+                <Route path="/main" element={<MainPage />} />
             </Routes>
         </BrowserRouter>
     );
