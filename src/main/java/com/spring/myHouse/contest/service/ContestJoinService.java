@@ -19,4 +19,6 @@ public class ContestJoinService {
     public void incrementLike(Long joinnum) {
         contestJoinRepository.incrementLike(joinnum);
     }
+
+    public boolean saveContestjoin(Contestjoin contestjoin) {}
 }
