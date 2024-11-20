@@ -19,7 +19,10 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/storeSignup" element={<StoreSignup />} />
-                <Route path="/main" element={<MainPage />} />
+                <Route path="/recommend" element={<Recommend />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/myPageSet" element={<MyPageSet />} />
+                <Route path="/shoppingHome" element={<ShoppingHome />} />
             </Routes>
         </BrowserRouter>
     );

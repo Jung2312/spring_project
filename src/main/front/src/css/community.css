@@ -2,18 +2,14 @@
     font-family: 'Pretendard';
 }
 
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 /* ----- 추천 ----- */
 .recommend-container {
     display: flex;
     flex-wrap: wrap;
     margin-top: 50px;
     margin-bottom: 50px;
+    justify-content: center;
+    align-items: center;
 }
 
 /* 추천 게시글 */
@@ -29,7 +25,7 @@ body {
     /*height: 380px;*/
     border-radius: 10px;
     padding: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 선으로 할 지 그림자로 할 지 정하기 */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* 프로필 */
@@ -52,7 +48,7 @@ body {
     display: flex;
     font-size: 14px;
     /* 닉네임 */
-    span {
+    .nick-name {
         margin-right: 5px;
     }
     /* 팔로우 버튼 */

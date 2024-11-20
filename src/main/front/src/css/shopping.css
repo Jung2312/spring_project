@@ -2,22 +2,16 @@
     font-family: 'Pretendard';
 }
 
-/* 기본 설정 */
-body {
+.purchase-container {
     display: flex;
     justify-content: center; /* 가로 방향 중앙 정렬 */
     align-items: center; /* 세로 방향 중앙 정렬 */
-    min-height: 100vh; /* 화면 전체 높이 */
-    margin: 0;
-}
-
-.purchase-container {
-    display: flex;
     gap: 20px;
     padding: 20px;
+    margin: 0;
     max-width: 1200px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* ----- 상품 영역 ----- */
