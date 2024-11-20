@@ -16,7 +16,5 @@ public class UserService {
     public List<User> getUserById(String userid) { return userRepository.findByUserid(userid); }
 
     // 사용자 정보 저장 및 업데이트
-    public User saveOrUpdateUser(User user) {
-        return userRepository.save(user);
-    }
+    public User saveUpdateUser(User user) { return userRepository.save(user); }
 }
