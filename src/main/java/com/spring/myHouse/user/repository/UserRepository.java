@@ -11,5 +11,11 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, String> {
     List<User> findByUserid(String userid);
 
+    boolean existsByUserid(String userid); // 중복 아이디 확인
+
+    boolean existsByEmail(String email); // 이메일 존재 여부 확인
+
+    boolean existsByPhone(String phone); // 전화번호 중복 여부 확인
+    
     List<User> findByUseridAndPassword(String userid, String password);
 }

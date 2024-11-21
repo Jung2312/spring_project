@@ -46,7 +46,7 @@ function ContestApply() {
                 setJoinData('Error fetching data');
             });
     }, []);
-    const handleParticipate = () => {
+    const goContestPost = () => {
         navigate('/contest/post');
     };
     return (
@@ -62,7 +62,7 @@ function ContestApply() {
                         type="button"
                         className="contestApplyPageBtn"
                         value="참여하기"
-                        onClick={handleParticipate}
+                        onClick={goContestPost}
                     />
                 </div>
             </div>
@@ -73,10 +73,10 @@ function ContestApply() {
             {joinData.length > 0 && (
                 <div className="contestContent">
                     <a href="/contest/postDetail">
-                        <div className="contentWork" style={{backgroundImage: `url("${process.env.PUBLIC_URL}/${joinData[0]?.joinimg}")`}}>
+                        <div className="contentWork" style={{backgroundImage: `url("${process.env.PUBLIC_URL}/postImg/${joinData[0]?.joinimg}")`}}>
                             <div className="contestProfileDiv">
                                 {/*프로필 사진 넣기*/}
-                                <img src={`${process.env.PUBLIC_URL}/${joinData[0]?.joinimg}` || ''} className="contestProfileImg" alt="profileImg" />
+                                <img src={`${process.env.PUBLIC_URL}/postImg/${joinData[0]?.joinimg}` || ''} className="contestProfileImg" alt="profileImg" />
                                 <span id="contestUserId" className="contestProfileText">{joinData[0]?.userid || '없음'}</span>
                             </div>
                             <div className="contestLikeDiv">

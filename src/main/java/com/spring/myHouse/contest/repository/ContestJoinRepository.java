@@ -18,4 +18,5 @@ public interface ContestJoinRepository extends JpaRepository<Contestjoin, Long> 
     @Transactional
     @Query("UPDATE Contestjoin c SET c.joinlike = c.joinlike + 1 WHERE c.joinnum = :joinnum")
     void incrementLike(Long joinnum);
+
 }

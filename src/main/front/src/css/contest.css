@@ -2,6 +2,11 @@
     font-family: 'Pretendard';
 }
 
+.contestApplyContainer{
+    width: 1280px;
+    margin: auto;
+}
+
 .contestBg {
     width: 1280px;
     position: relative;
@@ -124,10 +129,12 @@
     width: 1081px;
     height: 901px;
     border:none;
-    border-radius: 25px;
-    padding: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     margin: 40px auto 40px auto;
+}
+
+#contestPostImg{
+    width: 1081px;
+    height: 901px;
 }
 
 #contestPostBtnList input[type="file"] {

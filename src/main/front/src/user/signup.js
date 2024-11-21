@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal'; // react-modal 임포트
-import axios from 'axios';
+import axios, {post} from 'axios';
 import logo from '../img/myhouse_logo.png';
 import DaumPostCode from 'react-daum-postcode';
 import css from '../css/signup.css';
@@ -65,8 +65,8 @@ function Signup() {
         }
 
         try {
-            const response = await axios.post('http://localhost:80/api/users', {
-                userId: inputUser.id,
+            const response = await axios.post('http://localhost:80/user/signup', {
+                userid: inputUser.id,
                 password: inputUser.pwd,
                 name: inputUser.name,
                 phone: inputUser.phone,
@@ -74,8 +74,11 @@ function Signup() {
                 postcode: inputUser.postcode,
                 address: inputUser.address,
                 addressDetail: inputUser.addressdetail,
+                admin: 0,
+                gradenum: 1
             });
-            alert(response.data); // 성공 메시지
+            alert("회원가입이 완료되었습니다."); // 성공 메시지
+
         } catch (error) {
             alert(error.response?.data || '회원가입 중 오류가 발생했습니다.');
         }
@@ -83,7 +86,7 @@ function Signup() {
 
     return (
         <div className="signup-page">
-            <form className="container" onSubmit={handleSubmit}>
+            <form className="container" onSubmit={handleSubmit} method="post">
                 <div className="logo">
                     <a href=""><img src={logo} alt="나만의집 로고" /></a>
                     <span className="logo-name">나만의집</span>

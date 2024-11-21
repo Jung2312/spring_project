@@ -3,7 +3,6 @@ import axios from 'axios';
 import logo from '../img/myhouse_logo.png';
 import css from '../css/login.css';
 import {useNavigate} from "react-router-dom";
-
 function Login() {
     const [userType, setUserType] = useState('');
     const [inputUser, setInputUser] = useState({

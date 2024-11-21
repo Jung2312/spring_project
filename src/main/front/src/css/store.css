@@ -62,11 +62,12 @@ a{
     }
 }
 
-.product-container, .inventory-container{
+.product-container, .inventory-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    .insert-btn, .delete-btn{
+
+    .insert-btn, .delete-btn {
         width: 80px;
         height: 40px;
         background-color: #35C5F0;
@@ -78,50 +79,276 @@ a{
         cursor: pointer;
     }
 
-    .insert-btn:hover{
+    .insert-btn:hover {
         background-color: #2FB0D7;
     }
 
-    .delete-btn{
+    .delete-btn {
         background-color: #ff1010;
     }
 
-    .delete-btn:hover{
+    .delete-btn:hover {
         background-color: #dd1414
     }
 
-    .product-main-box, .inventory-main-box{
+    .product-main-box, .inventory-main-box {
         width: 80%;
     }
 
-    .product-count-box, .inventory-count-box{
+    .product-count-box, .inventory-count-box {
         margin: 30px 0;
         color: #595D60;
     }
 
-    .product-table-box, .inventory-table-box{
+    .product-table-box, .inventory-table-box {
         border-radius: 10px;
-        .product-table, .inventory-table{
+
+        .product-table, .inventory-table {
             width: 100%;
             border-collapse: collapse;
             box-shadow: 0 0 0 1px #B9B9B9;
             border-radius: 5px;
             border: hidden;
-            th{
+
+            th {
                 background: #d9d9d9;
                 padding: 10px;
                 border: 1px #B9B9B9 solid;
             }
-            th:first-child{
+
+            th:first-child {
                 border-radius: 5px 0 0 0;
             }
-            th:last-child{
+
+            th:last-child {
                 border-radius: 0 5px 0 0;
             }
-            td{
+
+            td {
                 border: 1px #B9B9B9 solid;
                 padding: 10px;
             }
         }
     }
+}
+/* 메인 컨테이너 */
+
+.store-main-container {
+    display: flex;
+    flex-direction: row; /* 가로로 정렬 */
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    background-color: white;
+}
+
+/* 콘텐츠 래퍼 */
+.store-content-wrapper {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+}
+
+/* 사이드바 */
+.store-sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+}
+
+.store-sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    max-width: 100%;
+    color: black;
+    margin-left: 70px;
+}
+
+.store-title {
+    font-size: 2rem;
+}
+
+/* 사이드바 메뉴 */
+.store-sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    padding: 120px 80px;
+    background-color: black;
+    color: white;
+    height: 400px;
+    font-size: 1.3rem;
+    line-height: 1.5;
+    letter-spacing: 0.05em;
+}
+
+/* 사이드바 아이템 스타일 */
+.store-sidebar-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 텍스트와 아이콘 간의 여백 */
+    padding: 10px;
+    gap: 10px; /* 텍스트와 아이콘 간격 */
+    transition: color 0.3s ease, background-color 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+.store-sidebar-item-text {
+    flex-grow: 1; /* 텍스트가 아이콘 옆에 올바르게 배치되도록 설정 */
+    color: #f8f9fa;
+}
+
+/* 사이드바 메뉴 텍스트에 마우스를 올렸을 때 파란색으로 변경 */
+.store-sidebar-item:hover .store-sidebar-item-text {
+    color: #00aaff;
+    cursor: pointer; /* 마우스 커서를 손 모양으로 변경 */
+}
+
+/* 클릭된 메뉴 텍스트는 파란색으로 유지 */
+.store-sidebar-item-wrapper.store-active .store-sidebar-item-text {
+    color: #00aaff;
+}
+
+/* 아이콘 스타일 */
+.store-sidebar-item-icon {
+    width: 20px; /* 아이콘 크기 */
+    height: 20px;
+    object-fit: contain;
+}
+
+/* 사이드바 항목 */
+.store-sidebar-item-wrapper {
+    position: relative;
+    margin-bottom: 20px;
+    flex-direction: row; /* 가로로 정렬 */
+    align-items: center; /* 세로 가운데 정렬 */
+}
+
+/* 흰 줄 */
+.store-sidebar-item-wrapper::after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 1.5px;
+    background-color: white;
+    margin-bottom: 20px;
+}
+
+/* 콘텐츠 섹션 */
+.store-content-section {
+    display: flex;
+    flex-direction: row; /* 가로로 정렬 */
+    width: 80%;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+/* 메인 컨테이너 */
+.store-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 500px;
+    padding: 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    margin-top: 90px;
+    margin-left: 170px;
+}
+
+/* 폼 항목 */
+.store-form-item {
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* 레이블 스타일 */
+.store-form-label {
+    color: #555;
+    font-size: 1rem;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* 주소 입력 부분 */
+.store-address-inputs {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+    height: 40px;
+}
+
+/* 일반 입력 박스 */
+.store-input {
+    padding: 9px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    color: #555;
+    width: 95%;
+    margin-top: 5px;
+}
+
+/* 읽기 전용 입력 박스 */
+.store-read-only {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.store-main-address-input {
+    padding: 9px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    color: #555;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.store-detail-address-input {
+    padding: 9px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    color: #555;
+    width: 100%;
+}
+
+/* 주소 검색 버튼 */
+.store-search-button {
+    background-color: #00aaff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0 15px;
+    font-size: 1rem;
+    height: 90%;
+    white-space: nowrap;
+    box-sizing: border-box;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+/* 탈퇴하기 버튼 */
+.store-quit-button {
+    color: #555;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    align-self: flex-start;
+    margin-left: 0;
+    margin-top: 10px;
+}
+
+/* 완료 버튼 */
+.store-submit-button {
+    background-color: #00aaff;
+    color: white;
+    font-size: 1rem;
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
 }
