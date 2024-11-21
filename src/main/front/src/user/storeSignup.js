@@ -1,12 +1,18 @@
-import React, {useState} from 'react';
-import logo from '../img/myhouse_logo.png';
+import React, { useState } from 'react';
 import Modal from 'react-modal'; // react-modal 임포트
+import axios, {post} from 'axios';
+import logo from '../img/myhouse_logo.png';
 import DaumPostCode from 'react-daum-postcode';
 import css from '../css/signup.css';
 
-function StoreSignup() {
-
+function Signup() {
     const [inputUser, setInputUser] = useState({
+        id: '',
+        pwd: '',
+        pwdchk: '',
+        name: '',
+        phone: '',
+        email: '',
         postcode: '',
         address: '',
         addressdetail: '',
@@ -17,7 +23,6 @@ function StoreSignup() {
     const toggle = () => {
         setIsOpen(!isOpen);
     };
-
 
     const completeHandler = (data) => {
         setInputUser({
@@ -42,9 +47,46 @@ function StoreSignup() {
         },
     };
 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setInputUser((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault(); // 기본 폼 제출 방지
+
+        // 비밀번호 확인
+        if (inputUser.pwd !== inputUser.pwdchk) {
+            alert('비밀번호가 일치하지 않습니다.');
+            return;
+        }
+
+        try {
+            const response = await axios.post('http://localhost:80/user/signup', {
+                userid: inputUser.id,
+                password: inputUser.pwd,
+                name: inputUser.name,
+                phone: inputUser.phone,
+                email: inputUser.email,
+                postcode: inputUser.postcode,
+                address: inputUser.address,
+                addressDetail: inputUser.addressdetail,
+                admin: 0,
+                gradenum: 1
+            });
+            alert("회원가입이 완료되었습니다."); // 성공 메시지
+
+        } catch (error) {
+            alert(error.response?.data || '회원가입 중 오류가 발생했습니다.');
+        }
+    };
+
     return (
         <div className="signup-page">
-            <form className="container">
+            <form className="container" onSubmit={handleSubmit} method="post">
                 <div className="logo">
                     <a href=""><img src={logo} alt="나만의집 로고"/></a>
                     <span className="logo-name">나만의집</span>
@@ -55,16 +97,37 @@ function StoreSignup() {
                 <div className="id-field">
                     <span className="text">아이디</span>
                     <p>다른 유저와 겹치지 않도록 입력해주세요. (2~20자)</p>
-                    <input type="text" name="id" id="id-field" placeholder="아이디"/>
+                    <input
+                        type="text"
+                        name="id"
+                        id="id-field"
+                        placeholder="아이디"
+                        value={inputUser.id}
+                        onChange={handleInputChange}
+                    />
                 </div>
                 <div className="pwd-field">
                     <span className="text">비밀번호</span>
                     <p>영문, 숫자를 포함한 8자 이상의 비밀번호를 입력해주세요.</p>
-                    <input type="password" name="pwd" id="pwd-field" placeholder="비밀번호"/>
+                    <input
+                        type="password"
+                        name="pwd"
+                        id="pwd-field"
+                        placeholder="비밀번호"
+                        value={inputUser.pwd}
+                        onChange={handleInputChange}
+                    />
                 </div>
                 <div className="pwdchk-field">
                     <span className="text">비밀번호 확인</span>
-                    <input type="password" name="pwdchk" id="pwdchk-field" placeholder="비밀번호 확인"/>
+                    <input
+                        type="password"
+                        name="pwdchk"
+                        id="pwdchk-field"
+                        placeholder="비밀번호 확인"
+                        value={inputUser.pwdchk}
+                        onChange={handleInputChange}
+                    />
                 </div>
                 <div className="store-name-field">
                     <span className="text">상점 이름</span>
@@ -72,27 +135,55 @@ function StoreSignup() {
                 </div>
                 <div className="phone-field">
                     <span className="text">전화번호</span>
-                    <input type="text" name="phone" id="phone-field" placeholder="전화번호"/>
+                    <input
+                        type="text"
+                        name="phone"
+                        id="phone-field"
+                        placeholder="전화번호"
+                        value={inputUser.phone}
+                        onChange={handleInputChange}
+                    />
                 </div>
                 <div className="email-field">
                     <span className="text">이메일</span>
-                    <input type="email" name="email" id="email-field" placeholder="이메일"/>
+                    <input
+                        type="email"
+                        name="email"
+                        id="email-field"
+                        placeholder="이메일"
+                        value={inputUser.email}
+                        onChange={handleInputChange}
+                    />
                 </div>
                 <div className="post-field" style={{marginBottom: '0px'}}>
                     <div className="post-btn" onClick={toggle} style={{marginBottom: '10px'}}>우편번호 검색</div>
-                    <input value={inputUser.postcode || ''} style={{marginBottom: '10px'}} type="text" name="post"
-                           id="post-field" readOnly placeholder="우편번호"/>
+                    <input
+                        value={inputUser.postcode || ''}
+                        style={{marginBottom: '10px'}}
+                        type="text"
+                        name="postcode"
+                        id="post-field"
+                        readOnly
+                        placeholder="우편번호"
+                    />
                 </div>
                 <div className="address-field">
-                    <input value={inputUser.address || ''} type="text" name="address" id="address-field"
-                           placeholder="주소"/>
+                    <input
+                        style={{marginBottom: '10px'}}
+                        value={inputUser.address || ''}
+                        type="text"
+                        name="address"
+                        id="address-field"
+                        placeholder="주소"
+                        readOnly
+                    />
                     <input
                         value={inputUser.addressdetail || ''}
                         type="text"
-                        name="address-detail"
+                        name="addressdetail"
                         id="address-detail-field"
                         placeholder="상세 주소"
-                        onChange={(e) => setInputUser({...inputUser, addressdetail: e.target.value})}
+                        onChange={handleInputChange}
                     />
                 </div>
                 <button className="submit-btn" type="submit">가입하기</button>
@@ -101,8 +192,8 @@ function StoreSignup() {
                 <DaumPostCode onComplete={completeHandler} height="100%"/>
             </Modal>
         </div>
-    )
-        ;
+    );
 }
 
-export default StoreSignup;
+export default Signup;
+
