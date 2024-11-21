@@ -13,16 +13,35 @@ public class UserService {
     private final UserRepository userRepository;
 
     // 사용자 정보 조회
-    public List<User> getUserById(String userid) { return userRepository.findByUserid(userid); }
-
-    public boolean isUserIdExists(String userid) {
-        // 아이디 중복 확인
-        return userRepository.existsByUserid((userid));
+    public List<User> getUserById(String userid) {
+        return userRepository.findByUserid(userid);
     }
 
+    // 사용자 정보 업데이트
+    public User updateUser(User user) {
+        User existingUser = userRepository.findByUserid(user.getUserid())
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        existingUser.setName(user.getName());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setPhone(user.getPhone());
+        existingUser.setIntroduce(user.getIntroduce());
+        existingUser.setProfileimage(user.getProfileimage());
+
+        return userRepository.save(existingUser);
+    }
+
+
+    // 사용자 저장
     public User saveUser(User user) {
-        // 사용자 저장
         return userRepository.save(user);
+    }
+
+    // 아이디 중복 확인
+    public boolean isUserIdExists(String userid) {
+        return userRepository.existsByUserid((userid));
     }
 
     // 이메일 중복 여부 확인
