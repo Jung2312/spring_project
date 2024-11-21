@@ -17,7 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true") // allowCredentials = "true" : 세션용
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
@@ -69,7 +69,7 @@ public class UserController {
     }
     
     // 로그인 API
-    @PostMapping("/user/login")
+    @PostMapping("/userlogin")
     public ResponseEntity<String> Userlogin(@RequestBody Map<String, String> loginData, HttpSession session) {
         String userid = loginData.get("userid");
         String password = loginData.get("password");
@@ -88,7 +88,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/user/session")
+    @GetMapping("/session")
     public ResponseEntity<String> checkSession(HttpSession session) {
         String userid = (String) session.getAttribute("userid");
 

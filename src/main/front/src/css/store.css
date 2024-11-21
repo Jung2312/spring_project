@@ -131,8 +131,8 @@ a{
         }
     }
 }
-/* 메인 컨테이너 */
 
+/* 메인 컨테이너 */
 .store-main-container {
     display: flex;
     flex-direction: row; /* 가로로 정렬 */

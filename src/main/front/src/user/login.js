@@ -13,27 +13,38 @@ function Login() {
     const navigate = useNavigate();
 
     const loginButtonClick = (type) => {
-        setUserType(type); // 'user' 또는 'seller' 설정
+        setUserType(type); // 'user' 또는 'store' 설정
     };
     const goMain = () => {
         navigate('/');
     };
+    const goStoreManagement = () => {
+        navigate('/StoreManagement')
+    }
 
     const loginSubmit = async (e) => {
         e.preventDefault(); // 기본 폼 제출 방지
-
         try {
-            const response = await axios.post('http://localhost:80/user/login', {
-                userid: inputUser.userid,
-                password: inputUser.password,
-                userType
-            }, {
-                // 세션 쿠키를 포함시키기 위한 설정
-                withCredentials: true  // 세션 쿠키를 포함하려면 withCredentials: true를 설정
-            });
-            alert(`${userType === 'user' ? '사용자' : '판매자'}로 로그인이 완료되었습니다.`);
-            console.log(response.data); // 추가적인 성공 데이터 확인
-            goMain();
+            if(userType === 'user'){
+                const response = await axios.post('http://localhost:80/user/userlogin', {
+                    userid: inputUser.id,
+                    password: inputUser.password,
+                    userType
+                });
+                alert(`사용자로 로그인이 완료되었습니다.`);
+                console.log(response.data); // 추가적인 성공 데이터 확인
+                goMain();
+            } else{
+                const response = await axios.post('http://localhost:80/store/storelogin', {
+                    userid: inputUser.id,
+                    password: inputUser.password,
+                    userType
+                });
+                alert(`판매자로 로그인이 완료되었습니다.`);
+                console.log(response.data); // 추가적인 성공 데이터 확인
+                goStoreManagement();
+            }
+
         } catch (error) {
             alert(error.response?.data || '로그인 중 오류가 발생했습니다.');
         }
@@ -59,8 +70,8 @@ function Login() {
                 <div className="login-field-box">
                     <input
                         type="text"
-                        name="userid"
-                        value={inputUser.userid}
+                        name="id"
+                        value={inputUser.id}
                         className="textField"
                         onChange={loginInputChange}
                         id="login-id-field"
@@ -78,7 +89,7 @@ function Login() {
                 </div>
                 <div className="login-btn-box">
                     <button className="login-btn login-user" type="submit" onClick={()=>loginButtonClick('user')}>사용자</button>
-                    <button className="login-btn login-seller" type="submit" onClick={()=>loginButtonClick('seller')}>판매자</button>
+                    <button className="login-btn login-seller" type="submit" onClick={()=>loginButtonClick('store')}>판매자</button>
                 </div>
                 <div className="register-box">
                     <a href="/register/user" className="login-aTag" id="register-user">사용자 회원가입</a>
