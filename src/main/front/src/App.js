@@ -15,6 +15,7 @@ import StoreManagement from "./store/storeManagement";
 import ContestChampionship from "./contest/contestChampionship";
 import ContestPostPage from "./contest/contestPostPage";
 import ContestPostDetail from "./contest/contestPostDetail";
+import MyShoppingPage from "./user/myShoppingPage";
 
 function App() {
     return (
@@ -35,6 +36,7 @@ function App() {
 
                 <Route path="/contest/post" element={<ContestPostPage />} />
                 <Route path="/contest/postDetail" element={<ContestPostDetail />} />
+                <Route path="/myShoppingPage" element={<MyShoppingPage />} />
             </Routes>
         </BrowserRouter>
     );
