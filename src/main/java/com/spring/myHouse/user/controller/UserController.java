@@ -17,7 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true") // allowCredentials = "true" : 세션용
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
@@ -69,7 +69,7 @@ public class UserController {
     }
     
     // 로그인 API
-    @PostMapping("/login")
+    @PostMapping("/userlogin")
     public ResponseEntity<String> Userlogin(@RequestBody Map<String, String> loginData, HttpSession session) {
         String userid = loginData.get("userid");
         String password = loginData.get("password");
@@ -93,6 +93,7 @@ public class UserController {
         String userid = (String) session.getAttribute("userid");
 
         if (userid != null) {
+            System.out.println(userid);
             return ResponseEntity.ok(userid);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("세션에 저장된 사용자 정보가 없습니다.");

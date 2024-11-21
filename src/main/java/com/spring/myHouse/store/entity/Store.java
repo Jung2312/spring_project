@@ -9,17 +9,17 @@ import lombok.Data;
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int storeNum;
+    private int storenum;
 
-    private String storeId;
+    private String storeid;
 
-    private String storePwd;
+    private String storepwd;
 
-    private String storeName;
+    private String storename;
 
-    private String storeAddress;
+    private String storeaddress;
 
-    private String storePhone;
+    private String storephone;
 
-    private String storeNotice;
+    private String storenotice;
 }
