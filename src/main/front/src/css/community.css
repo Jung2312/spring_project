@@ -124,3 +124,20 @@
         color: #676767;
     }
 }
+
+/*recommendPostPage 페이지*/
+.recommendPostPageContainer{
+    width: 1280px;
+    margin: auto;
+}
+
+.recommendPostPageBox{
+    width: 1280px;
+    justify-content: center;
+}
+
+.recommendPostImgContainer{
+    width: 811px;
+    border: 1px solid #E9E9E9;
+    height: 649px;
+}
