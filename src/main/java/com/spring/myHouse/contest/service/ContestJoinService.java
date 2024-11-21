@@ -20,5 +20,7 @@ public class ContestJoinService {
         contestJoinRepository.incrementLike(joinnum);
     }
 
-    public boolean saveContestjoin(Contestjoin contestjoin) {}
+    public void saveContestJoin(Contestjoin contestjoin) {
+        contestJoinRepository.save(contestjoin);
+    }
 }
