@@ -69,7 +69,7 @@ public class UserController {
     }
     
     // 로그인 API
-    @PostMapping("/user/login")
+    @PostMapping("/login")
     public ResponseEntity<String> Userlogin(@RequestBody Map<String, String> loginData, HttpSession session) {
         String userid = loginData.get("userid");
         String password = loginData.get("password");
@@ -88,7 +88,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/user/session")
+    @GetMapping("/session")
     public ResponseEntity<String> checkSession(HttpSession session) {
         String userid = (String) session.getAttribute("userid");
 
