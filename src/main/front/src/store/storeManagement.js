@@ -40,9 +40,8 @@ function StoreManagement() {
 
                 {/* 콘텐츠 섹션 */}
                 <section className="store-content-section">
-                    {activeMenu === "상품 관리" && <ProductManagement />}
+                    {activeMenu === "상품 관리" && <StoreProduct />}
                     {activeMenu === "재고 관리" && <StoreInventory />}
-                    {activeMenu === "매출 현황" && <StoreProduct />}
                     {activeMenu === "정보 변경" && <InfoUpdate />}
                 </section>
             </div>
