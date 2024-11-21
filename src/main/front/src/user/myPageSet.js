@@ -41,9 +41,9 @@ function MyPageSet() {
 
     // 변경된 데이터 저장 요청
     const saveChanges = () => {
-        console.log("전송할 데이터:", formData); // 요청 전 데이터 출력
+        // console.log("전송할 데이터:", formData); // 요청 전 데이터 출력
         axios
-            .put('http://localhost:80/user/info', formData) // PUT 요청으로 데이터 전송
+            .patch('http://localhost:80/user/update', formData) // PATCH 요청으로 데이터 전송
             .then((response) => {
                 console.log("저장 성공:", response.data);
                 alert("저장되었습니다.");
