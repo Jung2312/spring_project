@@ -93,6 +93,7 @@ public class UserController {
         String userid = (String) session.getAttribute("userid");
 
         if (userid != null) {
+            System.out.println(userid);
             return ResponseEntity.ok(userid);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("세션에 저장된 사용자 정보가 없습니다.");

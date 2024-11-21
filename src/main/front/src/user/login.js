@@ -71,7 +71,7 @@ function Login() {
                     <input
                         type="text"
                         name="id"
-                        value={inputUser.id}
+                        value={inputUser.id || ""}
                         className="textField"
                         onChange={loginInputChange}
                         id="login-id-field"
@@ -80,7 +80,7 @@ function Login() {
                     <input
                         type="password"
                         name="password"
-                        value={inputUser.password}
+                        value={inputUser.password || ""}
                         className="textField"
                         onChange={loginInputChange}
                         id="login-pw-field"

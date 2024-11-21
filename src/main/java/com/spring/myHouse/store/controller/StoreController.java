@@ -21,8 +21,8 @@ public class StoreController {
 
     // 판매자 정보 조회
     @GetMapping("/info/{storeId}")
-    public Store getStoreInfo(@PathVariable String storeId) {
-        return storeService.getStoreById(storeId);
+    public Store getStoreInfo(@PathVariable String storeid) {
+        return storeService.getStoreById(storeid);
     }
 
     // 판매자 정보 업데이트
@@ -33,19 +33,22 @@ public class StoreController {
 
     @PostMapping("/storelogin")
     public ResponseEntity<String> Storelogin(@RequestBody Map<String, String> loginData, HttpSession session) {
-        String storeid = loginData.get("storeid");
-        String storepwd = loginData.get("storepwd");
+        String storeid = loginData.get("userid");
+        String storepwd = loginData.get("password");
         String userType = loginData.get("userType");
-        System.out.println(storeid);
 
         // 로그인 시도
         List<Store> loginResult = storeService.storelogin(storeid, storepwd);
 
         if (loginResult != null && !loginResult.isEmpty()) {
             Store store = loginResult.get(0);
-            session.setAttribute("storeid", store.getStoreid());  // 세션에 사용자 정보 저장
-            session.setAttribute("storename", store.getStorename());
-            return ResponseEntity.ok("로그인 성공" + (String)session.getAttribute("storeid") + (String)session.getAttribute("storename"));
+            if(store == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("존재하지 않는 판매자입니다.");
+            } else {
+                session.setAttribute("storeid", store.getStoreid());  // 세션에 사용자 정보 저장
+                session.setAttribute("storename", store.getStorename());
+                return ResponseEntity.ok("로그인 성공" + (String)session.getAttribute("storeid") + (String)session.getAttribute("storename"));
+            }
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 또는 비밀번호가 잘못되었습니다.");
         }

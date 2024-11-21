@@ -26,11 +26,9 @@ public class StoreService {
         return storeRepository.save(updatedStore);
     }
 
+    // 판매자 로그인
     public List<Store> storelogin(String storeid, String storepwd){
         List<Store> byStore = storeRepository.findByStoreidAndStorepwd(storeid, storepwd);
-        if(byStore.isEmpty()){
-            return null;
-        }
         return byStore;
     }
 }
