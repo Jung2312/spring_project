@@ -28,7 +28,7 @@ function ContestPostPage() {
             });
     }, []);
     return (
-        <div className="contestApplyContainer2">
+        <div className="contestApplyContainer">
             <div className="contestBg">
                 <div>
                     <img src={contestBg} alt="Contest Background" />
