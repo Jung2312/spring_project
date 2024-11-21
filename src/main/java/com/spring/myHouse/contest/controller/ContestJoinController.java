@@ -16,23 +16,24 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@RequestMapping("/contest")
 public class ContestJoinController {
     private final ContestJoinService contestJoinService;
 
-    @GetMapping("/contest/info/join")
+    @GetMapping("/info/join")
     public List<Contestjoin> getContestjoins(Model model) {
         List<Contestjoin> contestjoins = contestJoinService.getContestJoin();
         model.addAttribute("contestjoins", contestjoins);
         return contestjoins;
     }
 
-    @PostMapping("/contest/like/{joinnum}")
+    @PostMapping("/like/{joinnum}")
     public ResponseEntity<String> incrementLike(@PathVariable Long joinnum) {
         contestJoinService.incrementLike(joinnum);
         return ResponseEntity.ok("success");
     }
 
-    @PostMapping("/contest/post")
+    @PostMapping("/post")
     public ResponseEntity<String> uploadFileAndSaveData(
             @RequestParam("file") MultipartFile file,
             @RequestParam("userid") String userid,

@@ -15,6 +15,8 @@ import StoreManagement from "./store/storeManagement";
 import ContestChampionship from "./contest/contestChampionship";
 import ContestPostPage from "./contest/contestPostPage";
 import ContestPostDetail from "./contest/contestPostDetail";
+import MyShoppingPage from "./user/myShoppingPage";
+import RecommendPostPage from "./community/recommendPostPage";
 
 function App() {
     return (
@@ -27,6 +29,7 @@ function App() {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/storeSignup" element={<StoreSignup />} />
                 <Route path="/recommend" element={<Recommend />} />
+                <Route path="/recommend/post" element={<RecommendPostPage />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/myPageSet" element={<MyPageSet />} />
                 <Route path="/shoppingHome" element={<ShoppingHome />} />
@@ -35,6 +38,7 @@ function App() {
 
                 <Route path="/contest/post" element={<ContestPostPage />} />
                 <Route path="/contest/postDetail" element={<ContestPostDetail />} />
+                <Route path="/myShoppingPage" element={<MyShoppingPage />} />
             </Routes>
         </BrowserRouter>
     );

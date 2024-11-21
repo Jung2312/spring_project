@@ -72,3 +72,126 @@
 .save:hover {
     background: #008fba;
 }
+
+/*마이페이지 주문 목록 페이지*/
+.myShoppingPageContainer {
+    font-size: 18px;
+    width: 1075px;
+    height: 92px;
+    margin: 40px auto auto auto;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    display: flex; /* Flexbox 사용 */
+    justify-content: space-around; /* 아이템 간 간격 균등 배분 */
+    align-items: center; /* 세로 가운데 정렬 */
+}
+
+.myShoppingPageContainer2 {
+    font-size: 18px;
+    width: 1075px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    margin: 40px auto;
+    border: 1px solid #E9E9E9;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    display: flex; /* Flexbox 사용 */
+    align-items: center; /* 세로 가운데 정렬 */
+}
+
+.myShoppingPageSelect{
+    margin-top: 20px;
+    margin-bottom: 40px;
+    padding-left: 20px;
+    width: 240px;
+    height: 40px;
+    font-size: 16px;
+    border: 1px solid #E9E9E9;
+    border-radius: 8px;
+}
+
+.myShoppingPageOrderImg {
+    margin-left:60px;
+    margin-right: 60px;
+    width: 101px;
+    height: 101px;
+}
+
+.myShoppingPageOrderDetails {
+    display: flex;
+    flex-direction: column; /* 텍스트 세로 배치 */
+    justify-content: center; /* 세로 중앙 정렬 */
+    flex: 1; /* 공간을 이미지와 균등 분배 */
+}
+
+.myShoppingPageOrderDetails .myShoppingPageOrderTitle {
+    color: #555555;
+    margin-bottom: 8px;
+}
+
+.myShoppingPageOrderDetails .myShoppingPageOrderDescription {
+    margin-bottom: 8px;
+}
+
+
+.myShoppingPageCategoryTitle{
+    margin-left: 20px;
+    font-size: 16px;
+}
+
+.myShoppingPageCategoryContent{
+    margin-left: 20px;
+    color: #35C5F0;
+    font-size: 16px;
+}
+
+.myShoppingPageCategoryBox{
+    margin: auto;
+    text-align: center; /* 텍스트와 아이콘 정렬 */
+}
+
+.myShoppingPageOrderDelBtn{
+    float: right;
+    margin-right: 40px;
+    margin-top: 80px;
+    width: 124px;
+    height: 41px;
+    border-radius: 10px;
+    background-color: white;
+    border: 1px solid #E9E9E9;
+}
+
+.myShoppingPageOrderDelBtn:hover{
+    background-color: #35C5F0;
+    border: none;
+    color: white;
+}
+
+.myShoppingPageOrderDetailText{
+    float: right;
+    margin-right: 10px;
+}
+
+.myShoppingPageOrderBox{
+    font-size: 18px;
+    width: 1075px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    margin: auto auto auto auto;
+}
+
+.myShoppingPageVline{
+    border-left: 1px solid #D5D5D5;
+    height:70px;
+    margin: auto;
+}
+
+.myShoppingPageVline2{
+    border-left: 1px solid #D5D5D5;
+    height:70px;
+    margin: auto;
+}
+
+.myShoppingPageOrderPrice{
+    margin-top: 20px;
+}
