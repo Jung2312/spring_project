@@ -1,33 +1,93 @@
-import React from 'react';
-import logo from '../img/myhouse_logo.png'
-import css from '../css/login.css'
+import React, { useState } from 'react';
+import axios from 'axios';
+import logo from '../img/myhouse_logo.png';
+import css from '../css/login.css';
+import {useNavigate} from "react-router-dom";
 
 function Login() {
+    const [userType, setUserType] = useState('');
+    const [inputUser, setInputUser] = useState({
+        userid: '',
+        password: ''
+    });
+
+    const navigate = useNavigate();
+
+    const loginButtonClick = (type) => {
+        setUserType(type); // 'user' 또는 'seller' 설정
+    };
+    const goMain = () => {
+        navigate('/');
+    };
+
+    const loginSubmit = async (e) => {
+        e.preventDefault(); // 기본 폼 제출 방지
+
+        try {
+            const response = await axios.post('http://localhost:80/user/login', {
+                userid: inputUser.userid,
+                password: inputUser.password,
+                userType
+            }, {
+                // 세션 쿠키를 포함시키기 위한 설정
+                withCredentials: true  // 세션 쿠키를 포함하려면 withCredentials: true를 설정
+            });
+            alert(`${userType === 'user' ? '사용자' : '판매자'}로 로그인이 완료되었습니다.`);
+            console.log(response.data); // 추가적인 성공 데이터 확인
+            goMain();
+        } catch (error) {
+            alert(error.response?.data || '로그인 중 오류가 발생했습니다.');
+        }
+    };
+
+    const loginInputChange = (e) => {
+        const { name, value } = e.target;
+        setInputUser((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
     return (
         <div className="login-container">
-            <div className="logo">
-                <a href="">
-                    <img id="logo-img" src={logo}/>
+            <div className="login-logo">
+                <a href="/" className="login-aTag">
+                    <img id="login-logo-img" src={logo} alt="Logo" />
                     <span className="logo-name">나만의집</span>
                 </a>
-
             </div>
-            <form action="/user/login" method="post">
+            <form onSubmit={loginSubmit}>
                 <div className="login-field-box">
-                    <input type="text" name="id" className="textField" id="id-field" placeholder="아이디"/>
-                    <input type="text" name="pw" className="textField" id="pw-field" placeholder="비밀번호"/>
+                    <input
+                        type="text"
+                        name="userid"
+                        value={inputUser.userid}
+                        className="textField"
+                        onChange={loginInputChange}
+                        id="login-id-field"
+                        placeholder="아이디"
+                    />
+                    <input
+                        type="password"
+                        name="password"
+                        value={inputUser.password}
+                        className="textField"
+                        onChange={loginInputChange}
+                        id="login-pw-field"
+                        placeholder="비밀번호"
+                    />
                 </div>
                 <div className="login-btn-box">
-                    <button className="login-btn login-user" type="submit">사용자</button>
-                    <button className="login-btn login-seller" type="submit">판매자</button>
+                    <button className="login-btn login-user" type="submit" onClick={()=>loginButtonClick('user')}>사용자</button>
+                    <button className="login-btn login-seller" type="submit" onClick={()=>loginButtonClick('seller')}>판매자</button>
                 </div>
                 <div className="register-box">
-                    <a href="" id="register-user">사용자 회원가입</a>
-                    <a href="" id="register-seller">판매자 회원가입</a>
+                    <a href="/register/user" className="login-aTag" id="register-user">사용자 회원가입</a>
+                    <a href="/register/seller" className="login-aTag" id="register-seller">판매자 회원가입</a>
                 </div>
             </form>
         </div>
-    )
+    );
 }
 
 export default Login;

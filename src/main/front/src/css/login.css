@@ -16,7 +16,7 @@
     font-size: 18px;
 }
 
-a{
+.login-aTag {
     text-decoration: none;
     color: #000000;
 }
@@ -30,11 +30,12 @@ img{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    text-align: center;
 }
 
-.logo{
+.login-logo{
     margin-bottom: 30px;
-    #logo-img{
+    #login-logo-img{
         width: 80px;
         margin-right: 20px;
     }
@@ -58,12 +59,12 @@ img{
         padding: 10px;
     }
 
-    #id-field{
+    #login-id-field{
         border: 1px #b3b3b3 solid;
         border-radius: 5px 5px 0 0;
     }
 
-    #pw-field{
+    #login-pw-field{
         border: 1px #b3b3b3 solid;
         border-top: none;
         border-radius: 0 0 5px 5px;
