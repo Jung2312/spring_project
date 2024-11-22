@@ -29,7 +29,7 @@ public class RecommendController {
 //        List<Recommend> recommends = recommendService.getAllPosts();
 //        return recommends;
 //    }
-    @GetMapping("/post")
+    @GetMapping("")
     public List<Map<String, Object>> getAllPosts() {
         List<Recommend> recommends = recommendService.getAllPosts();
 
@@ -43,8 +43,8 @@ public class RecommendController {
             postWithUser.put("postview", post.getPostview());
             postWithUser.put("postlike", post.getPostlike());
             postWithUser.put("hashtaglist", post.getHashtaglist());
+            postWithUser.put("paynum", post.getPaynum());
             postWithUser.put("postimg", post.getPostimg());
-
             try {
                 User user = userService.getUserByIds(post.getUserid());
                 postWithUser.put("introduce", user.getIntroduce());
@@ -53,7 +53,6 @@ public class RecommendController {
                 postWithUser.put("introduce", "소개 정보 없음");
                 postWithUser.put("profileimage", "기본 프로필 사진"); // 기본 이미지 경로 또는 텍스트 추가
             }
-
             return postWithUser;
         }).collect(Collectors.toList());
     }
