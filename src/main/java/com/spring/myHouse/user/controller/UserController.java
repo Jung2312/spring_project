@@ -45,7 +45,6 @@ public class UserController {
         }
     }
 
-
     @PostMapping("/signup")
     public ResponseEntity<String> createUser(@RequestBody Map<String, Object> userData) {
         // 요청 데이터에서 값 추출
@@ -74,7 +73,7 @@ public class UserController {
         if (email == null || email.isEmpty()) {
             return ResponseEntity.badRequest().body("이메일을 입력해주세요.");
         }
-        if (postcode == null || postcode.isEmpty() || address == null || address.isEmpty()) {
+        if (postcode == null || postcode.isEmpty() || addressDetail == null || addressDetail.isEmpty()) {
             return ResponseEntity.badRequest().body("주소를 입력해주세요.");
         }
 
@@ -143,5 +142,4 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("세션에 저장된 사용자 정보가 없습니다.");
         }
     }
-
 }

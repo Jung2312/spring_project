@@ -32,7 +32,6 @@ public class UserService {
         return userRepository.save(existingUser);
     }
 
-
     // 사용자 저장
     public User saveUser(User user) {
         return userRepository.save(user);
