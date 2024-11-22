@@ -8,7 +8,6 @@ import lombok.Data;
 @Table(name = "user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String userid;
     private String password;
     private String name;

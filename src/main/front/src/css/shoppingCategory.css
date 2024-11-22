@@ -1,0 +1,68 @@
+/* shoppingCategory.css */
+*{
+    font-family: 'Pretendard';
+}
+
+.shopping-category-container {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    padding: 60px;
+}
+
+.category-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Major 카테고리 간 간격 */
+}
+
+.major-category {
+    padding: 5px;
+}
+
+.major-category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.major-title {
+    font-size: 25px; /* Major 카테고리 글자 크기 */
+    font-weight: bold;
+}
+
+.category-arrow {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    border-right: 2px solid #333;
+    border-bottom: 2px solid #333;
+    transform: rotate(45deg);
+    transition: transform 0.3s ease;
+}
+
+.category-arrow.right {
+    transform: rotate(45deg); /* 기본: 오른쪽 화살표 */
+}
+
+/* 서브카테고리 리스트 */
+.subcategory-list {
+    margin-top: 8px; /* Major 카테고리와 서브카테고리 간 간격 */
+    padding-left: 20px;
+    list-style: none; /* 동그라미 제거 */
+}
+
+.subcategory-item {
+    font-size: 22px; /* Subcategory 글자 크기 */
+    font-weight: bold;
+    color: #666;
+    padding: 9px 0; /* Subcategory 항목 간 간격 */
+    cursor: pointer;
+    transition: color 0.2s ease; /* 호버 효과 추가 */
+}
+
+.subcategory-item:hover {
+    color: #35C5F0; /* 마우스 호버 시 파란색 */
+}

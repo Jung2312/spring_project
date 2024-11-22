@@ -2,6 +2,7 @@ package com.spring.myHouse.user.service;
 
 import com.spring.myHouse.user.entity.User;
 import com.spring.myHouse.user.repository.UserRepository;
+import jakarta.persistence.Id;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ public class UserService {
         return userRepository.findByUserid(userid);
     }
 
+    // 사용자 정보 여러 개 조회
     public User getUserByIds(String userid) {
         return userRepository.findByUserid(userid)
                 .stream()
@@ -59,5 +61,17 @@ public class UserService {
     // 전화번호 중복 여부 확인
     public boolean isPhoneExists(String phone) {
         return userRepository.existsByPhone(phone);
+    }
+    
+    // 로그인 아이디 조회, 비밀번호 일치 확인
+    public List<User> userlogin(String userid, String password) {
+        // 유저 ID로 조회
+        List<User> byUser = userRepository.findByUseridAndPassword(userid, password);
+        if (byUser.isEmpty()) {
+            // 조회 결과 없음
+            return null;
+        }
+        // 비밀번호 일치 여부 확인
+        return byUser;
     }
 }
