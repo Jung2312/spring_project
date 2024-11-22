@@ -11,7 +11,7 @@ function Recommend() {
     // 서버에서 게시글 데이터 가져옴
     useEffect(() => {
         axios
-            .get('http://localhost:80/recommend/post') // Spring Boot API URL
+            .get('http://localhost:80/recommend') // Spring Boot API URL
             .then((response) => {
                 setPostList(response.data);
             })
@@ -27,7 +27,7 @@ function Recommend() {
                     {/* 프로필 섹션 */}
                     <div className="profile-section">
                         <div className="profile-img">
-                            <img className="profile-img" src={post.postimg || ex} alt="프로필 사진"
+                            <img className="profile-img" src={`${process.env.PUBLIC_URL}/profileImg/${post.profileimage}`} alt="프로필 사진"
                                  onError={(e) => { e.target.src = ex; }}/>
                         </div>
                         <div className="profile-content">
@@ -42,7 +42,7 @@ function Recommend() {
                         </div>
                     </div>
                     {/* 게시글 사진 */}
-                    <img className="post-img" src={'http://localhost:80${post.postimg}'} alt="게시글 사진"
+                    <img className="post-img" src={`${process.env.PUBLIC_URL}/postImg/${post.postimg}`} alt="게시글 사진"
                          onError={(e) => { e.target.src = ex; }}/>
                     {/* 좋아요와 댓글 */}
                     <div className="like-comment">
