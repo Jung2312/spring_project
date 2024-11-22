@@ -61,6 +61,7 @@ function Signup() {
         // 비밀번호 확인
         if (inputUser.pwd !== inputUser.pwdchk) {
             alert('비밀번호가 일치하지 않습니다.');
+            document.querySelector('[name=pwdchk]').focus();
             return;
         }
 

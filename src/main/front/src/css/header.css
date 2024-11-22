@@ -26,6 +26,10 @@ img{
     align-items: center;
     padding: 20px;
     border-bottom: 1px #D5D5D5 solid;
+    a{
+        text-decoration: none;
+        color: #000000;
+    }
     .logo-name-box{
         margin-right: 50px;
         .logo-name{
@@ -67,7 +71,7 @@ img{
     margin-right: 15px;
 }
 
-.user-box{
+.header-user-box{
     a{
         margin-right: 10px;
     }
@@ -77,6 +81,9 @@ img{
     }
     #service:after{
         content: "";
+    }
+    .header-user-name{
+        margin-right: 15px;
     }
 }
 
@@ -88,6 +95,7 @@ img{
         background-color: #35C5F0;
         border-radius: 5px;
         cursor: pointer;
+        margin: auto;
         span{
             color:#ffffff;
         }
