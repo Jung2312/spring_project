@@ -98,8 +98,8 @@ function Login() {
                     <button className="login-btn login-seller" type="submit" onClick={() => loginButtonClick('store')}>판매자</button>
                 </div>
                 <div className="register-box">
-                    <a href="/register/user" className="login-aTag" id="register-user">사용자 회원가입</a>
-                    <a href="/register/seller" className="login-aTag" id="register-seller">판매자 회원가입</a>
+                    <a href="/signup" className="login-aTag" id="register-user">사용자 회원가입</a>
+                    <a href="/storesignup" className="login-aTag" id="register-seller">판매자 회원가입</a>
                 </div>
             </form>
         </div>

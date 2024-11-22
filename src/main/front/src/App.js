@@ -18,6 +18,7 @@ import ContestPostDetail from "./contest/contestPostDetail";
 import ShoppingCategory from "./shopping/shoppingCategory";
 import MyShoppingPage from "./user/myShoppingPage";
 import RecommendPostPage from "./community/recommendPostPage";
+import ProductDetail from "./shopping/productDetail";
 
 function App() {
     return (
@@ -41,6 +42,7 @@ function App() {
                 <Route path="/contest/postDetail" element={<ContestPostDetail />} />
                 <Route path="/shoppingCategory" element={<ShoppingCategory />} />
                 <Route path="/myShoppingPage" element={<MyShoppingPage />} />
+                <Route path="/productDetail" element={<ProductDetail />} />
             </Routes>
         </BrowserRouter>
     );

@@ -21,6 +21,15 @@ public class UserService {
         }
         return userList.get(0);
     }
+
+    // 사용자 정보 여러 개 조회
+    public User getUserByIds(String userid) {
+        return userRepository.findByUserid(userid)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("User not found with userid: " + userid));
+    }
+
     // 사용자 정보 업데이트
     public User updateUser(User user) {
         User existingUser = userRepository.findByUserid(user.getUserid())
@@ -36,7 +45,6 @@ public class UserService {
 
         return userRepository.save(existingUser);
     }
-
 
     // 사용자 저장
     public User saveUser(User user) {

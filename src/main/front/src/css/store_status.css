@@ -1,0 +1,21 @@
+*{
+    font-family: 'Pretendard';
+}
+
+/* 매출 현황 컨테이너 */
+.status_container {
+    display: flex;
+    flex-direction: column; /* 세로 배치 */
+}
+
+/* 월별 매출 현황 영역 */
+.monthly_status_section {
+    display: flex;
+    max-width: 1280px; /* 최대 너비 제한 */
+}
+
+/* 상품별 판매량 영역 */
+.sales_product_section {
+    display: flex;
+    max-width: 1280px; /* 최대 너비 제한 */
+}

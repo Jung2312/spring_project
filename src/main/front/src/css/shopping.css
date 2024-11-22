@@ -141,3 +141,233 @@
 .purchase-button:hover {
     background: #008fba;
 }
+
+/*상품 상세 페이지*/
+.productDetailcontainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin-top: 40px;
+}
+
+.productDetailsection {
+    width: 1280px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-content: center;
+}
+
+.productDetailsectionImg img{
+    margin-bottom: 12px;
+    width: 56px;
+    height: 56px;
+    border-radius: 10px;
+    flex-wrap: wrap;
+}
+
+.productDetailsectionText{
+    float: right;
+    margin-left: 60px;
+    margin-top: 40px;
+    width: 391px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.productDetailsectionImg, .productDetailInfoImgSection{
+    float: left;
+    display: flex;
+    justify-content: left;
+    flex-direction: column;
+    align-content: center;
+    margin-right: 20px;
+}
+
+.productDetailsection img {
+    max-width: 100%;
+    height: auto;
+
+}
+
+.productDetailReviewCnt {
+    font-size: 18px;
+    color: #35C5F0;
+    margin: 10px 10px;
+}
+
+.productDetailReviewCnt {
+    font-size: 18px;
+    color: #35C5F0;
+    margin: 10px 10px;
+}
+
+.productDetailStoreIcon{
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.productDetailStoreIconText{
+    font-size: 16px;
+    color: #525B61;
+}
+
+#productDetailStoreBtn{
+    color: #525B61;
+    border: none;
+    background-color: #EAEBEF;
+    width: 80px;
+    height: 24px;
+    border-radius: 9.5px;
+    margin-bottom: 40px;
+    margin-right: 20px;
+    font-size: 14px;
+    float: right;
+}
+
+.productDetailsection .productDetailSelect {
+    width: 391px;
+    height: 42px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+.productDetailsection input[type="button"] {
+    display: inline-block;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 185px;
+    height: 48px;
+}
+
+#productDetailCartBtn{
+    border: 1px solid #35C5F0;
+    color: #35C5F0;
+    background-color: white;
+    margin-bottom: 40px;
+    margin-right: 20px;
+    margin-top: 10px;
+    width: 45%;
+}
+
+#productDetailSellBtn{
+    border: none;
+    color: white;
+    background-color: #35C5F0;
+    margin: 10px 0;
+    width: 45%;
+}
+
+.productDetailText {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px 0 20px;
+}
+
+.productDetailsection .product-info {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #777;
+}
+
+
+.productDetailInfoImg{
+    margin-top: 20px;
+}
+
+.productPageImg{
+    width: 534px;
+    height: 534px;
+    border-radius: 15px;
+}
+
+.productDetailInfo{
+    display: flex;
+    justify-content: center;
+}
+
+.productDetailInfo-item:nth-child(1){
+    flex-shrink: 0;
+}
+
+.productDetailInfo-item:nth-child(2) {
+    flex-grow: 1;
+}
+
+.productDetailImgSection, .productDetailReviewSection{
+    display: flex;
+}
+
+.productDetailStoreSection{
+    margin-bottom: 20px;
+}
+
+.productDetail-productCountSection{
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px #B3B3B3 solid;
+    padding-bottom: 15px;
+    align-items: center;
+    .productDetail-productCount{
+        border: 1px #B3B3B3 solid;
+        border-radius: 10px;
+        #productDetail-productCount-delBtn, #productDetail-productCount-addBtn{
+            width: 40px;
+            height: 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 20px;
+            background-color: #ffffff;
+        }
+        #productDetailCountText{
+            width: 50px;
+            text-align: center;
+            border: none;
+            outline: none;
+        }
+    }
+}
+
+.productDetailCashSection{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+    #productDetailCash-Won{
+        font-weight: bold;
+        font-size: 24px;
+    }
+}
+
+.productDetailShoppingBtnSection{
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 중간 메뉴 바 */
+.productDetailMiddleBarSection{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-top: 1px #b3b3b3 solid;
+    border-bottom: 1px #b3b3b3 solid;
+    padding: 20px;
+}
+
+
+/* 상품정보 */
+.productDetailInfoText{
+    font-size: 20px;
+    color: #35C5F0;
+    text-align: center;
+}
+
+.productDetailReviewText, .productDetailQnAText{
+    font-size: 20px;
+    text-align: center;
+}
