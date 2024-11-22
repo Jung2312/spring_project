@@ -1,21 +1,3 @@
-@font-face {
-    font-family: 'Dovemayo_gothic';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.1/Dovemayo_gothic.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Pretendard-Regular';
-    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-    font-style: normal;
-}
-
-*{
-    font-family: 'Pretendard-Regular';
-    font-size: 18px;
-}
-
 a{
     text-decoration: none;
     color: #000000;
@@ -29,7 +11,13 @@ a{
         margin: 0 50px 0 80px;
         a{
             font-family: 'Dovemayo_gothic';
-            font-size: 30px;
+            font-size: 40px;
+        }
+    }
+
+    .store-name-box{
+        .store-name{
+            font-size: 18px;
         }
     }
 }
@@ -133,15 +121,15 @@ a{
 }
 
 /* 메인 컨테이너 */
-.store-main-container {
+/*.store-main-container {
     display: flex;
-    flex-direction: row; /* 가로로 정렬 */
+    flex-direction: row; !* 가로로 정렬 *!
     width: 100vw;
     height: 100vh;
     margin: 0;
     overflow: hidden;
     background-color: white;
-}
+}*/
 
 /* 콘텐츠 래퍼 */
 .store-content-wrapper {
@@ -235,13 +223,13 @@ a{
 }
 
 /* 콘텐츠 섹션 */
-.store-content-section {
+/*.store-content-section {
     display: flex;
-    flex-direction: row; /* 가로로 정렬 */
+    flex-direction: row; !* 가로로 정렬 *!
     width: 80%;
     justify-content: flex-start;
     align-items: flex-start;
-}
+}*/
 
 /* 메인 컨테이너 */
 .store-form-container {
