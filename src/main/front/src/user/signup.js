@@ -170,7 +170,7 @@ function Signup() {
                         style={{ marginBottom: '10px' }}
                         type="text"
                         name="postcode"
-                        id="post-field"
+                        id="postcode-field"
                         readOnly
                         placeholder="우편번호"
                     />
@@ -189,7 +189,7 @@ function Signup() {
                         value={inputUser.addressdetail || ''}
                         type="text"
                         name="addressdetail"
-                        id="address-detail-field"
+                        id="addressdetail-field"
                         placeholder="상세 주소"
                         onChange={handleInputChange}
                     />
