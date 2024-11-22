@@ -87,101 +87,101 @@ function Signup() {
 
     return (
         <div className="signup-page">
-            <form className="container" onSubmit={handleSubmit} method="post">
-                <div className="logo">
+            <form className="signup-container" onSubmit={handleSubmit} method="post">
+                <div className="signup-logo">
                     <a href=""><img src={logo} alt="나만의집 로고" /></a>
-                    <span className="logo-name">나만의집</span>
+                    <span className="signup-logo-name">나만의집</span>
                 </div>
-                <div className="signup">
-                    <span className="signup-text">회원가입</span>
+                <div className="signup-signup">
+                    <span className="signup-signup-text">회원가입</span>
                 </div>
-                <div className="id-field">
-                    <span className="text">아이디</span>
+                <div className="signup-id-field">
+                    <span className="signup-text">아이디</span>
                     <p>다른 유저와 겹치지 않도록 입력해주세요. (2~20자)</p>
                     <input
                         type="text"
                         name="id"
-                        id="id-field"
+                        id="signup-id-field"
                         placeholder="아이디"
                         value={inputUser.id}
                         onChange={handleInputChange}
                     />
                 </div>
-                <div className="pwd-field">
-                    <span className="text">비밀번호</span>
+                <div className="signup-pwd-field">
+                    <span className="signup-text">비밀번호</span>
                     <p>영문, 숫자를 포함한 8자 이상의 비밀번호를 입력해주세요.</p>
                     <input
                         type="password"
                         name="pwd"
-                        id="pwd-field"
+                        id="signup-pwd-field"
                         placeholder="비밀번호"
                         value={inputUser.pwd}
                         onChange={handleInputChange}
                     />
                 </div>
-                <div className="pwdchk-field">
-                    <span className="text">비밀번호 확인</span>
+                <div className="signup-pwdchk-field">
+                    <span className="signup-text">비밀번호 확인</span>
                     <input
                         type="password"
                         name="pwdchk"
-                        id="pwdchk-field"
+                        id="signup-pwdchk-field"
                         placeholder="비밀번호 확인"
                         value={inputUser.pwdchk}
                         onChange={handleInputChange}
                     />
                 </div>
-                <div className="name-field">
-                    <span className="text">이름</span>
+                <div className="signup-name-field">
+                    <span className="signup-text">이름</span>
                     <input
                         type="text"
                         name="name"
-                        id="name-field"
+                        id="signup-name-field"
                         placeholder="이름"
                         value={inputUser.name}
                         onChange={handleInputChange}
                     />
                 </div>
-                <div className="phone-field">
-                    <span className="text">전화번호</span>
+                <div className="signup-phone-field">
+                    <span className="signup-text">전화번호</span>
                     <input
                         type="text"
                         name="phone"
-                        id="phone-field"
+                        id="signup-phone-field"
                         placeholder="전화번호"
                         value={inputUser.phone}
                         onChange={handleInputChange}
                     />
                 </div>
-                <div className="email-field">
-                    <span className="text">이메일</span>
+                <div className="signup-email-field">
+                    <span className="signup-text">이메일</span>
                     <input
                         type="email"
                         name="email"
-                        id="email-field"
+                        id="signup-email-field"
                         placeholder="이메일"
                         value={inputUser.email}
                         onChange={handleInputChange}
                     />
                 </div>
-                <div className="post-field" style={{ marginBottom: '0px' }}>
-                    <div className="post-btn" onClick={toggle} style={{ marginBottom: '10px' }}>우편번호 검색</div>
+                <div className="signup-post-field" style={{ marginBottom: '0px' }}>
+                    <div className="signup-post-btn" onClick={toggle} style={{ marginBottom: '10px' }}>우편번호 검색</div>
                     <input
                         value={inputUser.postcode || ''}
                         style={{ marginBottom: '10px' }}
                         type="text"
                         name="postcode"
-                        id="postcode-field"
+                        id="signup-postcode-field"
                         readOnly
                         placeholder="우편번호"
                     />
                 </div>
-                <div className="address-field">
+                <div className="signup-address-field">
                     <input
                         style={{ marginBottom: '10px' }}
                         value={inputUser.address || ''}
                         type="text"
                         name="address"
-                        id="address-field"
+                        id="signup-address-field"
                         placeholder="주소"
                         readOnly
                     />
@@ -189,12 +189,12 @@ function Signup() {
                         value={inputUser.addressdetail || ''}
                         type="text"
                         name="addressdetail"
-                        id="addressdetail-field"
+                        id="signup-addressdetail-field"
                         placeholder="상세 주소"
                         onChange={handleInputChange}
                     />
                 </div>
-                <button className="submit-btn" type="submit">가입하기</button>
+                <button className="signup-submit-btn" type="submit">가입하기</button>
             </form>
             <Modal isOpen={isOpen} style={customStyles} onRequestClose={() => setIsOpen(false)}>
                 <DaumPostCode onComplete={completeHandler} height="100%" />
