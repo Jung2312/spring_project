@@ -13,8 +13,18 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
-    // 사용자 정보 조회
-    public List<User> getUserById(String userid) { return userRepository.findByUserid(userid); }
+    // 사용자 정보 1개 조회
+    public List<User> getUserById(String userid) {
+        return userRepository.findByUserid(userid);
+    }
+
+    // 사용자 정보 여러 개 조회
+    public User getUserByIds(String userid) {
+        return userRepository.findByUserid(userid)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("User not found with userid: " + userid));
+    }
 
     // 사용자 정보 업데이트
     public User updateUser(User user) {
