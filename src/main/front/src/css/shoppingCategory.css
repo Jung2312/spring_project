@@ -5,15 +5,26 @@
 
 .shopping-category-container {
     display: flex;
+    position: relative;
+    justify-content: center;
     flex-direction: column;
-    width: 300px;
-    padding: 60px;
+    margin: auto;
+    width: 1280px;
+}
+
+/* 헤더 아래의 메인 콘텐츠 레이아웃 */
+.shopping-category-main-content {
+    display: flex;
+    flex: 1; /* 헤더를 제외한 영역 전체 차지 */
 }
 
 .category-sidebar {
     display: flex;
     flex-direction: column;
     gap: 15px; /* Major 카테고리 간 간격 */
+    margin-left: 170px;
+    margin-top: 20px;
+
 }
 
 .major-category {
@@ -29,13 +40,13 @@
 }
 
 .major-title {
-    font-size: 25px; /* Major 카테고리 글자 크기 */
+    font-size: 20px; /* Major 카테고리 글자 크기 */
     font-weight: bold;
 }
 
 .category-arrow {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     display: inline-block;
     border-right: 2px solid #333;
     border-bottom: 2px solid #333;
@@ -45,6 +56,7 @@
 
 .category-arrow.right {
     transform: rotate(45deg); /* 기본: 오른쪽 화살표 */
+    margin-left: 30px;
 }
 
 /* 서브카테고리 리스트 */
@@ -55,7 +67,7 @@
 }
 
 .subcategory-item {
-    font-size: 22px; /* Subcategory 글자 크기 */
+    font-size: 16px; /* Subcategory 글자 크기 */
     font-weight: bold;
     color: #666;
     padding: 9px 0; /* Subcategory 항목 간 간격 */
@@ -65,4 +77,62 @@
 
 .subcategory-item:hover {
     color: #35C5F0; /* 마우스 호버 시 파란색 */
+}
+
+/* 상품 정보 섹션 */
+.category-product-info {
+    flex: 1; /* 남은 공간 차지 */
+    padding: 20px;
+    overflow-y: auto; /* 스크롤 가능 */
+}
+
+.category-product-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.category-product-card {
+    width: 200px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: left;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.category-product-card:hover {
+    transform: scale(1.05);
+}
+
+.category-product-image {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.category-product-name {
+    font-size: 14px;
+    margin: 10px 0;
+    text-align: left;
+    line-height: 1.2; /* 줄 간격 설정 */
+    height: 3.6em; /* 3줄 높이에 해당하는 고정 값 (line-height * 3) */
+    overflow: hidden; /* 넘치는 텍스트 숨김 */
+    text-overflow: ellipsis; /* ... 추가 */
+    white-space: normal; /* 여러 줄 허용 */
+}
+
+.category-product-price {
+    font-size: 14px;
+    font-weight: bold; /* 가격을 진하게 */
+    text-align: left; /* 왼쪽 정렬 */
+    margin-top: auto;
+}
+
+.category-product-store {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 5px; /* 상품 이름과 가격 사이에 간격 추가 */
+    text-align: left;
 }
