@@ -139,7 +139,11 @@
 
 .recommendPostPageBox{
     width: 1280px;
+    display: flex;
     justify-content: center;
+    flex-direction: column;
+    align-content: center;
+    flex-wrap: wrap;
 }
 
 .recommendPostBtn{
@@ -148,9 +152,9 @@
     background-color: #35C5F0;
     border: none;
     border-radius: 3px;
-    margin-left: 20px;
     color: white;
     font-size: 13px;
+    margin-bottom: 10px;
 }
 
 .recommendPostImgContainer{
@@ -174,7 +178,7 @@
     background-color: #d9d9d9;
     text-align: center;
     font-size: 50px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     cursor: pointer;
 }
 
