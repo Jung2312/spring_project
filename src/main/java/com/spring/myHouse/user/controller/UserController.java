@@ -24,11 +24,13 @@ public class UserController {
 
     // 사용자 정보 조회 API
     @GetMapping("/info")
-    public List<User> getUser(Model model) {
-        String userid = "aaa";
-        List<User> userList = userService.getUserById(userid);
-        model.addAttribute("userList", userList);
-        return userList;
+    public ResponseEntity<User> getUserInfo(@RequestParam String userid) {
+        User user = userService.getUserById(userid);  // userid로 사용자 정보 조회
+        if (user != null) {
+            return ResponseEntity.ok(user);  // 사용자 정보를 반환
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);  // 사용자 없으면 404 반환
+        }
     }
 
     // 사용자 정보 업데이트
@@ -124,8 +126,7 @@ public class UserController {
 
         if (loginResult != null && !loginResult.isEmpty()) {
             User user = loginResult.get(0);
-            session.setAttribute("userid", user.getUserid());  // 세션에 사용자 정보 저장
-            return ResponseEntity.ok("로그인 성공" + (String)session.getAttribute("userid"));
+            return ResponseEntity.ok("로그인 성공");
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 또는 비밀번호가 잘못되었습니다.");
         }

@@ -13,9 +13,13 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
-    // 사용자 정보 1개 조회
-    public List<User> getUserById(String userid) {
-        return userRepository.findByUserid(userid);
+    // 사용자 정보 조회
+    public User getUserById(String userid) {
+        List<User> userList = userRepository.findByUserid(userid);
+        if (userList.isEmpty()) {
+            return null;
+        }
+        return userList.get(0);
     }
 
     // 사용자 정보 여러 개 조회

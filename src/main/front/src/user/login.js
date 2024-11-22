@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import logo from '../img/myhouse_logo.png';
 import css from '../css/login.css';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 function Login() {
     const [userType, setUserType] = useState('');
     const [inputUser, setInputUser] = useState({
@@ -13,35 +14,40 @@ function Login() {
     const navigate = useNavigate();
 
     const loginButtonClick = (type) => {
-        setUserType(type); // 'user' 또는 'store' 설정
+        setUserType(type); // 'user' or 'store'
     };
+
     const goMain = () => {
         navigate('/');
     };
-    const goStoreManagement = () => {
-        navigate('/StoreManagement')
-    }
 
+    const goStoreManagement = () => {
+        navigate('/StoreManagement');
+    };
+
+    // Handle form submission for login
     const loginSubmit = async (e) => {
-        e.preventDefault(); // 기본 폼 제출 방지
+        e.preventDefault();
         try {
-            if(userType === 'user'){
-                const response = await axios.post('http://localhost:80/user/userlogin', {
+            let response;
+            if (userType === 'user') {
+                response = await axios.post('http://localhost:80/user/userlogin', {
                     userid: inputUser.id,
                     password: inputUser.password,
                     userType
                 });
                 alert(`사용자로 로그인이 완료되었습니다.`);
-                console.log(response.data); // 추가적인 성공 데이터 확인
+                sessionStorage.setItem("userid", inputUser.id);
+                console.log(response.data); // Check successful login response
                 goMain();
-            } else{
-                const response = await axios.post('http://localhost:80/store/storelogin', {
+            } else {
+                response = await axios.post('http://localhost:80/store/storelogin', {
                     userid: inputUser.id,
                     password: inputUser.password,
                     userType
                 });
                 alert(`판매자로 로그인이 완료되었습니다.`);
-                console.log(response.data); // 추가적인 성공 데이터 확인
+                console.log(response.data); // Check successful store login response
                 goStoreManagement();
             }
 
@@ -88,8 +94,8 @@ function Login() {
                     />
                 </div>
                 <div className="login-btn-box">
-                    <button className="login-btn login-user" type="submit" onClick={()=>loginButtonClick('user')}>사용자</button>
-                    <button className="login-btn login-seller" type="submit" onClick={()=>loginButtonClick('store')}>판매자</button>
+                    <button className="login-btn login-user" type="submit" onClick={() => loginButtonClick('user')}>사용자</button>
+                    <button className="login-btn login-seller" type="submit" onClick={() => loginButtonClick('store')}>판매자</button>
                 </div>
                 <div className="register-box">
                     <a href="/signup" className="login-aTag" id="register-user">사용자 회원가입</a>
