@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Dovemayo_gothic';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.1/Dovemayo_gothic.woff2') format('woff2');
+    src: url('https://fastly.mainPage-jsdelivr.mainPage-net/gh/projectnoonnu/noonfonts_2302@1.mainPage-1/Dovemayo_gothic.mainPage-woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
 }
@@ -19,11 +19,11 @@
     width: 1280px;
 }
 
-.banner-img {
+.mainPage-banner-img {
     width: 100%;
 }
 
-.recommend-section {
+.mainPage-recommend-section {
     display: flex;
     flex-wrap: wrap;
     max-width: 1280px;
@@ -31,12 +31,12 @@
     margin-bottom: 50px;
 }
 
-.recommend-part {
+.mainPage-recommend-part {
     display: flex;
     gap: 80px; /* 카테고리 간 간격 */
 }
 
-.recommend-content {
+.mainPage-recommend-content {
     width: 240px;
     /*height: 380px;*/
     border-radius: 10px;
@@ -45,41 +45,45 @@
 }
 
 /* 프로필 섹션 */
-.profile {
+.mainPage-profile {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
 }
 
-.profile-img {
+.mainPage-profile-img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     margin-right: 10px;
 }
 
-.profile-text {
+.mainPage-profile-text {
+    display: flex;
+    flex-direction: column;
     font-size: 14px;
     color: #333;
 }
 
-.follow {
+.mainPage-follow {
     color: #00c3ff;
     cursor: pointer;
     font-weight: bold;
+    font-size: 14px;
+    margin-top: 5px;
 }
 
-.follow:hover {
+.mainPage-follow:hover {
     color: #0099cc;
 }
 
-.one-liner_text {
+.mainPage-one-liner_text {
     font-size: 12px;
     color: #999;
 }
 
 /* 이미지 섹션 */
-.image img {
+.mainPage-image img {
     width: 100%;
     height: 200px;
     border-radius: 10px;
@@ -87,65 +91,65 @@
 }
 
 /* 좋아요/댓글 섹션 */
-.like_comment {
+.mainPage-like_comment {
     display: flex;
     justify-content: space-evenly;
     margin-bottom: 10px;
     align-items: center;
 }
 
-.like, .comment {
+.mainPage-like, .mainPage-comment {
     display: flex;
     align-items: center;
 }
 
-.like-img, .comment-img {
+.mainPage-like-img, .mainPage-comment-img {
     width: 16px;
     height: 16px;
     margin-right: 5px;
 }
 
 /* 좋아요 호버 효과 */
-.like:hover .like-img {
+.mainPage-like:hover .mainPage-like-img {
     filter: invert(23%) sepia(75%) saturate(6754%) hue-rotate(355deg) brightness(113%) contrast(125%);
 }
 
 /* 본문 내용 섹션 */
-.cotent {
+.mainPage-cotent {
     margin-bottom: 10px;
 }
 
-.cotent-text {
+.mainPage-cotent-text {
     font-size: 14px;
     color: #333;
     font-weight: bold;
 }
 
 /* 댓글 섹션 */
-.comment {
+.mainPage-comment {
     display: flex;
     align-items: center;
 }
 
-.comment-profile-img img {
+.mainPage-comment-profile-img img {
     width: 30px;
     height: 30px;
     border-radius: 50%;
     margin-right: 10px;
 }
 
-.comment-content .comment-text {
+.mainPage-comment-content .mainPage-comment-text {
     font-size: 12px;
     color: #666;
 }
 
-.comment-profile {
+.mainPage-comment-profile {
     display: flex;
     margin-top: 10px;
 }
 
 /* 전체 섹션 */
-.category-section, .mostView-section {
+.mainPage-category-section, .mainPage-mostView-section {
     display: flex;
     flex-direction: column;
     margin: 20px 0;
@@ -153,40 +157,40 @@
 }
 
 /* 제목 스타일 */
-.mostView-title .title-text, .category-title .title-text {
+.mainPage-mostView-title .mainPage-title-text, .mainPage-category-title .mainPage-title-text {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 20px;
 }
 
-.mostView-title {
+.mainPage-mostView-title {
     display: flex;
     justify-content: space-between
 }
 
-.title-more{
+.mainPage-title-more{
     color: #00c3ff;
     cursor: pointer;
     font-weight: bold;
 }
 
-.title-more:hover{
+.mainPage-title-more:hover{
     color: #0099cc;
 }
 
-.best-title {
+.mainPage-best-title {
     display: flex;
     justify-content: space-between
 }
 
 /* 카테고리 파트 */
-.category-part {
+.mainPage-category-part {
     display: flex;
     gap: 40px; /* 카테고리 간 간격 */
 }
 
 /* 각 카테고리 컨텐츠 */
-.category-content {
+.mainPage-category-content {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -194,20 +198,20 @@
 }
 
 /* 카테고리 이미지 */
-.category-content .categoty-img {
+.mainPage-category-content .mainPage-categoty-img {
     width: 100px;
     height: auto;
     margin-bottom: 10px;
 }
 
 /* 카테고리 이름 */
-.category-content .category-name {
+.mainPage-category-content .mainPage-category-name {
     font-size: 16px;
     color: #333;
 }
 
 /* 제목 스타일 */
-.mostView-title .title-text {
+.mainPage-mostView-title .mainPage-title-text {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 20px;
@@ -215,13 +219,13 @@
 }
 
 /* 상품 리스트 스타일 */
-.mostView-part {
+.mainPage-mostView-part {
     display: flex;
     gap: 25px; /* 카테고리 간 간격 */
     justify-content: space-between;
 }
 
-.mostView-content {
+.mainPage-mostView-content {
     width: 23%; /* 4개의 상품을 균등하게 분배 */
     border-radius: 10px;
     overflow: hidden; /* 이미지 확대 시 내용이 튀어나가지 않도록 */
@@ -229,72 +233,73 @@
     transition: transform 0.3s;
     position: relative;
     cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.mostView-img {
+.mainPage-mostView-img {
     width: 100%;
     height: auto;
     transition: transform 0.3s; /* 이미지 확대 효과 */
 }
 
-.mostView-content:hover .mostView-img {
+.mainPage-mostView-content:hover .mainPage-mostView-img {
     transform: scale(1.1); /* 이미지 확대 비율 */
 }
 
-.mostView-content:hover .mostView-text .product-name {
+.mainPage-mostView-content:hover .mainPage-mostView-text .mainPage-product-name {
     color: #ABADAE;
 }
 
-.mostView-text {
+.mainPage-mostView-text {
     padding: 10px;
     text-align: left;
 }
 
-.store-name {
+.mainPage-store-name {
     font-size: 14px;
     color: #888;
     display: block;
     margin-bottom: 5px;
 }
 
-.product-name {
+.mainPage-product-name {
     font-size: 16px;
     font-weight: bold;
     color: #333;
     display: block;
 }
 
-.product-price {
+.mainPage-product-price {
     font-size: 18px;
     color: #e74c3c;
     font-weight: bold;
     display: block;
 }
 
-.product-review {
+.mainPage-product-review {
     font-size: 12px;
     color: #555;
 }
 
-.best-title .title-text {
+.mainPage-best-title .mainPage-title-text {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 20px;
     display: block;
 }
 
-.best-section {
+.mainPage-best-section {
     margin-bottom: 50px;
 }
 
 /* 상품 리스트 스타일 */
-.best-part {
+.mainPage-best-part {
     display: flex;
     gap: 25px; /* 카테고리 간 간격 */
     justify-content: space-between;
 }
 
-.best-content {
+.mainPage-best-content {
     width: 32%; /* 3개의 상품을 균등하게 분배 */
     border-radius: 10px;
     overflow: hidden; /* 이미지 확대 시 내용이 튀어나가지 않도록 */
@@ -302,34 +307,35 @@
     transition: transform 0.3s;
     position: relative;
     cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.best-img {
+.mainPage-best-img {
     width: 100%;
     height: auto;
     transition: transform 0.3s; /* 이미지 확대 효과 */
 }
 
-.best-content:hover .best-img {
+.mainPage-best-content:hover .mainPage-best-img {
     transform: scale(1.1); /* 이미지 확대 비율 */
 }
 
-.best-content:hover .best-text .product-name {
+.mainPage-best-content:hover .mainPage-best-text .mainPage-product-name {
     color: #ABADAE;
 }
 
-.best-text {
+.mainPage-best-text {
     padding: 10px;
     text-align: left;
 }
 
-.tab-buttons {
+.mainPage-tab-buttons {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
 }
 
-.tab-button {
+.mainPage-tab-button {
     padding: 10px 15px;
     border: none;
     border-radius: 20px;
@@ -338,29 +344,31 @@
     transition: background-color 0.3s;
 }
 
-.tab-button.active {
+.mainPage-tab-button.active {
     background-color: #00aaff;
     color: white;
 }
 
-.tab-button:hover {
+.mainPage-tab-button:hover {
     background-color: #ddd;
 }
 
-.tab-content {
+.mainPage-tab-content {
     display: none; /* 기본적으로 숨김 */
 }
 
-.tab-content.show {
+.mainPage-tab-content.show {
     display: block; /* 활성화된 탭만 보이도록 */
 }
 
-.image-container {
+.mainPage-image-container {
     position: relative;
     display: inline-block;
+    width: 100%;
+    overflow: hidden;
 }
 
-.rank-badge {
+.mainPage-rank-badge {
     position: absolute;
     top: 0px;
     left: 20px;
@@ -373,7 +381,7 @@
 }
 
 /* 삼각형 모양 추가 */
-.rank-badge::after {
+.mainPage-rank-badge::after {
     content: '';
     position: absolute;
     bottom: -5px; /* 배지 아래로 살짝 나옴 */
