@@ -5,6 +5,7 @@ import { SidebarItem } from './sidebarItem';
 import '../css/store.css';
 import StoreInventory from "./store_inventory";
 import StoreProduct from "./store_product";
+import StoreStatus from "./store_status";
 
 const sidebarItems = [
     { text: "상품 관리", iconSrc: "storeImg/store_productmanage.png" },
@@ -42,6 +43,7 @@ function StoreManagement() {
                 <section className="store-content-section">
                     {activeMenu === "상품 관리" && <StoreProduct />}
                     {activeMenu === "재고 관리" && <StoreInventory />}
+                    {activeMenu === "매출 현황" && <StoreStatus />}
                     {activeMenu === "정보 변경" && <InfoUpdate />}
                 </section>
             </div>
