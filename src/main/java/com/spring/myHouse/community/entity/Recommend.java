@@ -12,6 +12,7 @@ public class Recommend {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postnum;
+    private Long paynum;
     private String userid;
     private String posttitle;
     private String postcontent;
