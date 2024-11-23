@@ -16,32 +16,37 @@ const sidebarItems = [
 
 function StoreManagement() {
     const [activeMenu, setActiveMenu] = useState("상품 관리");
-    const [storename, setStorename] = useState(null); // 로그인된 사용자 아이디 상태
+    const [isLogin, setIsLogin] = useState(false);
+    const [storeInfo, setStoreInfo] = useState(null);
 
-    // 세션에서 사용자 아이디 가져오기
-    const checkSession = async () => {
+    // 컴포넌트가 렌더링될 때 로그인 여부를 확인하고, 로그인된 경우 사용자 정보 가져오기
+    useEffect(() => {
+        const storeid = sessionStorage.getItem("storeid");
+        if (storeid) {
+            setIsLogin(true);
+            console.log(storeid);
+            fetchUserInfo(storeid);  // userid를 서버로 전송하여 사용자 정보 가져오기
+        }
+    }, []);
+
+    // 서버에서 사용자 정보를 가져오는 함수
+    const fetchUserInfo = async (storeid) => {
         try {
-            const response = await fetch('http://localhost:80/store/session', {
+            const response = await fetch(`http://localhost:80/store/info?storeid=${storeid}`, {
                 method: 'GET',
-                credentials: 'include'// 세션 쿠키 포함
             });
 
             if (response.ok) {
-                const data = await response.text();
-                setStorename(data.storename); // 로그인된 사용자 아이디 설정
+                const data = await response.json();
+                setStoreInfo(data);
+                console.log(data);
             } else {
-                setStorename(null); // 로그인되지 않음
+                console.error('Failed to fetch user info');
             }
         } catch (error) {
-            console.error('세션 확인 오류:', error);
-            setStorename(null); // 에러 발생 시 로그인되지 않음
+            console.error('Error fetching user info:', error);
         }
     };
-
-    // 컴포넌트가 렌더링될 때 세션 정보 확인
-    useEffect(() => {
-        checkSession();
-    }, []);
 
     return (
         <main className="store-main-container">
@@ -50,7 +55,7 @@ function StoreManagement() {
                     <a className="store-title">나만의집</a>
                 </div>
                 <div className="store-name-box">
-                    <span className="store-name">{storename} 님</span>
+                    <span className="store-name">{storeInfo ? `${storeInfo.storename}님` : "로딩중..."} 님</span>
                 </div>
             </header>
             <div className="store-content-wrapper">
