@@ -131,16 +131,4 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 또는 비밀번호가 잘못되었습니다.");
         }
     }
-
-    @GetMapping("/session")
-    public ResponseEntity<String> checkSession(HttpSession session) {
-        String userid = (String) session.getAttribute("userid");
-
-        if (userid != null) {
-            System.out.println(userid);
-            return ResponseEntity.ok(userid);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("세션에 저장된 사용자 정보가 없습니다.");
-        }
-    }
 }

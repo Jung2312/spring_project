@@ -2,23 +2,25 @@ package com.spring.myHouse.store.service;
 
 import com.spring.myHouse.store.entity.Store;
 import com.spring.myHouse.store.repository.StoreRepository;
+import com.spring.myHouse.user.entity.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class StoreService {
     private final StoreRepository storeRepository;
 
-    public StoreService(StoreRepository storeRepository) {
-        this.storeRepository = storeRepository;
-    }
-
     // storeId로 Store 정보 가져오기
     public Store getStoreById(String storeid) {
-        Optional<Store> store = storeRepository.findByStoreid(storeid);
-        return store.orElseThrow(() -> new RuntimeException("Store not found with ID: " + storeid));
+        List<Store> storeList = storeRepository.findByStoreid(storeid);
+        if (storeList.isEmpty()) {
+            return null;
+        }
+        return storeList.get(0);
     }
 
     // Store 정보 업데이트
@@ -64,7 +66,12 @@ public class StoreService {
 
     // 판매자 로그인
     public List<Store> storelogin(String storeid, String storepwd){
-        List<Store> byStore = storeRepository.findByStoreidAndStorepwd(storeid, storepwd);
-        return byStore;
+        List<Store> byUser = storeRepository.findByStoreidAndStorepwd(storeid, storepwd);
+        if (byUser.isEmpty()) {
+            // 조회 결과 없음
+            return null;
+        }
+        // 비밀번호 일치 여부 확인
+        return byUser;
     }
 }

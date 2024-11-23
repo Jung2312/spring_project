@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface StoreRepository extends CrudRepository<Store, Long> {
     // storeId로 Store 조회
-    Optional<Store> findByStoreid(String storeid);
+    List<Store> findByStoreid(String storeid);
     List<Store> findByStoreidAndStorepwd(String storeid, String storepwd);
 
     // storeName으로 검색

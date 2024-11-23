@@ -42,11 +42,12 @@ function Login() {
                 goMain();
             } else {
                 response = await axios.post('http://localhost:80/store/storelogin', {
-                    userid: inputUser.id,
+                    storeid: inputUser.id,
                     password: inputUser.password,
                     userType
                 });
                 alert(`판매자로 로그인이 완료되었습니다.`);
+                sessionStorage.setItem("storeid", inputUser.id);
                 console.log(response.data); // Check successful store login response
                 goStoreManagement();
             }
