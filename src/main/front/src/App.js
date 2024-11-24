@@ -19,6 +19,7 @@ import ShoppingCategory from "./shopping/shoppingCategory";
 import MyShoppingPage from "./user/myShoppingPage";
 import RecommendPostPage from "./community/recommendPostPage";
 import ProductDetail from "./shopping/productDetail";
+import MyPage from "./user/myPage";
 
 function App() {
     return (
@@ -37,7 +38,7 @@ function App() {
                 <Route path="/shoppingHome" element={<ShoppingHome />} />
                 <Route path="/main" element={<MainPage />} />
                 <Route path="/storeManagement" element={<StoreManagement />} />
-
+                <Route path="/myPage" element={<MyPage />} />
                 <Route path="/contest/post" element={<ContestPostPage />} />
                 <Route path="/contest/postDetail" element={<ContestPostDetail />} />
                 <Route path="/shoppingCategory" element={<ShoppingCategory />} />
