@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 
-function StoreProduct() {
+function StoreProduct(props) {
     return (
         <div className="product-container">
             <div className="product-main-box">
@@ -10,7 +10,7 @@ function StoreProduct() {
                 </div>
 
                 <div className="product-count-box count-box">
-                    <span>전체 {}개</span>
+                    <span>전체 {props.productcount}개</span>
                 </div>
                 <div className="product-table-box table-box">
                     <table className="product-table">
@@ -27,11 +27,20 @@ function StoreProduct() {
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
+                        {/*<tr>
                             <td>품번1</td>
                             <td>상품명1</td>
                             <td>19,000</td>
-                        </tr>
+                        </tr>*/}
+                        {
+                            Array(props.productcount).fill(
+                                <tr>
+                                    <td>{props.productnum}</td>
+                                    <td>{props.productname}</td>
+                                    <td>{props.productprice}</td>
+                                </tr>
+                            )
+                        }
                         </tbody>
                     </table>
                 </div>
