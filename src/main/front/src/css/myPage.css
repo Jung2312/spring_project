@@ -195,3 +195,119 @@
 .myShoppingPageOrderPrice{
     margin-top: 20px;
 }
+
+.myPage_mypage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+
+.myPage_profile_section, .myPage_community_content, .myPage_contest_content {
+    border: 1px solid #D5D5D5;
+    border-radius: 10px;
+    width: 1080px;
+    padding: 10px 20px;
+    margin-bottom: 50px;
+}
+
+.myPage_profile_info {
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.myPage-profile-img {
+    width: 137px;
+    height: auto;
+}
+
+.myPage_profile_content_section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 10px;
+}
+
+.myPage_profile_content_name {
+    margin-bottom: 5px;
+    > span {
+        font-size: 32px;
+        font-weight: bold;
+    }
+}
+
+.myPage_profile_content_follower_following {
+    margin-bottom: 20px;
+    color: #7d7d7d;
+    > span {
+        font-size: 16px;
+        font-weight: 500;
+    }
+}
+
+.myPage_profile_follower_number, .myPage_profile_following_number {
+    margin-left: 10px;
+    font-weight: 500;
+    color: #000000;
+}
+
+.myPage_profile_content_setting button{
+    padding: 7px 20px;
+    border: 1px solid #D5D5D5;
+    border-radius: 10px;
+    font-size: 16px;
+    background-color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+/*.myPage_profile_content_setting button:hover {*/
+/*    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); !* 그림자 효과 *!*/
+/*}*/
+
+.myPage_community_title, .myPage_contest_title {
+    margin-bottom: 30px;
+    >span {
+        font-size: 32px;
+        font-weight: bold;
+    }
+}
+
+.myPage_community_title_number, .myPage_contest_title_number {
+    margin-left: 20px;
+    color: #35C5F0;
+}
+
+.myPage_profile_activity {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.myPage_profile_activity_post, .myPage_profile_activity_like, .myPage_profile_activity_coupons {
+    > img {
+        width: 45px;
+    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.myPage_profile_activity_post:hover, .myPage_profile_activity_like:hover, .myPage_profile_activity_coupons:hover {
+    color: #7d7d7d; /* 텍스트 색상 변경 */
+}
+
+.myPage_profile_activity_post:hover > img, .myPage_profile_activity_like:hover > img, .myPage_profile_activity_coupons:hover > img {
+    filter: invert(51%) sepia(4%) saturate(12%) hue-rotate(315deg) brightness(95%) contrast(92%);
+}
+
+.myPage_profile_activity_text {
+    margin: 10px 0 5px 0;
+    font-weight: 500;
+}
