@@ -28,9 +28,8 @@ public class StoreController {
 
     // 사용자 정보 조회 API
     @GetMapping("/info")
-    public ResponseEntity<Store> getUserInfo(@RequestParam String userid) {
-        Store store = storeService.getStoreById(userid);  // userid로 사용자 정보 조회
-        System.out.println("상점::::::::::::::::::::::::::::::::::::::::::::::::::"+store);
+    public ResponseEntity<Store> getUserInfo(@RequestParam String storeid) {
+        Store store = storeService.getStoreById(storeid);  // userid로 사용자 정보 조회
         if (store != null) {
             return ResponseEntity.ok(store);  // 사용자 정보를 반환
         } else {
@@ -39,7 +38,7 @@ public class StoreController {
     }
 
     // 판매자 정보 업데이트
-    @PutMapping("/info")
+    @PutMapping("/update")
     public Store updateStoreInfo(@RequestBody Store updatedStore) {
         return storeService.updateStore(updatedStore);
     }

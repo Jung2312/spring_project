@@ -14,18 +14,21 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer productnum;
+    private long productnum;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String productname;
 
-    @Column(nullable = false)
+    /*@Column(nullable = false)*/
     private String productprice;
 
-    @Column(nullable = false)
+    /*@Column(nullable = false)*/
     private String productmainimage;
 
     @ManyToOne
-    @JoinColumn(name = "categorynum", nullable = false)
+    @JoinColumn(name = "categorynum"/*, nullable = false*/)
     private com.spring.myHouse.category.entity.Category category;
+
+    @JoinColumn(name="storenum")
+    private Long storenum;
 }
