@@ -63,8 +63,6 @@ function MyPage() {
                 <div className="myPage_contest_content">
 
                 </div>
-
-
             </div>
         </div>
     )

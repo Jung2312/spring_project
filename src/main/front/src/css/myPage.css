@@ -311,3 +311,67 @@
     margin: 10px 0 5px 0;
     font-weight: 500;
 }
+
+.profile_profile_box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 307px;
+    border: 1px solid #b6b6b6;
+    border-radius: 10px;
+    padding: 20px 0;
+}
+
+.profile_profile_image {
+    margin-bottom: 10px;
+}
+
+.followPage-profile-img {
+    width: 154px;
+}
+
+.profile_profile_content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile_profile_content_name {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.profile_profile_content_follower_following {
+    margin: 10px 0;
+    color: #7d7d7d;
+    > span {
+        font-size: 16px;
+        font-weight: 500;
+    }
+}
+
+.profile_profile_follower_number, .profile_profile_following_number {
+    margin-left: 5px;
+    font-weight: 500;
+    color: #000000;
+}
+
+.profile_profile_activity {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    gap: 40px;
+}
+
+.profile_profile_activity_post, .profile_profile_activity_like, .profile_profile_activity_coupons {
+    > img {
+        width: 45px;
+    }
+    > span {
+        margin: 5px 0;
+    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

@@ -329,13 +329,25 @@
     text-align: left;
 }
 
+.mainPage-tab-buttons-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    overflow: hidden; /* 탭 버튼들이 넘칠 경우 숨김 처리 */
+}
+
 .mainPage-tab-buttons {
     display: flex;
-    gap: 10px;
     margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 
 .mainPage-tab-button {
+    width: 140px;
+    height: 40px;
+    margin-right: 20px;
+    margin-bottom: 10px;
     padding: 10px 15px;
     border: none;
     border-radius: 20px;
@@ -359,6 +371,20 @@
 
 .mainPage-tab-content.show {
     display: block; /* 활성화된 탭만 보이도록 */
+}
+
+.mainPage-tab-more-btn {
+    padding: 10px;
+    margin-left: 10px;
+    background-color: #f1f1f1;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.mainPage-tab-more-btn:hover {
+    background-color: #ddd;
 }
 
 .mainPage-image-container {
