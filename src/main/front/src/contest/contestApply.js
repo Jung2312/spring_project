@@ -8,6 +8,7 @@ function ContestApply() {
     const navigate = useNavigate();
     const [contestData, setContestData] = useState([]);
     const [joinData, setJoinData] = useState([]);
+    const userid = sessionStorage.getItem('userid');
 
     useEffect(() => {
         fetch('http://localhost:80/contest/info')
@@ -129,6 +130,7 @@ function ContestApply() {
                                                     e.preventDefault();
                                                     clickContestLike(join.joinnum);
                                                 }}
+                                                disabled={!userid || userid === joinData.userid} // userid가 없거나 같으면 버튼 비활성화
                                             >
                                                 <img src={likeBtn} alt="like" />
                                             </button>
