@@ -43,7 +43,7 @@ function StoreManagement() {
 
     // 데이터가 준비되면 상태를 업데이트 (상품관리)
     useEffect(() => {
-        if (productCount !== null && productInfo.length > 0 && inventoryInfo.length > 0) {
+        if (productCount !== null && productInfo.length > 0) {
             // productCount와 productInfo가 모두 준비되었을 때 상태를 업데이트
             setProductData({
                 productcount: productCount,
