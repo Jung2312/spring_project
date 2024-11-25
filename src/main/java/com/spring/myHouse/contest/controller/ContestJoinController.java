@@ -1,7 +1,12 @@
 package com.spring.myHouse.contest.controller;
 
+import com.spring.myHouse.community.entity.Recommend;
+import com.spring.myHouse.contest.entity.Contest;
 import com.spring.myHouse.contest.entity.Contestjoin;
 import com.spring.myHouse.contest.service.ContestJoinService;
+import com.spring.myHouse.contest.service.ContestService;
+import com.spring.myHouse.user.entity.User;
+import com.spring.myHouse.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -10,8 +15,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
@@ -19,12 +27,71 @@ import java.util.UUID;
 @RequestMapping("/contest")
 public class ContestJoinController {
     private final ContestJoinService contestJoinService;
+    private final ContestService contestService;
+    private final UserService userService;
 
     @GetMapping("/info/join")
-    public List<Contestjoin> getContestjoins(Model model) {
+    public List<Map<String, Object>> getContestjoins() {
         List<Contestjoin> contestjoins = contestJoinService.getContestJoin();
-        model.addAttribute("contestjoins", contestjoins);
-        return contestjoins;
+
+        return contestjoins.stream().map(contestjoin -> {
+            Map<String, Object> contestWithUser = new HashMap<>();
+            contestWithUser.put("joinnum", contestjoin.getJoinnum());
+            contestWithUser.put("userid", contestjoin.getUserid());
+            contestWithUser.put("joinlike", contestjoin.getJoinlike());
+            contestWithUser.put("joinimg", contestjoin.getJoinimg());
+            contestWithUser.put("contestnum", contestjoin.getContestnum());
+
+            try {
+                User user = userService.getUserByIds(contestjoin.getUserid());
+                contestWithUser.put("profileimage", user.getProfileimage()); // 프로필 사진 추가
+                System.out.println(user.getProfileimage());
+            } catch (RuntimeException e) {
+                contestWithUser.put("profileimage", "기본 프로필 사진"); // 기본 이미지 경로 또는 텍스트 추가
+            }
+            return contestWithUser;
+        }).collect(Collectors.toList());
+    }
+    
+    // 완료된 콘테스트 조회
+    @GetMapping("/join/end")
+    public List<Map<String, Object>> getEndContestjoins() {
+        // 진행 중 콘테스트 가져오기 (임의로 0번째 데이터)
+        List<Contest> contestList = contestService.getContest();
+        Contest contest = contestList.get(0);
+
+        // 제외된 콘테스트 데이터 가져오기
+        List<Contestjoin> contestjoins = contestJoinService.getEndContestJoins(contest.getContestnum());
+
+        // 데이터를 가공하여 반환
+        return contestjoins.stream().map(contestjoin -> {
+            Map<String, Object> contestWithUser = new HashMap<>();
+            contestWithUser.put("joinnum", contestjoin.getJoinnum());
+            contestWithUser.put("userid", contestjoin.getUserid());
+            contestWithUser.put("joinlike", contestjoin.getJoinlike());
+            contestWithUser.put("joinimg", contestjoin.getJoinimg());
+            contestWithUser.put("contestnum", contestjoin.getContestnum());
+
+            User user = userService.getUserByIds(contestjoin.getUserid());
+            contestWithUser.put("profileimage", user.getProfileimage()); // 프로필 사진 추가
+            return contestWithUser;
+        }).collect(Collectors.toList());
+    }
+
+    @GetMapping("/join")
+    public Map<String, Object> getContestjoinDetail(@RequestParam Long joinnum) {
+        Contestjoin contestjoin = contestJoinService.getContestJoinDetail(joinnum);
+        Map<String, Object> contestWithUser = new HashMap<>();
+        contestWithUser.put("joinnum", contestjoin.getJoinnum());
+        contestWithUser.put("userid", contestjoin.getUserid());
+        contestWithUser.put("joinlike", contestjoin.getJoinlike());
+        contestWithUser.put("joinimg", contestjoin.getJoinimg());
+        contestWithUser.put("contestnum", contestjoin.getContestnum());
+
+        User user = userService.getUserByIds(contestjoin.getUserid());
+        contestWithUser.put("profileimage", user.getProfileimage());
+        System.out.println(user.getProfileimage());
+        return contestWithUser;
     }
 
     @PostMapping("/like/{joinnum}")

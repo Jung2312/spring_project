@@ -9,7 +9,6 @@ function ContestApply() {
     const [contestData, setContestData] = useState([]);
     const [joinData, setJoinData] = useState([]);
 
-    // 콘테스트 정보
     useEffect(() => {
         fetch('http://localhost:80/contest/info')
             .then(res => {
@@ -19,7 +18,6 @@ function ContestApply() {
                 return res.json();
             })
             .then(data => {
-                console.log(data);
                 setContestData(data);
             })
             .catch(err => {
@@ -28,7 +26,6 @@ function ContestApply() {
             });
     }, []);
 
-    // 콘테스트 참여 내역
     useEffect(() => {
         fetch('http://localhost:80/contest/info/join')
             .then(res => {
@@ -38,7 +35,6 @@ function ContestApply() {
                 return res.json();
             })
             .then(data => {
-                console.log(data);
                 setJoinData(data);
             })
             .catch(err => {
@@ -46,9 +42,35 @@ function ContestApply() {
                 setJoinData('Error fetching data');
             });
     }, []);
+
+    const clickContestLike = (joinnum) => {
+        fetch(`http://localhost:80/contest/like/${joinnum}`, {
+            method: "POST",
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Failed to update like");
+                }
+                return response.text();
+            })
+            .then(() => {
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    };
+
     const goContestPost = () => {
         navigate('/contest/post');
     };
+
+    // 4칸
+    const rows = [];
+    for (let i = 0; i < joinData.length; i += 4) {
+        rows.push(joinData.slice(i, i + 4));
+    }
+
     return (
         <div className="contestApplyContainer">
             <div className="contestBg">
@@ -70,51 +92,57 @@ function ContestApply() {
             <p className="contestApplyTitleText">참여작</p>
             <p className="contestApplyContentText">주제와 가장 어울리는 인테리어에 투표해주세요.</p>
 
-            {joinData.length > 0 && (
-                <div className="contestContent">
-                    <a href="/contest/postDetail">
-                        <div className="contentWork" style={{backgroundImage: `url("${process.env.PUBLIC_URL}/postImg/${joinData[0]?.joinimg}")`}}>
-                            <div className="contestProfileDiv">
-                                {/*프로필 사진 넣기*/}
-                                <img src={`${process.env.PUBLIC_URL}/postImg/${joinData[0]?.joinimg}` || ''} className="contestProfileImg" alt="profileImg" />
-                                <span id="contestUserId" className="contestProfileText">{joinData[0]?.userid || '없음'}</span>
-                            </div>
-                            <div className="contestLikeDiv">
-                                <button
-                                    type="button"
-                                    className="contestLikeBtn"
-                                    onClick={() => clickContestLike(joinData[0]?.joinnum)}
+            <div className="contestContentContainer">
+                {rows.map((row, rowIndex) => (
+                    <div className="contestRow" key={rowIndex}>
+                        {row.map((join, index) => (
+                            <div className="contentWork" key={join.joinnum}>
+                                <a
+                                    href={`/contest/postDetail/${join.joinnum}`}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        navigate(`/contest/postDetail/${join.joinnum}`);
+                                    }}
                                 >
-                                    <img src={likeBtn} alt="like" />
-                                </button>
-                                <span className="contestProfileText">{joinData[0]?.joinlike || 0}</span>
+                                    <div
+                                        className="contentWork"
+                                        style={{
+                                            backgroundImage: `url("${process.env.PUBLIC_URL}/postImg/${join.joinimg}")`,
+                                        }}
+                                    >
+                                        <div className="contestProfileDiv">
+                                            <img
+                                                src={`${process.env.PUBLIC_URL}/profileImg/${join.profileimage}` || ''}
+                                                className="contestProfileImg"
+                                                alt="profileImg"
+                                            />
+                                            <span id="contestUserId" className="contestProfileText">
+                                                {join.userid || '없음'}
+                                            </span>
+                                        </div>
+                                        <div className="contestLikeDiv">
+                                            <button
+                                                type="button"
+                                                className="contestLikeBtn"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    e.preventDefault();
+                                                    clickContestLike(join.joinnum);
+                                                }}
+                                            >
+                                                <img src={likeBtn} alt="like" />
+                                            </button>
+                                            <span className="contestProfileText">{join.joinlike || 0}</span>
+                                        </div>
+                                    </div>
+                                </a>
                             </div>
-                        </div>
-                    </a>
-                </div>
-            )}
+                        ))}
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }
-
-const clickContestLike = (joinnum) => {
-    fetch(`http://localhost:80/contest/like/${joinnum}`, {
-        method: "POST",
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Failed to update like");
-            }
-            return response.text();
-        })
-        .then((data) => {
-            console.log(data);
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        });
-};
-
-
 
 export default ContestApply;

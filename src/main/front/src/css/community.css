@@ -226,10 +226,12 @@
 
 .recommendPostPrevBtn{
     margin-right: 20px;
+    width: 60px;
 }
 
 .recommendPostNextBtn{
     margin-left: 20px;
+    width: 60px;
 }
 
 .recommendPostCurrentPage{
