@@ -340,3 +340,22 @@ a{
     cursor: pointer;
     border: none;
 }
+
+/* input 숫자 화살표 없앰 */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.inventory-btn-box{
+    display: flex;
+    .inventory-count-input{
+        max-width: 40px;
+    }
+    .inventory-del-btn, .inventory-add-btn{
+        background-color: #ffffff;
+        border: none;
+        cursor: pointer;
+    }
+}
