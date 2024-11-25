@@ -105,3 +105,13 @@ img{
         }
     }
 }
+
+#mainpage-logout{
+    height: 30px;
+    border: none;
+    color: #5c5c5c;
+    background-color: #ffffff;
+    margin-right: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}

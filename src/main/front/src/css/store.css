@@ -222,6 +222,19 @@ a{
     margin-bottom: 20px;
 }
 
+#store-logout{
+    color: #ffffff;
+    background-color: #000000;
+    border: none;
+    width: 150px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.store-sidebar-item-wrapper:last-child::after {
+    content: none;
+}
+
 /* 콘텐츠 섹션 */
 /*.store-content-section {
     display: flex;

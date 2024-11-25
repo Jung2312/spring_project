@@ -42,6 +42,7 @@ function StoreInventory({inventoryData}) {
                                         <td className="inventory-table-item">{item.productname}</td>
                                         <td className="inventory-table-item">
                                             {
+                                                inventoryInfo &&
                                                 inventoryInfo.map((item, index) => {
                                                     return (
                                                         <div className="inventory-btn-box" key={index}>

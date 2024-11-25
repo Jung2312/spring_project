@@ -4,7 +4,7 @@ function StoreProduct({productData}) {
     const { productcount, productInfo } = productData;
 
     // productcount나 productInfo가 없으면 로딩 중 상태 표시
-    if (productcount === null || productInfo.length === 0) {
+    if (!productInfo || productcount === null || productInfo.length === 0) {
         return <div>로딩중...</div>; // 로딩 중 메시지 또는 스피너
     }
 
