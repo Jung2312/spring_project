@@ -18,8 +18,15 @@ function StoreManagement() {
     const [activeMenu, setActiveMenu] = useState("상품 관리");
     const [isLogin, setIsLogin] = useState(false);
     const [storeInfo, setStoreInfo] = useState(null);
-    const [productInfo, setProductInfo] = useState(null);
     const [productCount, setProductCount] = useState(null);
+    const [productInfo, setProductInfo] = useState({});const [productData, setProductData] = useState({ productcount: null, productInfo: [] });
+
+    const product = {
+        productcount: productCount,
+        productnum: productInfo.productnum,
+        productname: productInfo.productname,
+        productprice: productInfo.productprice
+    };
 
     // 컴포넌트가 렌더링될 때 로그인 여부를 확인하고, 로그인된 경우 사용자 정보 가져오기
     useEffect(() => {
@@ -29,6 +36,25 @@ function StoreManagement() {
             fetchUserInfo(storeid);  // userid를 서버로 전송하여 사용자 정보 가져오기
         }
     }, []);
+
+    useEffect(() => {
+        const storenum = sessionStorage.getItem("storenum");
+        if(storenum){
+            fetchProductInfo(storenum);
+            fetchProductCount(storenum);
+        }
+    }, []);
+
+    // 데이터가 준비되면 상태를 업데이트
+    useEffect(() => {
+        if (productCount !== null && productInfo.length > 0) {
+            // productCount와 productInfo가 모두 준비되었을 때 상태를 업데이트
+            setProductData({
+                productcount: productCount,
+                productInfo: productInfo,
+            });
+        }
+    }, [productCount, productInfo]);
 
     // 서버에서 사용자 정보를 가져오는 함수
     const fetchUserInfo = async (storeid) => {
@@ -48,31 +74,6 @@ function StoreManagement() {
         }
     };
 
-    const printStoreInfo = () => {
-        sessionStorage.setItem("storenum", storeInfo.storenum);
-        return (
-            <div className="store-name-box">
-                <span className="store-name">{storeInfo.storename} 님</span>
-            </div>
-        )
-    }
-
-    const printLoading = () => {
-        return (
-            <div className="store-name-box">
-                <span className="store-name">로딩중...</span>
-            </div>
-        )
-    }
-
-    useEffect(() => {
-        const storenum = sessionStorage.getItem("storenum");
-        if(storenum){
-            fetchProductInfo(storenum);
-            fetchProductCount(storenum);
-        }
-    }, []);
-
     // 상품 리스트 불러오기
     const fetchProductInfo = async (storenum) => {
         try {
@@ -82,8 +83,13 @@ function StoreManagement() {
 
             if(response.ok){
                 const data = await response.json();
-                setProductInfo(data);
-                console.log(productInfo);
+                // 상품 데이터만 추출
+                const productData = data.map(item => ({
+                    productnum: item.productnum,
+                    productname: item.productname,
+                    productprice: item.productprice
+                }));
+                setProductInfo(productData);
             }else {
                 console.error('Failed to fetch user info');
             }
@@ -108,6 +114,23 @@ function StoreManagement() {
             console.error('Error fetching user info:', error);
         }
     };
+
+    const printStoreInfo = () => {
+        sessionStorage.setItem("storenum", storeInfo.storenum);
+        return (
+            <div className="store-name-box">
+                <span className="store-name">{storeInfo.storename} 님</span>
+            </div>
+        )
+    }
+
+    const printLoading = () => {
+        return (
+            <div className="store-name-box">
+                <span className="store-name">로딩중...</span>
+            </div>
+        )
+    }
 
     return (
         <main className="store-main-container">
@@ -137,7 +160,7 @@ function StoreManagement() {
                 {/* 콘텐츠 섹션 */}
                 <section className="store-content-section store-item">
                     {/*컴포넌트에 값 전달*/}
-                    {activeMenu === "상품 관리" && <StoreProduct productcount={productCount} productnum={productInfo.productnum} productname={productInfo.productname} productprice={productInfo.productprice}/>}
+                    {activeMenu === "상품 관리" && <StoreProduct productData={productData}/>}
                     {activeMenu === "재고 관리" && <StoreInventory />}
                     {activeMenu === "매출 현황" && <StoreStatus />}
                     {activeMenu === "정보 변경" && <InfoUpdate />}
