@@ -6,6 +6,7 @@ import '../css/store.css';
 import StoreInventory from "./store_inventory";
 import StoreProduct from "./store_product";
 import StoreStatus from "./store_status";
+import {useNavigate} from "react-router-dom";
 
 const sidebarItems = [
     { text: "상품 관리", iconSrc: "storeImg/store_productmanage.png" },
@@ -29,7 +30,7 @@ function StoreManagement() {
         const storeid = sessionStorage.getItem("storeid");
         if (storeid) {
             setIsLogin(true);
-            fetchUserInfo(storeid);  // userid를 서버로 전송하여 사용자 정보 가져오기
+            fetchUserInfo(storeid);  // storeid를 서버로 전송하여 사용자 정보 가져오기
         }
     }, []);
 
@@ -43,7 +44,7 @@ function StoreManagement() {
 
     // 데이터가 준비되면 상태를 업데이트 (상품관리)
     useEffect(() => {
-        if (productCount !== null && productInfo.length > 0) {
+        if (productCount !== null && productInfo.length > 0 ) {
             // productCount와 productInfo가 모두 준비되었을 때 상태를 업데이트
             setProductData({
                 productcount: productCount,
@@ -74,6 +75,7 @@ function StoreManagement() {
             if (response.ok) {
                 const data = await response.json();
                 setStoreInfo(data);
+                console.log(isLogin);
             } else {
                 console.error('Failed to fetch user info');
             }
@@ -159,6 +161,13 @@ function StoreManagement() {
         )
     }
 
+    const navigate = useNavigate();
+
+    const logoutButtonClick = () => {
+        sessionStorage.clear();
+        navigate('/');
+    }
+
     return (
         <main className="store-main-container">
             <header className="store-header">
@@ -179,8 +188,12 @@ function StoreManagement() {
                             >
                                 <SidebarItem {...item} isActive={activeMenu === item.text}/>
                             </div>
-
                         ))}
+                        <div className="store-sidebar-item-wrapper">
+                            <div action="/logout" className="store-sidebar-item" method="post">
+                                <button id="store-logout" onClick={() => logoutButtonClick()}>로그아웃</button>
+                            </div>
+                        </div>
                     </nav>
                 </section>
 

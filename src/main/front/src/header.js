@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import css from './css/header.css';
 import SearchImg from './img/search_img.png';
 import CartImg from './img/cart_img.png';
+import {useNavigate} from "react-router-dom";
 
 function Header() {
     const [isLogin, setIsLogin] = useState(false);
@@ -33,6 +34,11 @@ function Header() {
             console.error('Error fetching user info:', error);
         }
     };
+
+    const logoutButtonClick = () => {
+        sessionStorage.clear();
+        window.location.reload();
+    }
     return (
         <header className="main-header">
             <div className="logo-name-box"><a href="" className="logo-name">나만의집</a></div>
@@ -48,19 +54,21 @@ function Header() {
             <div className="cart-box">
                 <a href=""><img src={CartImg} /></a>
             </div>
-            <div className="header-user-box">
                 {isLogin ? (
                     // Display user information if logged in
-                    <span className="header-user-name">{userInfo ? `${userInfo.name}님` : "로딩중..."}</span>
+                    <div className="header-user-box">
+                        <span className="header-user-name">{userInfo ? `${userInfo.name}님` : "로딩중..."}</span>
+                        <button id="mainpage-logout" onClick={() => logoutButtonClick()}>로그아웃</button>
+                        <a href="" id="service">고객센터</a>
+                    </div>
                 ) : (
                     // If not logged in, show login and register links
-                    <>
+                    <div className="header-user-box">
                         <a href="/login" id="login">로그인</a>
                         <a href="/register" id="register">회원가입</a>
-                    </>
+                        <a href="" id="service">고객센터</a>
+                    </div>
                 )}
-                <a href="" id="service">고객센터</a>
-            </div>
             <div className="post-btn-box">
                 <button className="post-btn"><span>글쓰기</span></button>
             </div>
