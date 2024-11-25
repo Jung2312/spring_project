@@ -22,4 +22,6 @@ public class ContestController {
         model.addAttribute("contestList", contestList);
         return contestList;
     }
+
+
 }

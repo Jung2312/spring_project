@@ -14,7 +14,7 @@ import ContestApply from "./contest/contestApply";
 import StoreManagement from "./store/storeManagement";
 import ContestChampionship from "./contest/contestChampionship";
 import ContestPostPage from "./contest/contestPostPage";
-import ContestPostDetail from "./contest/contestPostDetail";
+import ContestPostDetailPage from "./contest/contestPostDetail";
 import ShoppingCategory from "./shopping/shoppingCategory";
 import MyShoppingPage from "./user/myShoppingPage";
 import RecommendPostPage from "./community/recommendPostPage";
@@ -40,7 +40,7 @@ function App() {
                 <Route path="/storeManagement" element={<StoreManagement />} />
                 <Route path="/myPage" element={<MyPage />} />
                 <Route path="/contest/post" element={<ContestPostPage />} />
-                <Route path="/contest/postDetail" element={<ContestPostDetail />} />
+                <Route path="/contest/postDetail/:joinnum" element={<ContestPostDetailPage />} />
                 <Route path="/shoppingCategory" element={<ShoppingCategory />} />
                 <Route path="/myShoppingPage" element={<MyShoppingPage />} />
                 <Route path="/productDetail" element={<ProductDetail />} />

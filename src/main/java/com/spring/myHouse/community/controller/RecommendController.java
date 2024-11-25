@@ -2,18 +2,21 @@ package com.spring.myHouse.community.controller;
 
 import com.spring.myHouse.community.entity.Recommend;
 import com.spring.myHouse.community.service.RecommendService;
+import com.spring.myHouse.contest.entity.Contestjoin;
 import com.spring.myHouse.user.entity.User;
 import com.spring.myHouse.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -56,5 +59,53 @@ public class RecommendController {
             return postWithUser;
         }).collect(Collectors.toList());
     }
+
+    @PostMapping("/post")
+    public ResponseEntity<String> uploadFileAndSaveData(
+            @RequestParam("file") MultipartFile file,
+            @RequestBody Map<String, Object> postData) {
+
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("파일이 비어있습니다.");
+        }
+
+        // 파일 저장 경로 설정
+        String uploadDir = "C:\\spring_project\\src\\main\\front\\public\\postImg\\";
+        File uploadPath = new File(uploadDir);
+        if (!uploadPath.exists()) {
+            uploadPath.mkdirs();
+        }
+        System.out.println("postDate" + postData);
+        try {
+            // 파일 저장
+            String fileName = file.getOriginalFilename();
+            String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
+
+            UUID uuid = UUID.randomUUID();
+            String newFileName = uuid.toString() + extension;
+
+            String filePath = uploadDir + newFileName;
+            file.transferTo(new File(filePath));
+
+            // DB에 저장할 recommend 객체 생성
+            Recommend recommend = new Recommend();
+            recommend.setHashtaglist((String) postData.get("hashtaglist"));
+            recommend.setPostimg((String) postData.get("postImg"));
+            recommend.setPostlike(0L);
+            recommend.setPaynum((Long) postData.get("paynum"));
+            recommend.setPostcontent((String) postData.get("postcontent"));
+            recommend.setPosttitle((String) postData.get("posttitle"));
+            recommend.setPostview(0L);
+
+            // DB 저장
+            recommendService.saveRecommend(recommend);
+
+            return ResponseEntity.ok("파일 업로드 및 데이터 저장 성공");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("파일 업로드 중 오류 발생");
+        }
+    }
+
 
 }

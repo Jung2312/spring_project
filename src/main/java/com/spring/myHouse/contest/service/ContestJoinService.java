@@ -16,6 +16,14 @@ public class ContestJoinService {
         return contestJoinRepository.findContestjoinByContestnum(1L);
     }
 
+    public List<Contestjoin> getEndContestJoins(Long contestnum) {
+        return contestJoinRepository.findContestjoinByContestnumNot(contestnum);
+    }
+
+    public Contestjoin getContestJoinDetail(Long joinnum) {
+        return contestJoinRepository.findContestjoinByJoinnum(joinnum);
+    }
+
     public void incrementLike(Long joinnum) {
         contestJoinRepository.incrementLike(joinnum);
     }

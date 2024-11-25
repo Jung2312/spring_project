@@ -1,72 +1,88 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import contestBg from '../img/contest_bg.png';
 import "../css/contest.css";
-import { useNavigate } from 'react-router-dom';
 import likeBtn from "../img/likeBtn.png";
 
-function ContestPostPage() {
-    const navigate = useNavigate();
-    const [contestData, setContestData] = useState([]);
-    const [joinData, setJoinData] = useState([]);
+function ContestPostDetailPage() {
+    const { joinnum } = useParams(); // Get joinnum from route params
+    const [joinData, setJoinData] = useState(null);
 
-    // 콘테스트 정보
     useEffect(() => {
-        fetch('http://localhost:80/contest/info')
+        fetch(`http://localhost:80/contest/join?joinnum=${joinnum}`)
             .then(res => {
                 if (!res.ok) {
-                    throw new Error('response error');
+                    throw new Error('Failed to fetch contest join detail');
                 }
                 return res.json();
             })
             .then(data => {
-                console.log(data);
-                setContestData(data);
+                setJoinData(data);
             })
             .catch(err => {
                 console.error('Fetch error:', err);
-                setContestData('Error fetching data');
             });
-    }, []);
+    }, [joinnum]);
+
+
+    const clickContestLike = (joinnum) => {
+        fetch(`http://localhost:80/contest/like/${joinnum}`, {
+            method: "POST",
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Failed to update like");
+                }
+                return response.text();
+            })
+            .then(() => {
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    };
+
     return (
         <div className="contestApplyContainer">
             <div className="contestBg">
-                <div>
-                    <img src={contestBg} alt="Contest Background" />
-                    <span className="contestSubjectText">{contestData[0]?.contesttitle || '주제'}</span>
-                    <span className="contestDateText">
-                        {contestData[0]?.conteststartdate || '시작일'} - {contestData[0]?.contestenddate || '종료일'}
-                    </span>
-                </div>
+                <img src={contestBg} alt="Contest Background" />
             </div>
 
-            <div id="contestPostContainer2">
-                <div className="contestProfileDiv2">
-                    {/*프로필 사진 넣기*/}
-                    <img src={`${process.env.PUBLIC_URL}/${joinData[0]?.joinimg}` || ''} className="contestProfileImg2"
-                         alt="profileImg"/>
-                    <span id="contestUserId" className="contestProfileText2">{joinData[0]?.userid || '없음'}</span>
-                </div>
+            {joinData && (
+                <div id="contestPostContainer2">
+                    <div className="contestProfileDiv2">
+                        <img
+                            src={`${process.env.PUBLIC_URL}/profileImg/${joinData.profileimage}`}
+                            className="contestProfileImg2"
+                            alt="profileImg"
+                        />
+                        <span className="contestProfileText2">{joinData.userid || '없음'}</span>
+                    </div>
 
-                <div id="contestImgContainer2"
-                     style={{backgroundImage: `url("${process.env.PUBLIC_URL}/profileImg/nongdamgom.png")`}}>
-                </div>
+                    <div
+                        id="contestImgContainer2"
+                        style={{
+                            backgroundImage: `url("${process.env.PUBLIC_URL}/postImg/${joinData.joinimg}")`,
+                            backgroundSize: "cover",
+                        }}
+                    ></div>
 
-                <div className="contestLikeDiv2">
-                    <button
-                        type="button"
-                        className="contestLikeBtn"
-                    >
-                        <img src={likeBtn} alt="like" id="likeBtnImg"/>
-                    </button>
-                    <span className="contestProfileText2">{joinData[0]?.joinlike || 0}</span>
+                    <div className="contestLikeDiv2">
+                        <button type="button" className="contestLikeBtn"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    clickContestLike(joinData.joinnum);
+                                }}>
+                            <img src={likeBtn} alt="like" id="likeBtnImg"/>
+                        </button>
+                        <span className="contestProfileText2">{joinData.joinlike || 0}</span>
+                    </div>
                 </div>
-                <div id="contestPostBtnList2">
-                    <input type="button" value="삭제" id="contestPostDelBtn" className="hidden"/>
-                </div>
-            </div>
+            )}
         </div>
     );
 }
 
-
-export default ContestPostPage;
+export default ContestPostDetailPage;

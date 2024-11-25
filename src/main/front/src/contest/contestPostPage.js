@@ -81,6 +81,7 @@ function ContestPostPage() {
     };
 
     return (
+
         <div className="contestApplyContainer">
             <div className="contestBg">
                 <div>

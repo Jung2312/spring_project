@@ -2,6 +2,7 @@ package com.spring.myHouse.community.service;
 
 import com.spring.myHouse.community.entity.Recommend;
 import com.spring.myHouse.community.repository.RecommendRepository;
+import com.spring.myHouse.contest.entity.Contestjoin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,4 +19,9 @@ public class RecommendService {
         List<Recommend> recommends = recommendRepository.findAll();
         return new ArrayList<>(recommends);
     }
+
+    public void saveRecommend(Recommend recommend) {
+        recommendRepository.save(recommend);
+    }
+
 }
