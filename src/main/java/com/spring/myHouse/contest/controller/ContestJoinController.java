@@ -146,4 +146,12 @@ public class ContestJoinController {
             return ResponseEntity.status(500).body("파일 업로드 중 오류 발생");
         }
     }
+
+    // 작성자가 본인 글 삭제
+    @DeleteMapping("/delete/{joinnum}")
+    public ResponseEntity<String> deleteContestJoin(@PathVariable Long joinnum) {
+        System.out.println(joinnum);
+        contestJoinService.delContestJoin(joinnum);
+        return ResponseEntity.ok("success");
+    }
 }

@@ -31,4 +31,8 @@ public class ContestJoinService {
     public void saveContestJoin(Contestjoin contestjoin) {
         contestJoinRepository.save(contestjoin);
     }
+
+    public void delContestJoin(Long joinnum) {
+        contestJoinRepository.deleteById(joinnum);
+    }
 }
