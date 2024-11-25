@@ -21,25 +21,48 @@ function MainPage() {
         return price.toLocaleString(); // 쉼표 포함 형식으로 변환
     };
 
-    const [activeTab, setActiveTab] = useState('all');
-    const [majorCategories, setMajorCategories] = useState([]);
+    const [majorCategories, setMajorCategories] = useState([]); // 카테고리 데이터
+    const [activeTab, setActiveTab] = useState(null); // 현재 활성화된 탭 (categorynum)
+    const [filteredProducts, setFilteredProducts] = useState([]); // 필터링된 상품 목록
     const [products, setProducts] = useState([]);
 
-    // 탭을 변경하는 함수
-    const showTab = (tabName) => {
-        setActiveTab(tabName);
+    // 주요 카테고리 데이터 가져오기
+    useEffect(() => {
+        axios
+            .get('http://localhost:80/categories/major')
+            .then((response) => {
+                const categories = response.data.map((name, index) => ({
+                    name,
+                    categorynum: index + 1, // 카테고리 번호는 서버에서 받아야 함
+                }));
+                setMajorCategories([{ name: '전체', categorynum: null }, ...categories]);
+            })
+            .catch((error) => console.error('Error fetching major categories:', error));
+    }, []);
+
+    // 특정 카테고리에 해당하는 상품 데이터 가져오기
+    const fetchProductsByCategory = (categorynum) => {
+        const url =
+            categorynum === null
+                ? 'http://localhost:80/product/productslist' // '전체'는 모든 상품을 가져옴
+                : `http://localhost:80/product/category/${categorynum}`;
+        axios
+            .get(url)
+            .then((response) => {
+                setFilteredProducts(response.data); // 3개만 저장
+            })
+            .catch((error) => console.error('Error fetching products:', error));
     };
 
-    // majorcategory 데이터를 서버에서 가져오는 함수
+    // 탭 클릭 시 처리
+    const handleTabClick = (categorynum) => {
+        setActiveTab(categorynum); // 활성 탭 상태 업데이트
+        fetchProductsByCategory(categorynum); // 해당 카테고리 상품 데이터 가져오기
+    };
+
     useEffect(() => {
-        axios.get('http://localhost:80/api/categories/major')
-            .then(response => {
-                console.log("Major Categories:", response.data); // 데이터 확인
-                setMajorCategories(['all', ...response.data]); // "전체" 버튼 추가
-            })
-            .catch(error => {
-                console.error('Error fetching major categories:', error);
-            });
+        // 초기 로드 시 '전체' 상품 데이터 가져오기
+        fetchProductsByCategory(null);
     }, []);
 
     const [postList, setPostList] = useState([]);
@@ -59,8 +82,8 @@ function MainPage() {
     useEffect(() => {
         axios.get('http://localhost:80/product/productslist')
             .then(response => {
-                console.log(response.data); // 데이터 확인
                 setProducts(response.data);
+                setFilteredProducts(response.data); // 초기에는 전체 상품 표시
             })
             .catch(error => {
                 console.error('Error fetching product data:', error);
@@ -178,26 +201,26 @@ function MainPage() {
                 {/* 탭 버튼 */}
                 <div className="mainPage-tab-buttons-wrapper">
                     <div className="mainPage-tab-buttons">
-                        {majorCategories.map((category, index) => (
-                            <button key={index} className={`mainPage-tab-button ${activeTab === category ? 'active' : ''}`}
-                                    onClick={() => showTab(category)}>{category}</button>
+                        {majorCategories.map((category) => (
+                            <button key={category.categorynum} className={`mainPage-tab-button ${activeTab === category.categorynum ? 'active' : ''}`}
+                                onClick={() => handleTabClick(category.categorynum)}>{category.name}</button>
                         ))}
                     </div>
                 </div>
                 <div className="mainPage-best-part">
-                    {products.slice(0, 3).map((product, index) => (
-                    <div className="mainPage-best-content" key={index}>
-                        <div className="mainPage-image-container">
-                            <img className="mainPage-best-img" src={product.productMainImage} alt={product.productName}/>
-                            <div className="mainPage-rank-badge">1</div>
+                    {filteredProducts.slice(0, 3).map((product, index) => (
+                        <div className="mainPage-best-content" key={index}>
+                            <div className="mainPage-image-container">
+                                <img className="mainPage-best-img" src={product.productMainImage} alt={product.productName}/>
+                                <div className="mainPage-rank-badge">{index + 1}</div>
+                            </div>
+                            <div className="mainPage-best-text">
+                                <span className="mainPage-store-name">{product.storeName}</span>
+                                <span className="mainPage-product-name">{product.productName}</span>
+                                <span className="mainPage-product-price">{formatPrice(product.productPrice)}원</span>
+                                <span className="mainPage-product-review">리뷰 37,213</span>
+                            </div>
                         </div>
-                        <div className="mainPage-best-text">
-                            <span className="mainPage-store-name">{product.storeName}</span>
-                            <span className="mainPage-product-name">{product.productName}</span>
-                            <span className="mainPage-product-price">{formatPrice(product.productPrice)}원</span>
-                            <span className="mainPage-product-review">리뷰 37,213</span>
-                        </div>
-                    </div>
                     ))}
                 </div>
             </div>
