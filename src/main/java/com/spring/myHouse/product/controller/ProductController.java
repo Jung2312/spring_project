@@ -3,9 +3,12 @@ package com.spring.myHouse.product.controller;
 import com.spring.myHouse.product.entity.Product;
 import com.spring.myHouse.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/product")
@@ -14,6 +17,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final JdbcTemplate jdbcTemplate;
 
     // 특정 카테고리에 속한 상품 목록 조회
     @GetMapping("/category/{categorynum}")
@@ -33,4 +37,20 @@ public class ProductController {
         System.out.println("Fetching products by store : " + storenum);
         return productService.getProductCountByStore(storenum);
     }
+
+    @GetMapping("/productslist")
+    public List<Map<String, Object>> getProducts() {
+        String query = "SELECT p.productmainimage, p.productname, p.productprice, s.storename " +
+                "FROM product p " +
+                "JOIN store s ON p.storenum = s.storenum";
+        return jdbcTemplate.query(query, (rs, rowNum) -> {
+            Map<String, Object> result = new HashMap<>();
+            result.put("productMainImage", rs.getString("productmainimage"));
+            result.put("productName", rs.getString("productname"));
+            result.put("productPrice", rs.getInt("productprice"));
+            result.put("storeName", rs.getString("storename"));
+            return result;
+        });
+    }
+
 }

@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import banner from '../img/banner.png';
 import like from '../img/like.png';
 import comment from '../img/comment.png';
-import nongdamgom  from '../img/nongdamgom.png';
-import blacknongdamgom  from '../img/blacknongdamgom.png';
 import furniture from '../img/furniture.png';
-import css from '../css/mainPage.css';
 import Header from '../header.js'
+import axios from "axios";
+import ex from "../img/exProfile.png";
+import '../css/community.css';
+import '../css/mainPage.css';
 
 function MainPage() {
     const [likeCount, setLikeCount] = useState(0); // 좋아요 초기값
@@ -16,12 +17,55 @@ function MainPage() {
         setLikeCount(likeCount + 1);
     };
 
+    const formatPrice = (price) => {
+        return price.toLocaleString(); // 쉼표 포함 형식으로 변환
+    };
+
     const [activeTab, setActiveTab] = useState('all');
+    const [majorCategories, setMajorCategories] = useState([]);
+    const [products, setProducts] = useState([]);
 
     // 탭을 변경하는 함수
     const showTab = (tabName) => {
         setActiveTab(tabName);
     };
+
+    // majorcategory 데이터를 서버에서 가져오는 함수
+    useEffect(() => {
+        axios.get('http://localhost:80/api/categories/major')
+            .then(response => {
+                console.log("Major Categories:", response.data); // 데이터 확인
+                setMajorCategories(['all', ...response.data]); // "전체" 버튼 추가
+            })
+            .catch(error => {
+                console.error('Error fetching major categories:', error);
+            });
+    }, []);
+
+    const [postList, setPostList] = useState([]);
+
+    // 서버에서 게시글 데이터 가져옴
+    useEffect(() => {
+        axios
+            .get('http://localhost:80/recommend') // Spring Boot API URL
+            .then((response) => {
+                setPostList(response.data);
+            })
+            .catch((error) => {
+                console.error("데이터를 가져오는 중 오류가 발생했습니다.", error);
+            });
+    }, []);
+
+    useEffect(() => {
+        axios.get('http://localhost:80/product/productslist')
+            .then(response => {
+                console.log(response.data); // 데이터 확인
+                setProducts(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching product data:', error);
+            });
+    }, []);
 
     return (
         <div className="mainPage">
@@ -32,196 +76,57 @@ function MainPage() {
                 </div>
             </div>
             <div className="mainPage-recommend-section">
-                <div className="mainPage-recommend-part">
-                    <div className="mainPage-recommend-content">
-                        <div className="mainPage-profile">
-                            <div className="mainPage-profile-img">
-                                <img className="mainPage-profile-img" src={nongdamgom} alt="프로필 사진"/>
+                {postList.map((post) => (
+                    <div className="recommend-section" key={post.postnum}>
+                        {/* 프로필 섹션 */}
+                        <div className="profile-section">
+                            <div className="profile-img">
+                                <img className="profile-img" src={`${process.env.PUBLIC_URL}/profileImg/${post.profileimage}`} alt="프로필 사진"
+                                     onError={(e) => { e.target.src = ex; }}/>
                             </div>
-                            <div className="mainPage-profile-content">
-                                <div className="mainPage-profile-text">
-                                    <span className="mainPage-name">nondamgomguma</span>
-                                    <span className="mainPage-follow">팔로우</span>
+                            <div className="profile-content">
+                                <div className="profile-name">
+                                    <span className="nick-name">{post.userid}</span> {/* 닉네임 */}
+                                    <span>·</span>
+                                    <button className="follow">팔로우</button>
                                 </div>
-                                <div className="mainPage-one-liner">
-                                    <span className="mainPage-one-liner_text">고구마를 좋아하는 어쩌구 ...</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mainPage-image">
-                            <img className="mainPage-post-img" src={banner} alt="게시글 사진"/>
-                        </div>
-                        <div className="mainPage-like_comment">
-                            <div className="mainPage-like" onClick={handleLikeClick} style={{cursor: 'pointer'}}>
-                                <img className="mainPage-like-img" src={like} alt="좋아요"/>
-                                <span className="mainPage-like-text">{likeCount}</span>
-                            </div>
-                            <div className="mainPage-comment">
-                                <img className="mainPage-comment-img" src={comment} alt="댓글"/>
-                                <span>12</span>
-                            </div>
-                        </div>
-                        <div className="mainPage-cotent">
-                            <div className="mainPage-cotent-text">
-                                <span>이 고구마를 봐, 때깔곱지</span>
-                            </div>
-                        </div>
-                        <div className="mainPage-comment">
-                            <div className="mainPage-comment-profile">
-                                <div className="mainPage-comment-profile-img">
-                                    <img className="mainPage-comment-profile-img" src={blacknongdamgom} alt="프로필사진"/>
-                                </div>
-                                <div className="mainPage-comment-content">
-                                    <div className="mainPage-comment-text">
-                                        <span className="mainPage-name">nondamgomguma</span>
-                                        <span className="mainPage-one-liner_text">고구마를 좋아하는 어쩌구 ...</span>
-                                    </div>
+                                <div>
+                                    <span className="profile-text">{post.introduce}</span> {/* 자기소개 */}
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="mainPage-recommend-content">
-                        <div className="mainPage-profile">
-                            <div className="mainPage-profile-img">
-                                <img className="mainPage-profile-img" src={nongdamgom} alt="프로필 사진"/>
+                        {/* 게시글 사진 */}
+                        <img className="post-img" src={`${process.env.PUBLIC_URL}/postImg/${post.postimg}`} alt="게시글 사진"
+                             onError={(e) => { e.target.src = ex; }}/>
+                        {/* 좋아요와 댓글 */}
+                        <div className="like-comment" onClick={handleLikeClick} style={{cursor: 'pointer'}}>
+                            <div className="like">
+                                <img className="like-img" src={like} alt="마음"/>
+                                <span>{post.postlike+likeCount}</span>
                             </div>
-                            <div className="mainPage-profile-content">
-                                <div className="mainPage-profile-text">
-                                    <span className="mainPage-name">nondamgomguma</span>
-                                    <span className="mainPage-follow">팔로우</span>
-                                </div>
-                                <div className="mainPage-one-liner">
-                                    <span className="mainPage-one-liner_text">고구마를 좋아하는 어쩌구 ...</span>
-                                </div>
+                            <div className="comment">
+                                <img className="comment-img" src={comment} alt="댓글"/>
+                                <span>{post.postview}</span>
                             </div>
                         </div>
-                        <div className="mainPage-image">
-                            <img className="mainPage-post-img" src={banner} alt="게시글 사진"/>
-                        </div>
-                        <div className="mainPage-like_comment">
-                            <div className="mainPage-like">
-                                <img className="mainPage-like-img" src={like} alt="좋아요"/>
-                                <span>112</span>
-                            </div>
-                            <div className="mainPage-comment">
-                                <img className="mainPage-comment-img" src={comment} alt="댓글"/>
-                                <span>12</span>
+                        {/* 게시글 내용 */}
+                        <div className="cotent-section">
+                            <div>
+                                <span className="cotent-text">{post.postcontent}</span>
                             </div>
                         </div>
-                        <div className="mainPage-cotent">
-                            <div className="mainPage-cotent-text">
-                                <span>이 고구마를 봐, 때깔곱지</span>
-                            </div>
-                        </div>
-                        <div className="mainPage-comment">
-                            <div className="mainPage-comment-profile">
-                                <div className="mainPage-comment-profile-img">
-                                    <img className="mainPage-comment-profile-img" src={blacknongdamgom} alt="프로필사진"/>
-                                </div>
-                                <div className="mainPage-comment-content">
-                                    <div className="mainPage-comment-text">
-                                        <span className="mainPage-name">nondamgomguma</span>
-                                        <span className="mainPage-one-liner_text">고구마를 좋아하는 어쩌구 ...</span>
-                                    </div>
+                        {/* 댓글 내용 */}
+                        <div className="comment-section">
+                            <div className="comment">
+                                <img className="comment-profile" src={ex} alt="프로필사진"/>
+                                <div className="comment-content">
+                                    <div><span className="name">{post.userid}</span></div>
+                                    <span className="comment-text">{post.userid}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="mainPage-recommend-content">
-                        <div className="mainPage-profile">
-                            <div className="mainPage-profile-img">
-                                <img className="mainPage-profile-img" src={nongdamgom} alt="프로필 사진"/>
-                            </div>
-                            <div className="mainPage-profile-content">
-                                <div className="mainPage-profile-text">
-                                    <span className="mainPage-name">nondamgomguma</span>
-                                    <span className="mainPage-follow">팔로우</span>
-                                </div>
-                                <div className="mainPage-one-liner">
-                                    <span className="mainPage-one-liner_text">고구마를 좋아하는 어쩌구 ...</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mainPage-image">
-                            <img className="mainPage-post-img" src={banner} alt="게시글 사진"/>
-                        </div>
-                        <div className="mainPage-like_comment">
-                            <div className="mainPage-like">
-                                <img className="mainPage-like-img" src={like} alt="좋아요"/>
-                                <span>112</span>
-                            </div>
-                            <div className="mainPage-comment">
-                                <img className="mainPage-comment-img" src={comment} alt="댓글"/>
-                                <span>12</span>
-                            </div>
-                        </div>
-                        <div className="mainPage-cotent">
-                            <div className="mainPage-cotent-text">
-                                <span>이 고구마를 봐, 때깔곱지</span>
-                            </div>
-                        </div>
-                        <div className="mainPage-comment">
-                            <div className="mainPage-comment-profile">
-                                <div className="mainPage-comment-profile-img">
-                                    <img className="mainPage-comment-profile-img" src={blacknongdamgom} alt="프로필사진"/>
-                                </div>
-                                <div className="mainPage-comment-content">
-                                    <div className="mainPage-comment-text">
-                                        <span className="mainPage-name">nondamgomguma</span>
-                                        <span className="mainPage-one-liner_text">고구마를 좋아하는 어쩌구 ...</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="mainPage-recommend-content" style={{marginRight: '0px'}}>
-                        <div className="mainPage-profile">
-                            <div className="mainPage-profile-img">
-                                <img className="mainPage-profile-img" src={nongdamgom} alt="프로필 사진"/>
-                            </div>
-                            <div className="mainPage-profile-content">
-                                <div className="mainPage-profile-text">
-                                    <span className="mainPage-name">nondamgomguma</span>
-                                    <span className="mainPage-follow">팔로우</span>
-                                </div>
-                                <div className="mainPage-ne-liner">
-                                    <span className="mainPage-one-liner_text">고구마를 좋아하는 어쩌구 ...</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mainPage-image">
-                            <img className="mainPage-post-img" src={banner} alt="게시글 사진"/>
-                        </div>
-                        <div className="mainPage-like_comment">
-                            <div className="mainPage-like">
-                                <img className="mainPage-like-img" src={like} alt="좋아요"/>
-                                <span>112</span>
-                            </div>
-                            <div className="mainPage-comment">
-                                <img className="mainPage-comment-img" src={comment} alt="댓글"/>
-                                <span>12</span>
-                            </div>
-                        </div>
-                        <div className="mainPage-cotent">
-                            <div className="mainPage-cotent-text">
-                                <span>이 고구마를 봐, 때깔곱지</span>
-                            </div>
-                        </div>
-                        <div className="mainPage-comment">
-                            <div className="mainPage-comment-profile">
-                                <div className="mainPage-comment-profile-img">
-                                    <img className="mainPage-comment-profile-img" src={blacknongdamgom} alt="프로필사진"/>
-                                </div>
-                                <div className="mainPage-comment-content">
-                                    <div className="mainPage-comment-text">
-                                        <span className="mainPage-name">nondamgomguma</span>
-                                        <span className="mainPage-one-liner_text">고구마를 좋아하는 어쩌구 ...</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                ))}
             </div>
             <div className="mainPage-category-section">
                 <div className="mainPage-category-title">
@@ -248,107 +153,56 @@ function MainPage() {
                     <span className="mainPage-title-more">더보기</span>
                 </div>
                 <div className="mainPage-mostView-part">
-                    <div className="mainPage-mostView-content">
-                        <div className="mainPage-image-container">
-                            <img className="mainPage-mostView-img" src={furniture} alt="가구"/>
-                        </div>
-                        <div className="mainPage-mostView-text">
-                            <span className="mainPage-store-name">아임홈</span>
-                            <span className="mainPage-product-name">맞춤 원목 서랍장</span>
-                            <span className="mainPage-product-price">49,000</span>
-                            <span className="mainPage-product-review">리뷰 37,213</span>
-                        </div>
-                        </div>
-                        <div className="mainPage-mostView-content">
+                    {products.slice(0, 4).map((product, index) => (
+                        <div className="mainPage-mostView-content" key={index}>
                             <div className="mainPage-image-container">
-                                <img className="mainPage-mostView-img" src={furniture} alt="가구"/>
+                                <img className="mainPage-mostView-img" src={product.productMainImage}
+                                     alt={product.productName}/>
                             </div>
                             <div className="mainPage-mostView-text">
-                                <span className="mainPage-store-name">아임홈</span>
-                                <span className="mainPage-product-name">맞춤 원목 서랍장</span>
-                                <span className="mainPage-product-price">49,000</span>
+                                <span className="mainPage-store-name">{product.storeName}</span>
+                                <span className="mainPage-product-name">{product.productName}</span>
+                                <span className="mainPage-product-price">{formatPrice(product.productPrice)}원</span>
                                 <span className="mainPage-product-review">리뷰 37,213</span>
                             </div>
                         </div>
-                        <div className="mainPage-mostView-content">
-                            <div className="mainPage-image-container">
-                                <img className="mainPage-mostView-img" src={furniture} alt="가구"/>
-                            </div>
-                            <div className="mainPage-mostView-text">
-                                <span className="mainPage-store-name">아임홈</span>
-                                <span className="mainPage-product-name">맞춤 원목 서랍장</span>
-                                <span className="mainPage-product-price">49,000</span>
-                                <span className="mainPage-product-review">리뷰 37,213</span>
-                            </div>
-                        </div>
-                        <div className="mainPage-mostView-content">
-                            <div className="mainPage-image-container">
-                                <img className="mainPage-mostView-img" src={furniture} alt="가구"/>
-                            </div>
-                            <div className="mainPage-mostView-text">
-                                <span className="mainPage-store-name">아임홈</span>
-                                <span className="mainPage-product-name">맞춤 원목 서랍장</span>
-                                <span className="mainPage-product-price">49,000</span>
-                                <span className="mainPage-product-review">리뷰 37,213</span>
-                            </div>
-                        </div>
-                    </div>
+                    ))}
                 </div>
-                <div className="mainPage-best-section">
+
+            </div>
+            <div className="mainPage-best-section">
                 <div className="mainPage-best-title">
                     <span className="mainPage-title-text">베스트 상품</span>
                     <span className="mainPage-title-more">더보기</span>
                 </div>
                 {/* 탭 버튼 */}
-                <div className="mainPage-tab-buttons">
-                    <button className={`mainPage-tab-button ${activeTab === 'all' ? 'active' : ''}`} onClick={() => showTab('all')}>전체</button>
-                    <button className={`mainPage-tab-button ${activeTab === 'furniture' ? 'active' : ''}`} onClick={() => showTab('furniture')}>가구</button>
-                    <button className={`mainPage-tab-button ${activeTab === 'fabric' ? 'active' : ''}`} onClick={() => showTab('fabric')}>패브릭</button>
-                    {/* 필요에 따라 더 많은 탭 버튼 추가 */}
+                <div className="mainPage-tab-buttons-wrapper">
+                    <div className="mainPage-tab-buttons">
+                        {majorCategories.map((category, index) => (
+                            <button key={index} className={`mainPage-tab-button ${activeTab === category ? 'active' : ''}`}
+                                    onClick={() => showTab(category)}>{category}</button>
+                        ))}
+                    </div>
                 </div>
                 <div className="mainPage-best-part">
-                    <div
-                        className={`mainPage-best-content tab-content ${activeTab === 'all' || activeTab === 'furniture' ? 'show' : ''}`}>
+                    {products.slice(0, 3).map((product, index) => (
+                    <div className="mainPage-best-content" key={index}>
                         <div className="mainPage-image-container">
-                            <img className="mainPage-best-img" src={furniture} alt="가구"/>
+                            <img className="mainPage-best-img" src={product.productMainImage} alt={product.productName}/>
                             <div className="mainPage-rank-badge">1</div>
                         </div>
                         <div className="mainPage-best-text">
-                            <span className="mainPage-store-name">아임홈</span>
-                            <span className="mainPage-product-name">맞춤 원목 서랍장</span>
-                            <span className="mainPage-product-price">49,000</span>
+                            <span className="mainPage-store-name">{product.storeName}</span>
+                            <span className="mainPage-product-name">{product.productName}</span>
+                            <span className="mainPage-product-price">{formatPrice(product.productPrice)}원</span>
                             <span className="mainPage-product-review">리뷰 37,213</span>
                         </div>
                     </div>
-                    <div
-                        className={`mainPage-best-content tab-content ${activeTab === 'all' || activeTab === 'fabric' ? 'show' : ''}`}>
-                        <div className="mainPage-image-container">
-                            <img className="mainPage-best-img" src={furniture} alt="가구"/>
-                            <div className="mainPage-rank-badge">2</div>
-                        </div>
-                        <div className="mainPage-best-text">
-                            <span className="mainPage-store-name">아임홈</span>
-                            <span className="mainPage-product-name">맞춤 원목 커튼</span>
-                            <span className="mainPage-product-price">49,000</span>
-                            <span className="mainPage-product-review">리뷰 37,213</span>
-                        </div>
-                    </div>
-                    <div className={`mainPage-best-content tab-content ${activeTab === 'all' || activeTab === 'furniture' ? 'show' : ''}`}>
-                        <div className="mainPage-image-container">
-                            <img className="mainPage-best-img" src={furniture} alt="가구"/>
-                            <div className="mainPage-rank-badge">3</div>
-                        </div>
-                        <div className="mainPage-best-text">
-                            <span className="mainPage-store-name">아임홈</span>
-                            <span className="mainPage-product-name">맞춤 원목 서랍장</span>
-                            <span className="mainPage-product-price">49,000</span>
-                            <span className="mainPage-product-review">리뷰 37,213</span>
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </div>
         </div>
-);
+    );
 }
 
 export default MainPage;

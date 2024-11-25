@@ -1,0 +1,162 @@
+.followPage {
+    width: 1280px;
+    margin: auto;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+}
+
+.followPage_followpage{
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    margin-top: 50px;
+}
+
+.followPage_profile_box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 307px;
+    border: 1px solid #b6b6b6;
+    border-radius: 10px;
+    padding: 40px 0;
+}
+
+.followPage_profile_image {
+    margin-bottom: 10px;
+}
+
+.followPage-profile-img {
+    width: 154px;
+}
+
+.followPage_profile_content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.followPage_profile_content_name {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.followPage_profile_content_follower_following {
+    margin: 10px 0;
+    color: #7d7d7d;
+    > span {
+        font-size: 16px;
+        font-weight: 500;
+    }
+}
+
+.followPage_profile_follower_number, .followPage_profile_following_number {
+    margin-left: 10px;
+    font-weight: 500;
+    color: #000000;
+}
+
+.followPage_profile_content_follow_button {
+    width: 100%;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #35C5F0;
+    color: #ffffff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+.followPage_profile_content_intro {
+    font-size: 15px;
+}
+
+.followPage_post_section {
+    margin-left: 50px;
+    display: flex;
+}
+
+.followPage_post_container {
+    width: 221px;
+    height: auto;
+    margin-right: 30px;
+}
+
+.followPage_post_profile {
+    display: flex;
+}
+
+.followPage_post_profile_img {
+    width: 39px;
+    border-radius: 50%;
+    margin-right: 5px;
+    > img {
+        width: 100%;
+    }
+}
+
+.followPage_post_profile_follow:hover {
+    color: #0099cc;
+}
+
+.followPage_post_profile_content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.followPage_post_profile_text span {
+    font-size: 15px;
+}
+
+.followPage_post_profile_name, .followPage_post_profile_follow {
+    font-weight: 600;
+}
+
+.followPage_post_profile_follow {
+    color: #35C5F0;
+    cursor: pointer;
+}
+
+.followPage_post_profile_one_liner_text {
+    font-size: 10px;
+    margin-top: 1px;
+}
+
+.followPage_post_image {
+    margin-top: 5px;
+    width: 221px;
+    > img {
+        width: 100%;
+    }
+}
+
+.followPage_post_cotent {
+    margin-bottom: 5px;
+    > span {
+        font-size: 10px;
+    }
+}
+
+.followPage_post_like_comment {
+    display: flex;
+}
+
+.followPage_post_like, .followPage_post_comment {
+    > img {
+        width: 15px;
+        margin-right: 5px;
+    }
+    > span {
+        font-size: 14px;
+        margin-right: 15px;
+    }
+}
+
+.followPage_post_like:hover .followPage_post_like_img {
+    filter: invert(23%) sepia(75%) saturate(6754%) hue-rotate(355deg) brightness(113%) contrast(125%);
+}
