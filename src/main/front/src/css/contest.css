@@ -69,9 +69,9 @@
 
 .contestApplyTitleText{
     margin-left: 114px;
+    margin-top: 80px;
     font-size: 24px;
     font-weight: bold;
-    margin-top: 80px;
 }
 
 .contestApplyContentText{
@@ -279,4 +279,82 @@
     background-color: transparent;
     border: none;
     filter: opacity(0.5) drop-shadow(0 0 0 #282c34);
+}
+
+/* --notice css-- */
+.contest_notice {
+    display: flex;
+    margin-top: 100px;
+}
+
+/* 콘테스트 윗 부분 */
+.contest_notice_info {
+    width: 550px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 100px;
+}
+
+/* 콘테스트 작은 사진 */
+.contest_notice_img {
+    width: 550px;
+    height: 550px;
+    object-fit: cover;
+}
+
+/* 콘테스트 사진 속 설명 */
+.contestDateText_info {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate( -50%, 50% );
+    color: #ffffff;
+    font-size: 36px;
+    font-weight: bold;
+    white-space: pre-wrap;
+    text-align: center;
+}
+
+/* 콘테스트 글 묶음 */
+.contest_info {
+    display: flex;
+    margin-top: 110px;
+}
+
+/* 콘테스트 메인 글 */
+.contest_notice_main_text{
+    weight: 30px;
+    height: 40px;
+    margin-left: 170px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+/* 콘테스트 글 */
+.contest_notice_text {
+    weight: 300px;
+    height: 40px;
+    margin-left: 30px;
+    font-size: 30px;
+}
+
+/* 콘테스트 긴 사진 */
+.contest_notice_bg {
+    width: 1280px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+}
+
+/* 콘테스트 사진 속 설명2 */
+.contestDateText_info2 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate( -50%, 200% );
+    color: #ffffff;
+    font-size: 36px;
+    font-weight: bold;
 }
