@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useRef, useState, useEffect, useLayoutEffect} from 'react';
 import banner from '../img/banner.png';
 import like from '../img/like.png';
 import comment from '../img/comment.png';
@@ -92,6 +92,72 @@ function MainPage() {
         }
     }, [majorCategories]);
 
+    const categoryContainerRef = useRef(null); // 카테고리 컨테이너 참조
+    const [scrollPosition, setScrollPosition] = useState(0);
+    const [isAtEnd, setIsAtEnd] = useState(false); // 오른쪽 끝 여부 상태
+
+    // 초기 스크롤 상태 업데이트 (수정됨)
+    useEffect(() => {
+        const container = categoryContainerRef.current;
+
+        if (container) {
+            const atStart = container.scrollLeft === 0;
+            const atEnd =
+                container.scrollLeft + container.offsetWidth >= container.scrollWidth - 1;
+
+            setScrollPosition(container.scrollLeft);
+            setIsAtEnd(atEnd);
+        }
+    }, [categories]); // 카테고리가 로드된 이후 실행
+
+    // 스크롤 이벤트 처리 (수정됨)
+    useEffect(() => {
+        const container = categoryContainerRef.current;
+
+        const handleScroll = () => {
+            if (container) {
+                const atStart = container.scrollLeft === 0;
+                const atEnd =
+                    container.scrollLeft + container.offsetWidth >=
+                    container.scrollWidth - 1;
+
+                setScrollPosition(container.scrollLeft);
+                setIsAtEnd(atEnd);
+            }
+        };
+
+        if (container) {
+            container.addEventListener("scroll", handleScroll);
+            return () => container.removeEventListener("scroll", handleScroll);
+        }
+    }, []);
+
+    // 카테고리 슬라이드 버튼 함수 (수정됨)
+    const slideCategories = (direction) => {
+        const container = categoryContainerRef.current;
+        const scrollAmount = 1280; // 스크롤 이동량
+
+        if (container) {
+            if (direction === "left") {
+                container.scrollLeft = Math.max(container.scrollLeft - scrollAmount, 0);
+            } else {
+                container.scrollLeft = Math.min(
+                    container.scrollLeft + scrollAmount,
+                    container.scrollWidth
+                );
+            }
+
+            // 스크롤 후 상태 업데이트
+            const atStart = container.scrollLeft === 0;
+            const atEnd =
+                container.scrollLeft + container.offsetWidth >=
+                container.scrollWidth - 1;
+
+            setScrollPosition(container.scrollLeft);
+            setIsAtEnd(atEnd);
+        }
+    };
+
     return (
         <div className="mainPage">
             <Header/>
@@ -106,8 +172,11 @@ function MainPage() {
                         {/* 프로필 섹션 */}
                         <div className="profile-section">
                             <div className="profile-img">
-                                <img className="profile-img" src={`${process.env.PUBLIC_URL}/profileImg/${post.profileimage}`} alt="프로필 사진"
-                                     onError={(e) => { e.target.src = ex; }}/>
+                                <img className="profile-img"
+                                     src={`${process.env.PUBLIC_URL}/profileImg/${post.profileimage}`} alt="프로필 사진"
+                                     onError={(e) => {
+                                         e.target.src = ex;
+                                     }}/>
                             </div>
                             <div className="profile-content">
                                 <div className="profile-name">
@@ -122,12 +191,14 @@ function MainPage() {
                         </div>
                         {/* 게시글 사진 */}
                         <img className="post-img" src={`${process.env.PUBLIC_URL}/postImg/${post.postimg}`} alt="게시글 사진"
-                             onError={(e) => { e.target.src = ex; }}/>
+                             onError={(e) => {
+                                 e.target.src = ex;
+                             }}/>
                         {/* 좋아요와 댓글 */}
                         <div className="like-comment" onClick={handleLikeClick} style={{cursor: 'pointer'}}>
                             <div className="like">
                                 <img className="like-img" src={like} alt="마음"/>
-                                <span>{post.postlike+likeCount}</span>
+                                <span>{post.postlike + likeCount}</span>
                             </div>
                             <div className="comment">
                                 <img className="comment-img" src={comment} alt="댓글"/>
@@ -157,13 +228,18 @@ function MainPage() {
                 <div className="mainPage-category-title">
                     <span className="mainPage-title-text">카테고리별 상품 찾기</span>
                 </div>
-                <div className="mainPage-category-part">
-                    {categories.map((item, index) => (
-                        <div className="mainPage-category-content" key={index}>
-                            <img className="mainPage-categoty-img" src={item.categoryimage} alt={item.majorcategory}/>
-                            <span className="mainPage-category-name">{item.majorcategory}</span>
-                        </div>
-                    ))}
+                <div className="mainPage-category-slider">
+                    <button className="mainPage-slide-button left" onClick={() => slideCategories('left')} disabled={scrollPosition === 0}>&#8678;</button>
+                    <div className="mainPage-category-part" ref={categoryContainerRef}>
+                        {categories.map((item, index) => (
+                            <div className="mainPage-category-content" key={index}>
+                                <img className="mainPage-categoty-img" src={item.categoryimage}
+                                     alt={item.majorcategory}/>
+                                <span className="mainPage-category-name">{item.majorcategory}</span>
+                            </div>
+                        ))}
+                    </div>
+                    <button className="mainPage-slide-button right" onClick={() => slideCategories('right')} disabled={isAtEnd}>&#8680;</button>
                 </div>
             </div>
             <div className="mainPage-mostView-section">
@@ -187,7 +263,6 @@ function MainPage() {
                         </div>
                     ))}
                 </div>
-
             </div>
             <div className="mainPage-best-section">
                 <div className="mainPage-best-title">
@@ -198,7 +273,8 @@ function MainPage() {
                 <div className="mainPage-tab-buttons-wrapper">
                     <div className="mainPage-tab-buttons">
                         {majorCategories.map((category, index) => (
-                            <button key={index} className={`mainPage-tab-button ${activeTab === category ? 'active' : ''}`}
+                            <button key={index}
+                                    className={`mainPage-tab-button ${activeTab === category ? 'active' : ''}`}
                                     onClick={() => showTab(category)}>{category}</button>
                         ))}
                     </div>
@@ -207,7 +283,8 @@ function MainPage() {
                     {products.slice(0, 3).map((product, index) => (
                         <div className="mainPage-best-content" key={index}>
                             <div className="mainPage-image-container">
-                                <img className="mainPage-best-img" src={product.productMainImage} alt={product.productName}/>
+                                <img className="mainPage-best-img" src={product.productMainImage}
+                                     alt={product.productName}/>
                                 <div className="mainPage-rank-badge">{index + 1}</div>
                             </div>
                             <div className="mainPage-best-text">
@@ -215,7 +292,7 @@ function MainPage() {
                                 <span className="mainPage-product-name">{product.productName}</span>
                                 <span className="mainPage-product-price">{formatPrice(product.productPrice)}원</span>
                                 <span className="mainPage-product-review">리뷰 37,213</span>
-                        </div>
+                            </div>
                         </div>
                     ))}
                 </div>

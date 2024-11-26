@@ -168,13 +168,13 @@
     justify-content: space-between
 }
 
-.mainPage-title-more{
+.mainPage-title-more, .shoppingHome-title-more{
     color: #00c3ff;
     cursor: pointer;
     font-weight: bold;
 }
 
-.mainPage-title-more:hover{
+.mainPage-title-more:hover, .shoppingHome-title-more:hover{
     color: #0099cc;
 }
 
@@ -186,7 +186,17 @@
 /* 카테고리 파트 */
 .mainPage-category-part {
     display: flex;
-    gap: 40px; /* 카테고리 간 간격 */
+    gap: 30px; /* 카테고리 간 간격 */
+    overflow: hidden;
+    white-space: nowrap; /* 가로로 정렬 */
+    position: relative; /* 버튼과의 상대 위치 */
+    transition: transform 0.5s ease-in-out; /* 부드러운 슬라이드 */
+}
+
+.mainPage-category-wrap {
+    display: inline-block; /* 가로로 나열 */
+    text-align: center;
+    flex-shrink: 0; /* 크기 줄어들지 않도록 고정 */
 }
 
 /* 각 카테고리 컨텐츠 */
@@ -209,6 +219,43 @@
     font-size: 16px;
     color: #333;
 }
+
+.mainPage-category-slider {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.mainPage-slide-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainPage-slide-button.left {
+    left: -20px; /* 왼쪽 위치 */
+}
+
+.mainPage-slide-button.right {
+    right: -20px; /* 오른쪽 위치 */
+}
+
+.mainPage-slide-button:disabled {
+    background-color: rgba(0, 0, 0, 0.2); /* 비활성화 시 색상 변경 */
+    cursor: not-allowed;
+}
+
 
 /* 제목 스타일 */
 .mainPage-mostView-title .mainPage-title-text {
