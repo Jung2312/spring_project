@@ -26,4 +26,6 @@ public interface ContestJoinRepository extends JpaRepository<Contestjoin, Long> 
             "  SELECT MAX(subCj.joinlike) FROM Contestjoin subCj WHERE subCj.contestnum = cj.contestnum)")
     List<Contestjoin> findContestjoinByContestnumNot(@Param("contestnum") Long contestnum);
 
+
+    List<Contestjoin>  findContestjoinByUseridAndContestnum(String userid, Long contestnum);
 }

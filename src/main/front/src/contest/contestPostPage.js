@@ -76,7 +76,7 @@ function ContestPostPage() {
             }
         } catch (err) {
             console.error(err);
-            alert("제출 중 오류가 발생했습니다.");
+            alert("이미 참여한 콘테스트입니다.");
         }
     };
 
