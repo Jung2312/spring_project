@@ -15,7 +15,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    // 모든 majorCategory를 가져오는 API
+    // categoryimage가 null이 아닌 majorCategory를 가져오는 API
     @GetMapping("/major")
     public List<String> getAllMajorCategories() {
         return categoryService.getAllMajorCategories();
@@ -26,4 +26,11 @@ public class CategoryController {
     public List<Category> getSubCategories(@PathVariable String majorCategory) {
         return categoryService.getSubCategoriesByMajorCategory(majorCategory);
     }
+
+    // CategoryController.java
+    @GetMapping("/all")
+    public List<Category> getAllCategories() {
+        return categoryService.getAllCategories();
+    }
+
 }

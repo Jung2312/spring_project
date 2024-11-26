@@ -13,17 +13,19 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    // 모든 majorCategory 목록을 반환
+    // categoryimage가 null이 아닌 majorCategory 목록을 반환
     public List<String> getAllMajorCategories() {
-        return categoryRepository.findAll()
-                .stream()
-                .map(Category::getMajorcategory)
-                .distinct()  // 중복되는 majorCategory는 제외
-                .toList();
+        return categoryRepository.findDistinctMajorCategoriesWithImage();
     }
 
     // 특정 majorCategory에 해당하는 subCategory들을 반환
     public List<Category> getSubCategoriesByMajorCategory(String majorCategory) {
         return categoryRepository.findByMajorcategory(majorCategory);
     }
+
+    // CategoryService.java
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAllWithNonNullCategoryImage();
+    }
+
 }
