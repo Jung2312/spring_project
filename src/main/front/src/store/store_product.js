@@ -2,11 +2,13 @@ import React, {useEffect, useState} from "react";
 
 function StoreProduct({productData}) {
     const { productcount, productInfo } = productData;
+/*    const [productCount, setProductCount] = useState(null);
+    const [productInfo, setProductInfo] = useState({});*/
 
-    // productcount나 productInfo가 없으면 로딩 중 상태 표시
-    if (!productInfo || productcount === null || productInfo.length === 0) {
+    /*// productcount나 productInfo가 없으면 로딩 중 상태 표시
+    if (productcount === null || productInfo.length === 0) {
         return <div>로딩중...</div>; // 로딩 중 메시지 또는 스피너
-    }
+    }*/
 
     return (
         <div className="product-container">
@@ -36,7 +38,6 @@ function StoreProduct({productData}) {
                         <tbody>
                         {
                             productInfo.map((item, index) => {
-                                sessionStorage.setItem("productnum", item.productnum);
                                 return (
                                     <tr key={item.productnum}>
                                         <td>{item.productnum}</td>
