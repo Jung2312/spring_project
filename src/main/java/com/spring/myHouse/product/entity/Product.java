@@ -29,6 +29,7 @@ public class Product {
     @JoinColumn(name = "categorynum"/*, nullable = false*/)
     private com.spring.myHouse.category.entity.Category category;
 
+
     @JoinColumn(name="storenum")
     private Long storenum;
 }

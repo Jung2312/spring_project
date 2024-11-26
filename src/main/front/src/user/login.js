@@ -5,6 +5,7 @@ import css from '../css/login.css';
 import { useNavigate } from "react-router-dom";
 
 function Login() {
+    const [isLogin, setIsLogin] = useState(false);
     const [userType, setUserType] = useState('');
     const [inputUser, setInputUser] = useState({
         userid: '',
@@ -40,7 +41,7 @@ function Login() {
                 sessionStorage.setItem("userid", inputUser.id);
                 console.log(response.data); // Check successful login response
                 goMain();
-            } else {
+            } else if (userType === 'store') {
                 response = await axios.post('http://localhost:80/store/storelogin', {
                     storeid: inputUser.id,
                     password: inputUser.password,
@@ -50,6 +51,8 @@ function Login() {
                 sessionStorage.setItem("storeid", inputUser.id);
                 console.log(response.data); // Check successful store login response
                 goStoreManagement();
+            } else {
+                sessionStorage.clear();
             }
 
         } catch (error) {

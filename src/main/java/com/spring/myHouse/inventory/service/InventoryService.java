@@ -17,4 +17,14 @@ public class InventoryService {
     public List<Inventory> getInventoryByProductnum(Long productnum) {
         return inventoryRepository.findByProductnum(productnum);
     }
+
+    public List<Inventory> getInventoryByStoreNum(Long stornum){
+        return inventoryRepository.findByStorenum(stornum);
+    }
+
+    public boolean updateInventory(Long productnum, Long inventorycount) {
+        // 업데이트 된 행의 수 리턴
+        Long updateCount = inventoryRepository.updateInventoryCount(productnum, inventorycount);
+        return updateCount > 0;
+    }
 }
