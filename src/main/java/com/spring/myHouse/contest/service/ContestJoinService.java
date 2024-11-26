@@ -2,6 +2,7 @@ package com.spring.myHouse.contest.service;
 
 import com.spring.myHouse.contest.entity.Contestjoin;
 import com.spring.myHouse.contest.repository.ContestJoinRepository;
+import com.spring.myHouse.liked.entity.Liked;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,16 @@ public class ContestJoinService {
 
     public List<Contestjoin> getContestJoin() {
         return contestJoinRepository.findContestjoinByContestnum(1L);
+    }
+
+    public Contestjoin getContestjoinByUseridAndContestnum(String userid, Long contestnum) {
+        List<Contestjoin> contestjoinList = contestJoinRepository.findContestjoinByUseridAndContestnum(userid, contestnum);
+
+        if (contestjoinList.isEmpty()) {
+            return null;
+        }
+
+        return contestjoinList.get(0);
     }
 
     public List<Contestjoin> getEndContestJoins(Long contestnum) {
