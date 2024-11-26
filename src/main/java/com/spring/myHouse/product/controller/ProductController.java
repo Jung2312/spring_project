@@ -39,11 +39,18 @@ public class ProductController {
     }
 
     @GetMapping("/productslist")
-    public List<Map<String, Object>> getProducts() {
+    public List<Map<String, Object>> getProducts(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "8") int limit) {
+        // 페이지와 제한 개수로 계산된 OFFSET
+        int offset = (page - 1) * limit;
+
+        // LIMIT과 OFFSET을 사용한 쿼리
         String query = "SELECT p.productmainimage, p.productname, p.productprice, s.storename " +
                 "FROM product p " +
-                "JOIN store s ON p.storenum = s.storenum";
-        return jdbcTemplate.query(query, (rs, rowNum) -> {
+                "JOIN store s ON p.storenum = s.storenum " +
+                "LIMIT ? OFFSET ?"; // LIMIT과 OFFSET 사용;
+
+        // 쿼리 파라미터로 limit과 offset을 넘겨서 처리
+        return jdbcTemplate.query(query, new Object[]{limit, offset}, (rs, rowNum) -> {
             Map<String, Object> result = new HashMap<>();
             result.put("productMainImage", rs.getString("productmainimage"));
             result.put("productName", rs.getString("productname"));
@@ -52,5 +59,4 @@ public class ProductController {
             return result;
         });
     }
-
 }
