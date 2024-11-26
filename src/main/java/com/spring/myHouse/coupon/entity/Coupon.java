@@ -1,4 +1,4 @@
-package com.spring.myHouse.contest.entity;
+package com.spring.myHouse.coupon.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
