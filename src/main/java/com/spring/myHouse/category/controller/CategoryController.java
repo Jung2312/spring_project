@@ -33,4 +33,10 @@ public class CategoryController {
         return categoryService.getAllCategories();
     }
 
+    @GetMapping("/{majorCategory}/{subCategory}")
+    public List<Category> getCategoriesByMajorAndSubCategory(
+            @PathVariable String majorCategory,
+            @PathVariable String subCategory) {
+        return categoryService.getCategoriesByMajorAndSubCategory(majorCategory, subCategory);
+    }
 }

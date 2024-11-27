@@ -28,4 +28,8 @@ public class CategoryService {
         return categoryRepository.findAllWithNonNullCategoryImage();
     }
 
+    public List<Category> getCategoriesByMajorAndSubCategory(String majorCategory, String subCategory) {
+        return categoryRepository.findByMajorcategoryAndSubcategory(majorCategory, subCategory);
+    }
+
 }

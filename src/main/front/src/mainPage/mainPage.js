@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect, useLayoutEffect} from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import banner from '../img/banner.png';
 import like from '../img/like.png';
 import comment from '../img/comment.png';
@@ -11,6 +11,15 @@ import '../css/mainPage.css';
 
 function MainPage() {
     const [likeCount, setLikeCount] = useState(0); // 좋아요 초기값
+    const [majorCategories, setMajorCategories] = useState([]); // majorCategory 데이터
+    const [categories, setCategories] = useState([]); // 모든 카테고리 데이터를 저장
+    const [activeTab, setActiveTab] = useState("전체"); // 기본 탭을 "전체"로 설정
+    const [products, setProducts] = useState([]);
+    const [postList, setPostList] = useState([]); // 게시글 데이터
+    const categoryContainerRef = useRef(null); // 카테고리 컨테이너 참조
+    const [scrollPosition, setScrollPosition] = useState(0);
+    const [isAtEnd, setIsAtEnd] = useState(false); // 오른쪽 끝 여부 상태
+    const [categoryImages, setCategoryImages] = useState([]); // categoryImage 데이터
 
     // 좋아요 클릭 시 숫자 증가
     const handleLikeClick = () => {
@@ -21,60 +30,37 @@ function MainPage() {
         return price.toLocaleString(); // 쉼표 포함 형식으로 변환
     };
 
-    const [majorCategories, setMajorCategories] = useState([]); // majorCategory 데이터
-    const [categoryImages, setCategoryImages] = useState([]); // categoryImage 데이터
-    const [activeTab, setActiveTab] = useState("전체"); // 기본 탭을 "전체"로 설정
-    const [products, setProducts] = useState([]);
-    const [categories, setCategories] = useState([]); // 모든 카테고리 데이터를 저장
-
+    // 모든 카테고리 및 Major 카테고리 데이터 가져오기
     useEffect(() => {
-        // 모든 카테고리를 가져오는 API 호출
+        // Major 카테고리 가져오기
+        axios.get('http://localhost:80/api/categories/major')
+            .then(response => {
+                setMajorCategories(["전체", ...response.data]); // "전체" 추가
+            })
+            .catch(error => {
+                console.error('Error fetching major categories:', error);
+            });
+
+        // 모든 카테고리 가져오기
         axios.get('http://localhost:80/api/categories/all')
             .then(response => {
-                // categoryimage가 null이 아닌 데이터만 저장
-                setCategories(response.data.filter(category => category.categoryimage !== null));
+                setCategories(response.data.filter(category => category.categoryimage !== null)); // null 이미지 제외
             })
             .catch(error => {
                 console.error('Error fetching categories:', error);
             });
     }, []);
 
-    const showTab = (tabName) => {
-        setActiveTab(tabName); // 활성화된 탭 설정
-
-        if (tabName === "전체") {
-            // 전체 탭인 경우 모든 제품 데이터를 가져옴
-            axios.get('http://localhost:80/product/productslist')
-                .then(response => {
-                    setProducts(response.data); // 모든 제품 업데이트
-                })
-                .catch(error => {
-                    console.error('Error fetching all products:', error);
-                });
-        } else {
-            // 특정 카테고리의 제품 데이터를 가져옴
-            axios.get(`http://localhost:80/product/productslist?category=${tabName}`)
-                .then(response => {
-                    setProducts(response.data); // 필터링된 제품 업데이트
-                })
-                .catch(error => {
-                    console.error(`Error fetching products for category ${tabName}:`, error);
-                });
-        }
-    };
-
+    // 모든 제품 데이터를 가져옴
     useEffect(() => {
-        // 서버에서 majorCategory를 가져옴
-        axios.get('http://localhost:80/api/categories/major')
+        axios.get('http://localhost:80/product/productslist')
             .then(response => {
-                setMajorCategories(["전체", ...response.data]); // majorCategory 저장
+                setProducts(response.data); // 모든 제품 저장
             })
             .catch(error => {
-                console.error('Error fetching major categories:', error);
+                console.error('Error fetching products:', error);
             });
     }, []);
-
-    const [postList, setPostList] = useState([]);
 
     // 서버에서 게시글 데이터 가져옴
     useEffect(() => {
@@ -88,32 +74,37 @@ function MainPage() {
             });
     }, []);
 
-    useEffect(() => {
-        axios.get('http://localhost:80/product/productslist')
-            .then(response => {
-                setProducts(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching product data:', error);
-            });
-    }, []);
+    // 특정 Major 카테고리 탭 클릭 시 데이터 필터링
+    const showTab = (tabName) => {
+        setActiveTab(tabName); // 활성화된 탭 설정
 
-    useEffect(() => {
-        if (majorCategories.length > 0) {
-            // 각 majorCategory에 해당하는 categoryimage를 가져옴
-            axios.get(`http://localhost:80/api/categories/${majorCategories[0]}/sub`) // 첫 번째 majorCategory를 기본으로 선택
+        if (tabName === "전체") {
+            axios.get('http://localhost:80/product/productslist')
                 .then(response => {
-                    setCategoryImages(response.data.filter(item => item.categoryimage !== null)); // null이 아닌 categoryImage만 필터링
+                    setProducts(response.data); // 모든 제품 업데이트
                 })
                 .catch(error => {
-                    console.error('Error fetching subcategories:', error);
+                    console.error('Error fetching all products:', error);
+                });
+        } else {
+            axios.get(`http://localhost:80/api/categories/${tabName}/sub`)
+                .then(response => {
+                    const subCategoryNums = response.data.map(category => category.categorynum);
+                    axios.get('http://localhost:80/product/productslist', {
+                        params: { categoryNums: subCategoryNums } // 필터 조건 전달
+                    })
+                        .then(response => {
+                            setProducts(response.data); // 필터링된 제품 저장
+                        })
+                        .catch(error => {
+                            console.error(`Error fetching products for ${tabName}:`, error);
+                        });
+                })
+                .catch(error => {
+                    console.error(`Error fetching subcategories for ${tabName}:`, error);
                 });
         }
-    }, [majorCategories]);
-
-    const categoryContainerRef = useRef(null); // 카테고리 컨테이너 참조
-    const [scrollPosition, setScrollPosition] = useState(0);
-    const [isAtEnd, setIsAtEnd] = useState(false); // 오른쪽 끝 여부 상태
+    };
 
     // 초기 스크롤 상태 업데이트 (수정됨)
     useEffect(() => {
@@ -128,28 +119,6 @@ function MainPage() {
             setIsAtEnd(atEnd);
         }
     }, [categories]); // 카테고리가 로드된 이후 실행
-
-    // 스크롤 이벤트 처리 (수정됨)
-    useEffect(() => {
-        const container = categoryContainerRef.current;
-
-        const handleScroll = () => {
-            if (container) {
-                const atStart = container.scrollLeft === 0;
-                const atEnd =
-                    container.scrollLeft + container.offsetWidth >=
-                    container.scrollWidth - 1;
-
-                setScrollPosition(container.scrollLeft);
-                setIsAtEnd(atEnd);
-            }
-        };
-
-        if (container) {
-            container.addEventListener("scroll", handleScroll);
-            return () => container.removeEventListener("scroll", handleScroll);
-        }
-    }, []);
 
     // 카테고리 슬라이드 버튼 함수 (수정됨)
     const slideCategories = (direction) => {
@@ -251,11 +220,13 @@ function MainPage() {
                     <button className="mainPage-slide-button left" onClick={() => slideCategories('left')} disabled={scrollPosition === 0}>&#8678;</button>
                     <div className="mainPage-category-part" ref={categoryContainerRef}>
                         {categories.map((item, index) => (
-                            <div className="mainPage-category-content" key={index}>
-                                <img className="mainPage-categoty-img" src={item.categoryimage}
-                                     alt={item.majorcategory}/>
-                                <span className="mainPage-category-name">{item.majorcategory}</span>
-                            </div>
+                            <a href="/shoppingCategory">
+                                <div className="mainPage-category-content" key={index}>
+                                    <img className="mainPage-categoty-img" src={item.categoryimage}
+                                         alt={item.majorcategory}/>
+                                    <span className="mainPage-category-name">{item.majorcategory}</span>
+                                </div>
+                            </a>
                         ))}
                     </div>
                     <button className="mainPage-slide-button right" onClick={() => slideCategories('right')} disabled={isAtEnd}>&#8680;</button>

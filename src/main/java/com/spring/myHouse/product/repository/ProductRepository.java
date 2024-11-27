@@ -1,7 +1,9 @@
 package com.spring.myHouse.product.repository;
 
 import com.spring.myHouse.product.entity.Product;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,4 +17,8 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     List<Product> findProductByStorenum(Long storenum);
 
     Long countByStorenum(Long storenum);
+
+    @Query("SELECT p FROM Product p WHERE p.category.categorynum = :categorynum AND p.productprice BETWEEN :minPrice AND :maxPrice")
+    List<Product> findByCategoryAndPriceRange(@Param("categorynum") Long categorynum, @Param("minPrice") String minPrice, @Param("maxPrice") String maxPrice);
+
 }

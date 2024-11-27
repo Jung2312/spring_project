@@ -16,4 +16,7 @@ public interface CategoryRepository extends CrudRepository<Category, Integer> {
     // categoryimage가 null이 아닌 전체 데이터를 가져옴
     @Query("SELECT c FROM Category c WHERE c.categoryimage IS NOT NULL")
     List<Category> findAllWithNonNullCategoryImage();
+
+    List<Category> findByMajorcategoryAndSubcategory(String majorCategory, String subCategory);
+
 }
