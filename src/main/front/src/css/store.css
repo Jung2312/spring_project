@@ -370,10 +370,12 @@ input::-webkit-inner-spin-button {
         text-align: center;
     }
     .inventory-del-btn, .inventory-add-btn{
-        background-color: #f4f4f4;
+        background-color: #ffffff;
         border: none;
         cursor: pointer;
         width: 30px;
+        border-radius: 5px;
+        font-size: 24px;
     }
 }
 
