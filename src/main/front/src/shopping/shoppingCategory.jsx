@@ -32,7 +32,7 @@ function ShoppingCategory() {
 
     // 서브 카테고리 클릭 시 상품 데이터 불러오기
     const handleSubCategoryClick = (categorynum) => {
-        fetch(`http://localhost:80/api/products/category/${categorynum}`)
+        fetch(`http://localhost:80/product/category/${categorynum}`)
             .then(response => response.json())
             .then(data => setProducts(data)) // 상품 데이터를 상태에 저장
             .catch(err => console.error("Error fetching products:", err));

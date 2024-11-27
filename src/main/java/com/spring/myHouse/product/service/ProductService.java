@@ -27,4 +27,9 @@ public class ProductService {
     public Long getProductCountByStore(Long storenum) {
         return productRepository.countByStorenum(storenum);
     }
+
+    public List<Product> getProductsByCategoryAndPriceRange(Long categorynum, String minPrice, String maxPrice) {
+        return productRepository.findByCategoryAndPriceRange(categorynum, minPrice, maxPrice);
+    }
+
 }
