@@ -27,7 +27,7 @@ public class InventoryController {
         return inventoryService.getInventoryByStoreNum(storenum);
     }
 
-    @PutMapping("/updateCount")
+    @PutMapping("/updateCount/{productnum}")
     public ResponseEntity<?> updateInventory(@PathVariable Long productnum, @RequestParam Long inventorycount) {
         boolean isUpdated = inventoryService.updateInventory(productnum, inventorycount);
 
