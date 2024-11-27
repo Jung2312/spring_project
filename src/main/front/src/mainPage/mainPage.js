@@ -23,7 +23,7 @@ function MainPage() {
 
     const [majorCategories, setMajorCategories] = useState([]); // majorCategory 데이터
     const [categoryImages, setCategoryImages] = useState([]); // categoryImage 데이터
-    const [activeTab, setActiveTab] = useState(null); // 현재 활성화된 탭
+    const [activeTab, setActiveTab] = useState("전체"); // 기본 탭을 "전체"로 설정
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]); // 모든 카테고리 데이터를 저장
 
@@ -39,16 +39,35 @@ function MainPage() {
             });
     }, []);
 
-    // 탭을 변경하는 함수
     const showTab = (tabName) => {
-        setActiveTab(tabName);
+        setActiveTab(tabName); // 활성화된 탭 설정
+
+        if (tabName === "전체") {
+            // 전체 탭인 경우 모든 제품 데이터를 가져옴
+            axios.get('http://localhost:80/product/productslist')
+                .then(response => {
+                    setProducts(response.data); // 모든 제품 업데이트
+                })
+                .catch(error => {
+                    console.error('Error fetching all products:', error);
+                });
+        } else {
+            // 특정 카테고리의 제품 데이터를 가져옴
+            axios.get(`http://localhost:80/product/productslist?category=${tabName}`)
+                .then(response => {
+                    setProducts(response.data); // 필터링된 제품 업데이트
+                })
+                .catch(error => {
+                    console.error(`Error fetching products for category ${tabName}:`, error);
+                });
+        }
     };
 
     useEffect(() => {
         // 서버에서 majorCategory를 가져옴
         axios.get('http://localhost:80/api/categories/major')
             .then(response => {
-                setMajorCategories(response.data); // majorCategory 저장
+                setMajorCategories(["전체", ...response.data]); // majorCategory 저장
             })
             .catch(error => {
                 console.error('Error fetching major categories:', error);
@@ -283,7 +302,8 @@ function MainPage() {
                     {products.slice(0, 3).map((product, index) => (
                         <div className="mainPage-best-content" key={index}>
                             <div className="mainPage-image-container">
-                                <img className="mainPage-best-img" src={product.productMainImage}
+                                <img className="mainPage-best-img"
+                                     src={product.productMainImage}
                                      alt={product.productName}/>
                                 <div className="mainPage-rank-badge">{index + 1}</div>
                             </div>
