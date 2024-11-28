@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import contestBg from '../img/contest_bg.png';
 import "../css/contest.css";
 import likeBtn from "../img/likeBtn.png";
+import Header from '../header.js'
 
 function ContestPostDetailPage() {
     const { joinnum } = useParams();
@@ -75,6 +76,7 @@ function ContestPostDetailPage() {
     };
     return (
         <div className="contestApplyContainer">
+            <Header/>
             <div className="contestBg">
                 <img src={contestBg} alt="Contest Background" />
             </div>

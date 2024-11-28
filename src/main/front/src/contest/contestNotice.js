@@ -3,6 +3,7 @@ import contestBg from '../img/contest_bg.png';
 import contestInfo from '../img/contest_info.png';
 import contestInfo2 from '../img/contest_info2.png'
 import "../css/contest.css";
+import Header from '../header.js'
 import { useNavigate } from 'react-router-dom';
 
 function ContestNotice() {
@@ -28,6 +29,7 @@ function ContestNotice() {
 
     return (
         <div className="contestApplyContainer">
+            <Header/>
             <div className="contest_notice">
                 <div className="contest_notice_info">
                     <img className="contest_notice_img" src={contestInfo} alt="contestInfoBg"/>
