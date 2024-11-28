@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import contestBg from '../img/contest_bg.png';
 import likeBtn from '../img/likeBtn.png';
 import "../css/contest.css";
+import Header from '../header.js'
 import { useNavigate } from 'react-router-dom';
 
 function ContestApply() {
@@ -89,6 +90,7 @@ function ContestApply() {
 
     return (
         <div className="contestApplyContainer">
+            <Header/>
             <div className="contestBg">
                 <div>
                     <img src={contestBg} alt="Contest Background" />

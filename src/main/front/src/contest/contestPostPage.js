@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import contestBg from '../img/contest_bg.png';
 import "../css/contest.css";
+import Header from '../header.js'
 import { useNavigate } from 'react-router-dom';
 
 function ContestPostPage() {
@@ -81,8 +82,8 @@ function ContestPostPage() {
     };
 
     return (
-
         <div className="contestApplyContainer">
+            <Header/>
             <div className="contestBg">
                 <div>
                     <img src={contestBg} alt="Contest Background" />

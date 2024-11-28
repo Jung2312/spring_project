@@ -41,11 +41,11 @@ function Header() {
     }
     return (
         <header className="main-header">
-            <div className="logo-name-box"><a href="" className="logo-name">나만의집</a></div>
+            <div className="logo-name-box"><a href="/" className="logo-name">나만의집</a></div>
             <div className="top-category-box">
                 <a href="" id="community">커뮤니티</a>
-                <a href="" id="shopping">쇼핑</a>
-                <a href="" id="contest">콘테스트</a>
+                <a href="/shoppinghome" id="shopping">쇼핑</a>
+                <a href="/contest" id="contest">콘테스트</a>
             </div>
             <div className="search-box">
                 <img className="search-img" src={SearchImg} />
