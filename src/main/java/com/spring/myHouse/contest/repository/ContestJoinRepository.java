@@ -28,4 +28,10 @@ public interface ContestJoinRepository extends JpaRepository<Contestjoin, Long> 
 
 
     List<Contestjoin>  findContestjoinByUseridAndContestnum(String userid, Long contestnum);
+
+    @Query("SELECT c.joinimg FROM Contestjoin c WHERE c.userid = :userid")
+    List<String> findJoinimgByUserid(@Param("userid") String userid);
+
+    @Query("SELECT COUNT(c) FROM Contestjoin c WHERE c.userid = :userid")
+    long countByUserId(@Param("userid") String userid);
 }

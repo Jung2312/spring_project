@@ -91,8 +91,10 @@ function Signup() {
         <div className="signup-page">
             <form className="signup-container" onSubmit={handleSubmit} method="post">
                 <div className="signup-logo">
-                    <a href=""><img src={logo} alt="나만의집 로고" /></a>
-                    <span className="signup-logo-name">나만의집</span>
+                    <a href="/">
+                        <img src={logo} alt="나만의집 로고"/>
+                        <span className="signup-logo-name">나만의집</span>
+                    </a>
                 </div>
                 <div className="signup-signup">
                     <span className="signup-signup-text">회원가입</span>
