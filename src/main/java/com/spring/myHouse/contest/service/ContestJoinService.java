@@ -46,4 +46,13 @@ public class ContestJoinService {
     public void delContestJoin(Long joinnum) {
         contestJoinRepository.deleteById(joinnum);
     }
+
+    public List<String> getJoinImagesByUserid(String userid) {
+        return contestJoinRepository.findJoinimgByUserid(userid);
+    }
+
+    public long getCountByUserId(String userid) {
+        return contestJoinRepository.countByUserId(userid);
+    }
+
 }

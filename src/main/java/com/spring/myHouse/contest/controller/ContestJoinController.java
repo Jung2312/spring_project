@@ -175,4 +175,16 @@ public class ContestJoinController {
         contestJoinService.delContestJoin(joinnum);
         return ResponseEntity.ok("success");
     }
+
+    @GetMapping("/join/images")
+    public ResponseEntity<List<String>> getContestImages(@RequestParam String userid) {
+        List<String> joinImages = contestJoinService.getJoinImagesByUserid(userid);
+        return ResponseEntity.ok(joinImages);
+    }
+
+    @GetMapping("/join/count")
+    public ResponseEntity<Long> getCountByUserId(@RequestParam String userid) {
+        long count = contestJoinService.getCountByUserId(userid);
+        return ResponseEntity.ok(count);
+    }
 }

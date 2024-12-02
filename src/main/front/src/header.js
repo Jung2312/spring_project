@@ -57,7 +57,7 @@ function Header() {
                 {isLogin ? (
                     // Display user information if logged in
                     <div className="header-user-box">
-                        <span className="header-user-name">{userInfo ? `${userInfo.name}님` : "로딩중..."}</span>
+                        <a href="/myPage"><span className="header-user-name">{userInfo ? `${userInfo.name}님` : "로딩중..."}</span></a>
                         <button id="mainpage-logout" onClick={() => logoutButtonClick()}>로그아웃</button>
                         <a href="" id="service">고객센터</a>
                     </div>
@@ -65,7 +65,7 @@ function Header() {
                     // If not logged in, show login and register links
                     <div className="header-user-box">
                         <a href="/login" id="login">로그인</a>
-                        <a href="/register" id="register">회원가입</a>
+                        <a href="/signup" id="register">회원가입</a>
                         <a href="" id="service">고객센터</a>
                     </div>
                 )}
