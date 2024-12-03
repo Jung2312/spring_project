@@ -14,6 +14,9 @@ function MyPage() {
     const [userInfo, setUserInfo] = useState(null);
     const [contestImages, setContestImages] = useState([]); // 콘테스트 이미지 상태 추가
     const [contestCount, setContestCount] = useState(0); // 콘테스트 글 개수 상태 추가
+    const [likeCount, setLikeCount] = useState(0);
+    const [postCount, setPostCount] = useState(0);
+    const [totalCount, setTotalCount] = useState(0); // 합산된 값을 저장할 상태 변수
 
     useEffect(() => {
         const userid = sessionStorage.getItem("userid");
@@ -22,8 +25,10 @@ function MyPage() {
             fetchUserInfo(userid);  // userid를 서버로 전송하여 사용자 정보 가져오기
             fetchContestImages(userid); // 콘테스트 이미지 가져오기
             fetchContestCount(userid); // 콘테스트 글 개수 가져오기
+            fetchLikeCount(userid);
+            fetchPostCount(userid);
         }
-    }, []);
+    }, [contestCount]);
 
     // 서버에서 사용자 정보를 가져오는 함수
     const fetchUserInfo = async (userid) => {
@@ -67,11 +72,35 @@ function MyPage() {
         }
     };
 
+    const fetchLikeCount = async (userid) => {
+        try {
+            const response = await axios.get('http://localhost:80/liked/count', {
+                params: { userid }
+            });
+            setLikeCount(response.data);
+        } catch (error) {
+            console.error('Error fetching like count:', error);
+        }
+    };
+
+    const fetchPostCount = async (userid) => {
+        try {
+            const response = await axios.get('http://localhost:80/recommend/count', {
+                params: { userid }
+            });
+            setPostCount(response.data);
+            setTotalCount(response.data + contestCount); // 합산하여 totalCount에 저장
+        } catch (error) {
+            console.error('Error fetching post count:', error);
+        }
+    };
+
     const navigate = useNavigate();
 
     const handleButtonClick = () => {
         navigate("/myPageSet");
     };
+
     return (
         <div className="myPage_mypage">
             <Header/>
@@ -102,17 +131,17 @@ function MyPage() {
                 <hr style={{width: '1080px', border: '0.5px solid #D5D5D5'}}></hr>
                 <div className="myPage_profile_activity">
                     <div className="myPage_profile_activity_post">
-                        <img className="myPage_profile_activity_img" src={myPost} alt="프로필 사진"/>
+                        <img className="myPage_profile_activity_img" src={myPost}/>
                         <span className="myPage_profile_activity_text">내가 쓴 글</span>
-                        <span className="myPage_profile_activity_number">0</span>
+                        <span className="myPage_profile_activity_number">{totalCount}</span>
                     </div>
                     <div className="myPage_profile_activity_like">
-                        <img className="myPage_profile_activity_img" src={myLike} alt="프로필 사진"/>
+                        <img className="myPage_profile_activity_img" src={myLike}/>
                         <span className="myPage_profile_activity_text">좋아요</span>
-                        <span className="myPage_profile_activity_number">0</span>
+                        <span className="myPage_profile_activity_number">{likeCount}</span>
                     </div>
                     <div className="myPage_profile_activity_coupons">
-                        <img className="myPage_profile_activity_img" src={myCounpons} alt="프로필 사진"/>
+                        <img className="myPage_profile_activity_img" src={myCounpons}/>
                         <span className="myPage_profile_activity_text">내 쿠폰</span>
                         <span className="myPage_profile_activity_pnumber">0</span>
                     </div>
@@ -120,7 +149,7 @@ function MyPage() {
             </div>
             <div className="myPage_community_section">
                 <div className="myPage_community_title">
-                    <span>커뮤니티</span><span className="myPage_community_title_number">0</span>
+                    <span>커뮤니티</span><span className="myPage_community_title_number">{postCount}</span>
                 </div>
                 <div className="myPage_community_content">
                     {/* 게시글 사진 */}

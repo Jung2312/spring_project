@@ -2,7 +2,6 @@ package com.spring.myHouse.liked.service;
 
 import com.spring.myHouse.liked.entity.Liked;
 import com.spring.myHouse.liked.repository.LikeRepository;
-import com.spring.myHouse.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +11,7 @@ import java.util.List;
 @Service
 public class LikedService {
     private final LikeRepository likeRepository;
+
     public Liked getByUseridAndJoinnum(String userid, Long joinnum) {
         List<Liked> likedList = likeRepository.findByUseridAndJoinnum(userid, joinnum);
 
@@ -25,4 +25,8 @@ public class LikedService {
         likeRepository.save(liked);
     }
 
+    // 새로운 메서드: 좋아요 수 카운트
+    public int countLikesByUserid(String userid) {
+        return likeRepository.countByUserid(userid);
+    }
 }
