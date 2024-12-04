@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../css/shopping.css';
 import star from '../img/star.png';
 import storeIcon from '../img/store.png';
 
 function ProductDetail() {
+    const navigate = useNavigate();
+
+    const handleBrandHomeClick = () => {
+        const storename = "메이트";
+        console.log("Navigating to store with storename:", storename);
+        navigate(`/shoppingInformation/${storename}`);
+    };
+
     return (
         <div className="productDetailcontainer">
             <div className="productDetailsection">
@@ -73,7 +82,7 @@ function ProductDetail() {
                             <div className="productDetailStoreSection">
                                 <img className="productDetailStoreIcon" src={storeIcon}/>
                                 <span className="productDetailStoreIconText">어그리어블리</span>
-                                <input type="button" value="브랜드홈 >" id="productDetailStoreBtn"/>
+                                <input type="button" value="브랜드홈 >" id="productDetailStoreBtn" onClick={handleBrandHomeClick}/>
                             </div>
                         </div>
                         <div className="productDetail-productCountSection">

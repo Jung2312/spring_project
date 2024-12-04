@@ -27,4 +27,10 @@ public class ProductService {
     public Long getProductCountByStore(Long storenum) {
         return productRepository.countByStorenum(storenum);
     }
+
+    // 특정 카테고리와 상점 번호에 해당하는 상품 목록 반환
+    public List<Product> getProductsByCategoryAndStore(Long categorynum, Long storenum) {
+        return productRepository.findByCategoryCategorynumAndStorenum(categorynum, storenum);
+    }
+
 }
