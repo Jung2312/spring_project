@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import banner from '../img/banner.png';
 import like from '../img/like.png';
 import comment from '../img/comment.png';
@@ -11,6 +11,15 @@ import '../css/mainPage.css';
 
 function MainPage() {
     const [likeCount, setLikeCount] = useState(0); // 좋아요 초기값
+    const [majorCategories, setMajorCategories] = useState([]); // majorCategory 데이터
+    const [categories, setCategories] = useState([]); // 모든 카테고리 데이터를 저장
+    const [activeTab, setActiveTab] = useState("전체"); // 기본 탭을 "전체"로 설정
+    const [products, setProducts] = useState([]);
+    const [postList, setPostList] = useState([]); // 게시글 데이터
+    const categoryContainerRef = useRef(null); // 카테고리 컨테이너 참조
+    const [scrollPosition, setScrollPosition] = useState(0);
+    const [isAtEnd, setIsAtEnd] = useState(false); // 오른쪽 끝 여부 상태
+    const [categoryImages, setCategoryImages] = useState([]); // categoryImage 데이터
 
     // 좋아요 클릭 시 숫자 증가
     const handleLikeClick = () => {
@@ -21,51 +30,37 @@ function MainPage() {
         return price.toLocaleString(); // 쉼표 포함 형식으로 변환
     };
 
-    const [majorCategories, setMajorCategories] = useState([]); // 카테고리 데이터
-    const [activeTab, setActiveTab] = useState(null); // 현재 활성화된 탭 (categorynum)
-    const [filteredProducts, setFilteredProducts] = useState([]); // 필터링된 상품 목록
-    const [products, setProducts] = useState([]);
-
-    // 주요 카테고리 데이터 가져오기
+    // 모든 카테고리 및 Major 카테고리 데이터 가져오기
     useEffect(() => {
-        axios
-            .get('http://localhost:80/categories/major')
-            .then((response) => {
-                const categories = response.data.map((name, index) => ({
-                    name,
-                    categorynum: index + 1, // 카테고리 번호는 서버에서 받아야 함
-                }));
-                setMajorCategories([{ name: '전체', categorynum: null }, ...categories]);
+        // Major 카테고리 가져오기
+        axios.get('http://localhost:80/api/categories/major')
+            .then(response => {
+                setMajorCategories(["전체", ...response.data]); // "전체" 추가
             })
-            .catch((error) => console.error('Error fetching major categories:', error));
+            .catch(error => {
+                console.error('Error fetching major categories:', error);
+            });
+
+        // 모든 카테고리 가져오기
+        axios.get('http://localhost:80/api/categories/all')
+            .then(response => {
+                setCategories(response.data.filter(category => category.categoryimage !== null)); // null 이미지 제외
+            })
+            .catch(error => {
+                console.error('Error fetching categories:', error);
+            });
     }, []);
 
-    // 특정 카테고리에 해당하는 상품 데이터 가져오기
-    const fetchProductsByCategory = (categorynum) => {
-        const url =
-            categorynum === null
-                ? 'http://localhost:80/product/productslist' // '전체'는 모든 상품을 가져옴
-                : `http://localhost:80/product/category/${categorynum}`;
-        axios
-            .get(url)
-            .then((response) => {
-                setFilteredProducts(response.data); // 3개만 저장
-            })
-            .catch((error) => console.error('Error fetching products:', error));
-    };
-
-    // 탭 클릭 시 처리
-    const handleTabClick = (categorynum) => {
-        setActiveTab(categorynum); // 활성 탭 상태 업데이트
-        fetchProductsByCategory(categorynum); // 해당 카테고리 상품 데이터 가져오기
-    };
-
+    // 모든 제품 데이터를 가져옴
     useEffect(() => {
-        // 초기 로드 시 '전체' 상품 데이터 가져오기
-        fetchProductsByCategory(null);
+        axios.get('http://localhost:80/product/productslist')
+            .then(response => {
+                setProducts(response.data); // 모든 제품 저장
+            })
+            .catch(error => {
+                console.error('Error fetching products:', error);
+            });
     }, []);
-
-    const [postList, setPostList] = useState([]);
 
     // 서버에서 게시글 데이터 가져옴
     useEffect(() => {
@@ -79,16 +74,77 @@ function MainPage() {
             });
     }, []);
 
+    // 특정 Major 카테고리 탭 클릭 시 데이터 필터링
+    const showTab = (tabName) => {
+        setActiveTab(tabName); // 활성화된 탭 설정
+
+        if (tabName === "전체") {
+            axios.get('http://localhost:80/product/productslist')
+                .then(response => {
+                    setProducts(response.data); // 모든 제품 업데이트
+                })
+                .catch(error => {
+                    console.error('Error fetching all products:', error);
+                });
+        } else {
+            axios.get(`http://localhost:80/api/categories/${tabName}/sub`)
+                .then(response => {
+                    const subCategoryNums = response.data.map(category => category.categorynum);
+                    axios.get('http://localhost:80/product/productslist', {
+                        params: { categoryNums: subCategoryNums } // 필터 조건 전달
+                    })
+                        .then(response => {
+                            setProducts(response.data); // 필터링된 제품 저장
+                        })
+                        .catch(error => {
+                            console.error(`Error fetching products for ${tabName}:`, error);
+                        });
+                })
+                .catch(error => {
+                    console.error(`Error fetching subcategories for ${tabName}:`, error);
+                });
+        }
+    };
+
+    // 초기 스크롤 상태 업데이트 (수정됨)
     useEffect(() => {
-        axios.get('http://localhost:80/product/productslist')
-            .then(response => {
-                setProducts(response.data);
-                setFilteredProducts(response.data); // 초기에는 전체 상품 표시
-            })
-            .catch(error => {
-                console.error('Error fetching product data:', error);
-            });
-    }, []);
+        const container = categoryContainerRef.current;
+
+        if (container) {
+            const atStart = container.scrollLeft === 0;
+            const atEnd =
+                container.scrollLeft + container.offsetWidth >= container.scrollWidth - 1;
+
+            setScrollPosition(container.scrollLeft);
+            setIsAtEnd(atEnd);
+        }
+    }, [categories]); // 카테고리가 로드된 이후 실행
+
+    // 카테고리 슬라이드 버튼 함수 (수정됨)
+    const slideCategories = (direction) => {
+        const container = categoryContainerRef.current;
+        const scrollAmount = 1280; // 스크롤 이동량
+
+        if (container) {
+            if (direction === "left") {
+                container.scrollLeft = Math.max(container.scrollLeft - scrollAmount, 0);
+            } else {
+                container.scrollLeft = Math.min(
+                    container.scrollLeft + scrollAmount,
+                    container.scrollWidth
+                );
+            }
+
+            // 스크롤 후 상태 업데이트
+            const atStart = container.scrollLeft === 0;
+            const atEnd =
+                container.scrollLeft + container.offsetWidth >=
+                container.scrollWidth - 1;
+
+            setScrollPosition(container.scrollLeft);
+            setIsAtEnd(atEnd);
+        }
+    };
 
     return (
         <div className="mainPage">
@@ -104,8 +160,11 @@ function MainPage() {
                         {/* 프로필 섹션 */}
                         <div className="profile-section">
                             <div className="profile-img">
-                                <img className="profile-img" src={`${process.env.PUBLIC_URL}/profileImg/${post.profileimage}`} alt="프로필 사진"
-                                     onError={(e) => { e.target.src = ex; }}/>
+                                <img className="profile-img"
+                                     src={`${process.env.PUBLIC_URL}/profileImg/${post.profileimage}`} alt="프로필 사진"
+                                     onError={(e) => {
+                                         e.target.src = ex;
+                                     }}/>
                             </div>
                             <div className="profile-content">
                                 <div className="profile-name">
@@ -120,12 +179,14 @@ function MainPage() {
                         </div>
                         {/* 게시글 사진 */}
                         <img className="post-img" src={`${process.env.PUBLIC_URL}/postImg/${post.postimg}`} alt="게시글 사진"
-                             onError={(e) => { e.target.src = ex; }}/>
+                             onError={(e) => {
+                                 e.target.src = ex;
+                             }}/>
                         {/* 좋아요와 댓글 */}
                         <div className="like-comment" onClick={handleLikeClick} style={{cursor: 'pointer'}}>
                             <div className="like">
                                 <img className="like-img" src={like} alt="마음"/>
-                                <span>{post.postlike+likeCount}</span>
+                                <span>{post.postlike + likeCount}</span>
                             </div>
                             <div className="comment">
                                 <img className="comment-img" src={comment} alt="댓글"/>
@@ -155,19 +216,20 @@ function MainPage() {
                 <div className="mainPage-category-title">
                     <span className="mainPage-title-text">카테고리별 상품 찾기</span>
                 </div>
-                <div className="mainPage-category-part">
-                    <div className="mainPage-category-content">
-                        <img className="mainPage-categoty-img" src={furniture} alt="가구"/>
-                        <span className="mainPage-category-name">가구</span>
+                <div className="mainPage-category-slider">
+                    <button className="mainPage-slide-button left" onClick={() => slideCategories('left')} disabled={scrollPosition === 0}>&#8678;</button>
+                    <div className="mainPage-category-part" ref={categoryContainerRef}>
+                        {categories.map((item, index) => (
+                            <a href="/shoppingCategory">
+                                <div className="mainPage-category-content" key={index}>
+                                    <img className="mainPage-categoty-img" src={item.categoryimage}
+                                         alt={item.majorcategory}/>
+                                    <span className="mainPage-category-name">{item.majorcategory}</span>
+                                </div>
+                            </a>
+                        ))}
                     </div>
-                    <div className="mainPage-category-content">
-                        <img className="mainPage-categoty-img" src={furniture} alt="가구"/>
-                        <span className="mainPage-category-name">가구</span>
-                    </div>
-                    <div className="mainPage-category-content">
-                        <img className="mainPage-categoty-img" src={furniture} alt="가구"/>
-                        <span className="mainPage-category-name">가구</span>
-                    </div>
+                    <button className="mainPage-slide-button right" onClick={() => slideCategories('right')} disabled={isAtEnd}>&#8680;</button>
                 </div>
             </div>
             <div className="mainPage-mostView-section">
@@ -191,7 +253,6 @@ function MainPage() {
                         </div>
                     ))}
                 </div>
-
             </div>
             <div className="mainPage-best-section">
                 <div className="mainPage-best-title">
@@ -201,17 +262,20 @@ function MainPage() {
                 {/* 탭 버튼 */}
                 <div className="mainPage-tab-buttons-wrapper">
                     <div className="mainPage-tab-buttons">
-                        {majorCategories.map((category) => (
-                            <button key={category.categorynum} className={`mainPage-tab-button ${activeTab === category.categorynum ? 'active' : ''}`}
-                                onClick={() => handleTabClick(category.categorynum)}>{category.name}</button>
+                        {majorCategories.map((category, index) => (
+                            <button key={index}
+                                    className={`mainPage-tab-button ${activeTab === category ? 'active' : ''}`}
+                                    onClick={() => showTab(category)}>{category}</button>
                         ))}
                     </div>
                 </div>
                 <div className="mainPage-best-part">
-                    {filteredProducts.slice(0, 3).map((product, index) => (
+                    {products.slice(0, 3).map((product, index) => (
                         <div className="mainPage-best-content" key={index}>
                             <div className="mainPage-image-container">
-                                <img className="mainPage-best-img" src={product.productMainImage} alt={product.productName}/>
+                                <img className="mainPage-best-img"
+                                     src={product.productMainImage}
+                                     alt={product.productName}/>
                                 <div className="mainPage-rank-badge">{index + 1}</div>
                             </div>
                             <div className="mainPage-best-text">

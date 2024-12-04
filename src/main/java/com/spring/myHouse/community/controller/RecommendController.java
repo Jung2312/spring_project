@@ -107,5 +107,11 @@ public class RecommendController {
         }
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<Integer> getPostCountByUser(@RequestParam("userid") String userid) {
+        int postCount = recommendService.countPostsByUserid(userid);
+        return ResponseEntity.ok(postCount);
+    }
+
 
 }

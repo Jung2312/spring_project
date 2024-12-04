@@ -21,4 +21,7 @@ public class Category {
 
     @Column(nullable = false)
     private String subcategory;
+
+    @Column(nullable = false)
+    private String categoryimage;
 }

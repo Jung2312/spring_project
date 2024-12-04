@@ -363,12 +363,24 @@ input::-webkit-inner-spin-button {
 
 .inventory-btn-box{
     display: flex;
+    justify-content: center;
     .inventory-count-input{
         max-width: 40px;
+        border: none;
+        text-align: center;
     }
     .inventory-del-btn, .inventory-add-btn{
         background-color: #ffffff;
         border: none;
         cursor: pointer;
+        width: 30px;
+        border-radius: 5px;
+        font-size: 24px;
+    }
+}
+
+.product-table{
+    tbody>tr>td:last-child{
+        text-align: right;
     }
 }

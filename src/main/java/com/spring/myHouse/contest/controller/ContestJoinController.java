@@ -1,15 +1,16 @@
 package com.spring.myHouse.contest.controller;
 
-import com.spring.myHouse.community.entity.Recommend;
 import com.spring.myHouse.contest.entity.Contest;
 import com.spring.myHouse.contest.entity.Contestjoin;
 import com.spring.myHouse.contest.service.ContestJoinService;
 import com.spring.myHouse.contest.service.ContestService;
+import com.spring.myHouse.liked.entity.Liked;
+import com.spring.myHouse.liked.service.LikedService;
 import com.spring.myHouse.user.entity.User;
 import com.spring.myHouse.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +30,7 @@ public class ContestJoinController {
     private final ContestJoinService contestJoinService;
     private final ContestService contestService;
     private final UserService userService;
+    private final LikedService likedService;
 
     @GetMapping("/info/join")
     public List<Map<String, Object>> getContestjoins() {
@@ -94,11 +96,28 @@ public class ContestJoinController {
         return contestWithUser;
     }
 
-    @PostMapping("/like/{joinnum}")
-    public ResponseEntity<String> incrementLike(@PathVariable Long joinnum) {
-        contestJoinService.incrementLike(joinnum);
-        return ResponseEntity.ok("success");
+    @PostMapping("/like")
+    public ResponseEntity<String> incrementLike(@RequestHeader("userid") String userid, @RequestHeader("joinnum") Long joinnum) {
+        if (userid == null || joinnum == null) {
+            return ResponseEntity.badRequest().body("파라미터를 올바르게 받아오지 못했습니다.");
+        }
+        Liked liked = likedService.getByUseridAndJoinnum(userid, joinnum);
+
+        if (liked == null) {
+            liked = new Liked();
+            liked.setUserid(userid);
+            liked.setJoinnum(joinnum);
+            liked.setPostnum(0L);
+
+            contestJoinService.incrementLike(joinnum);
+            likedService.saveLiked(liked);
+
+            return ResponseEntity.ok("success");
+        } else {
+            return ResponseEntity.badRequest().body("이미 추천한 참여작입니다.");
+        }
     }
+
 
     @PostMapping("/post")
     public ResponseEntity<String> uploadFileAndSaveData(
@@ -106,8 +125,10 @@ public class ContestJoinController {
             @RequestParam("userid") String userid,
             @RequestParam("contestnum") Long contestnum) {
 
-        if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body("파일이 비어있습니다.");
+        Contestjoin contestjoin = contestJoinService.getContestjoinByUseridAndContestnum(userid, contestnum);
+
+        if(contestjoin != null) {
+            return ResponseEntity.badRequest().body("이미 참여한 콘테스트입니다.");
         }
 
         // 파일 저장 경로 설정
@@ -130,7 +151,7 @@ public class ContestJoinController {
             file.transferTo(new File(filePath));
 
             // DB에 저장할 Contestjoin 객체 생성
-            Contestjoin contestjoin = new Contestjoin();
+            contestjoin = new Contestjoin();
             contestjoin.setUserid(userid);
             contestjoin.setContestnum(contestnum);
             contestjoin.setJoinimg(newFileName); // 저장된 파일 이름 저장
@@ -153,5 +174,17 @@ public class ContestJoinController {
         System.out.println(joinnum);
         contestJoinService.delContestJoin(joinnum);
         return ResponseEntity.ok("success");
+    }
+
+    @GetMapping("/join/images")
+    public ResponseEntity<List<String>> getContestImages(@RequestParam String userid) {
+        List<String> joinImages = contestJoinService.getJoinImagesByUserid(userid);
+        return ResponseEntity.ok(joinImages);
+    }
+
+    @GetMapping("/join/count")
+    public ResponseEntity<Long> getCountByUserId(@RequestParam String userid) {
+        long count = contestJoinService.getCountByUserId(userid);
+        return ResponseEntity.ok(count);
     }
 }

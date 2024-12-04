@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import contestBg from '../img/contest_bg.png';
 import "../css/contest.css";
+import Header from '../header.js'
 import { useNavigate } from 'react-router-dom';
 
 function ContestPostPage() {
@@ -76,13 +77,13 @@ function ContestPostPage() {
             }
         } catch (err) {
             console.error(err);
-            alert("제출 중 오류가 발생했습니다.");
+            alert("이미 참여한 콘테스트입니다.");
         }
     };
 
     return (
-
         <div className="contestApplyContainer">
+            <Header/>
             <div className="contestBg">
                 <div>
                     <img src={contestBg} alt="Contest Background" />

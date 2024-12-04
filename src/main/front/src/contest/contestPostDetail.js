@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import contestBg from '../img/contest_bg.png';
 import "../css/contest.css";
 import likeBtn from "../img/likeBtn.png";
+import Header from '../header.js'
 
 function ContestPostDetailPage() {
     const { joinnum } = useParams();
@@ -25,24 +26,38 @@ function ContestPostDetailPage() {
             });
     }, [joinnum]);
 
-
-    const clickContestLike = () => {
-        fetch(`http://localhost:80/contest/like/${joinnum}`, {
-            method: "POST",
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Failed to update like");
+    const clickContestLike = (joinuserid, joinnum) => {
+        if (userid === null) {
+            alert("로그인을 진행하세요.");
+        } else if (userid === joinuserid) {
+            alert("자신의 참여작에는 투표할 수 없습니다.");
+        } else {
+            fetch('http://localhost:80/contest/like', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",  // Set content type to JSON if you're using request body.
+                    "userid": userid,  // Send userid as a header
+                    "joinnum": joinnum.toString()  // Ensure joinnum is sent as a string
                 }
-                return response.text();
             })
-            .then(() => {
-                window.location.reload();
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
+                .then((response) => {
+                    if (response.ok) {
+                        alert("추천이 완료되었습니다.")
+                        window.location.reload();
+
+                    }
+                    alert("이미 추천한 참여작입니다.");
+                    return response.text();
+                })
+                .then(() => {
+
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+        }
     };
+
     const deletePost = () => {
         fetch(`http://localhost:80/contest/delete/${joinnum}`, {
             method: "DELETE",
@@ -61,6 +76,7 @@ function ContestPostDetailPage() {
     };
     return (
         <div className="contestApplyContainer">
+            <Header/>
             <div className="contestBg">
                 <img src={contestBg} alt="Contest Background" />
             </div>
@@ -91,11 +107,10 @@ function ContestPostDetailPage() {
                             onClick={(e) => {
                                 e.stopPropagation();
                                 e.preventDefault();
-                                clickContestLike();
+                                clickContestLike(joinData.userid, joinData.joinnum);
                             }}
-                            disabled={!userid || userid === joinData.userid} // userid가 없거나 같으면 버튼 비활성화
                         >
-                            <img src={likeBtn} alt="like" id="likeBtnImg"/>
+                            <img src={likeBtn} alt="like"/>
                         </button>
                         <span className="contestProfileText2">{joinData.joinlike || 0}</span>
                     </div>
@@ -108,7 +123,8 @@ function ContestPostDetailPage() {
                         onClick={(e) => {
                             e.stopPropagation();
                             e.preventDefault();
-                            deletePost()}}
+                            deletePost()
+                        }}
                     />
                 </div>
             )}

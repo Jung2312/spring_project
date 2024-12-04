@@ -41,11 +41,11 @@ function Header() {
     }
     return (
         <header className="main-header">
-            <div className="logo-name-box"><a href="" className="logo-name">나만의집</a></div>
+            <div className="logo-name-box"><a href="/" className="logo-name">나만의집</a></div>
             <div className="top-category-box">
                 <a href="" id="community">커뮤니티</a>
-                <a href="" id="shopping">쇼핑</a>
-                <a href="" id="contest">콘테스트</a>
+                <a href="/shoppinghome" id="shopping">쇼핑</a>
+                <a href="/contest" id="contest">콘테스트</a>
             </div>
             <div className="search-box">
                 <img className="search-img" src={SearchImg} />
@@ -57,7 +57,7 @@ function Header() {
                 {isLogin ? (
                     // Display user information if logged in
                     <div className="header-user-box">
-                        <span className="header-user-name">{userInfo ? `${userInfo.name}님` : "로딩중..."}</span>
+                        <a href="/myPage"><span className="header-user-name">{userInfo ? `${userInfo.name}님` : "로딩중..."}</span></a>
                         <button id="mainpage-logout" onClick={() => logoutButtonClick()}>로그아웃</button>
                         <a href="" id="service">고객센터</a>
                     </div>
@@ -65,7 +65,7 @@ function Header() {
                     // If not logged in, show login and register links
                     <div className="header-user-box">
                         <a href="/login" id="login">로그인</a>
-                        <a href="/register" id="register">회원가입</a>
+                        <a href="/signup" id="register">회원가입</a>
                         <a href="" id="service">고객센터</a>
                     </div>
                 )}
