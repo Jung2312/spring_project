@@ -81,15 +81,15 @@ function ShoppingCategory() {
                 <section className="category-product-info">
                     {products.length > 0 && (
                         <div className="category-product-list">
-                            {products.map((product) => (
-                                <div key={product.productnum} className="category-product-card">
+                            {products.map((product, index) => (
+                                <div key={index} className="category-product-card">
                                     <img
                                         src={product.productmainimage}
                                         alt={product.productname}
                                         className="category-product-image"
                                     />
                                     <h2 className="category-product-name">{product.productname}</h2>
-                                    <p className="category-product-store">{product.storename}</p>
+                                    <p className="category-product-store">{product.storeName}</p>
                                     <p className="category-product-price">{product.productprice}</p>
                                 </div>
                             ))}

@@ -23,6 +23,7 @@ import ProductDetail from "./shopping/productDetail";
 import MyPage from "./user/myPage";
 import FollowPage from "./user/followPage";
 import Profile from "./user/profile";
+import ShoppingInformation from "./shopping/shoppingInformation";
 
 function App() {
     return (
@@ -50,6 +51,7 @@ function App() {
                 <Route path="/shoppingCategory" element={<ShoppingCategory />} />
                 <Route path="/myShoppingPage" element={<MyShoppingPage />} />
                 <Route path="/productDetail" element={<ProductDetail />} />
+                <Route path="/shoppingInformation/:storename" element={<ShoppingInformation />} />
             </Routes>
         </BrowserRouter>
     );

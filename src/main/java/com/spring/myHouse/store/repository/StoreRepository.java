@@ -16,6 +16,9 @@ public interface StoreRepository extends CrudRepository<Store, Long> {
     // storeName으로 검색
     List<Store> findByStorenameContainingIgnoreCase(String storename);
 
+    // 상점 이름으로 상점 조회
+    Store findByStorename(String storename);
+
     // 중복 여부 확인
     boolean existsByStoreid(String storeid);
     boolean existsByStoreemail(String email);

@@ -74,4 +74,9 @@ public class StoreService {
         // 비밀번호 일치 여부 확인
         return byUser;
     }
+
+    // 상점 이름으로 상점 정보 조회
+    public Store getStoreByName(String storename) {
+        return storeRepository.findByStorename(storename);
+    }
 }
