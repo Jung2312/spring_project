@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../css/shopping.css';
 import star from '../img/star.png';
 import storeIcon from '../img/store.png';
+import Header from '../header.js'
 
 function ProductDetail() {
     const navigate = useNavigate();
@@ -15,6 +16,7 @@ function ProductDetail() {
 
     return (
         <div className="productDetailcontainer">
+            <Header/>
             <div className="productDetailsection">
                 <div className="productDetailInfo">
                     <div className="productDetailImgSection productDetailInfo-item">

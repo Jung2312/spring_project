@@ -75,59 +75,63 @@ function ContestPostDetailPage() {
             });
     };
     return (
-        <div className="contestApplyContainer">
+        <div>
             <Header/>
-            <div className="contestBg">
-                <img src={contestBg} alt="Contest Background" />
-            </div>
 
-            {joinData && (
-                <div id="contestPostContainer2">
-                    <div className="contestProfileDiv2">
-                        <img
-                            src={`${process.env.PUBLIC_URL}/profileImg/${joinData.profileimage}`}
-                            className="contestProfileImg2"
-                            alt="profileImg"
-                        />
-                        <span className="contestProfileText2">{joinData.userid || '없음'}</span>
-                    </div>
+            <div className="contestApplyContainer">
 
-                    <div
-                        id="contestImgContainer2"
-                        style={{
-                            backgroundImage: `url("${process.env.PUBLIC_URL}/postImg/${joinData.joinimg}")`,
-                            backgroundSize: "cover",
-                        }}
-                    ></div>
+                <div className="contestBg">
+                    <img src={contestBg} alt="Contest Background" />
+                </div>
 
-                    <div className="contestLikeDiv2">
-                        <button
+                {joinData && (
+                    <div id="contestPostContainer2">
+                        <div className="contestProfileDiv2">
+                            <img
+                                src={`${process.env.PUBLIC_URL}/profileImg/${joinData.profileimage}`}
+                                className="contestProfileImg2"
+                                alt="profileImg"
+                            />
+                            <span className="contestProfileText2">{joinData.userid || '없음'}</span>
+                        </div>
+
+                        <div
+                            id="contestImgContainer2"
+                            style={{
+                                backgroundImage: `url("${process.env.PUBLIC_URL}/postImg/${joinData.joinimg}")`,
+                                backgroundSize: "cover",
+                            }}
+                        ></div>
+
+                        <div className="contestLikeDiv2">
+                            <button
+                                type="button"
+                                className="contestLikeBtn"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    clickContestLike(joinData.userid, joinData.joinnum);
+                                }}
+                            >
+                                <img src={likeBtn} alt="like"/>
+                            </button>
+                            <span className="contestProfileText2">{joinData.joinlike || 0}</span>
+                        </div>
+                        {/* 삭제 버튼: 로그인한 사용자와 게시물 작성자가 동일한 경우에만 표시 */}
+                        <input
                             type="button"
-                            className="contestLikeBtn"
+                            value="삭제"
+                            id="contestPostDelBtn"
+                            className={userid === joinData.userid ? "" : "hidden"} // 조건부로 hidden 클래스 추가
                             onClick={(e) => {
                                 e.stopPropagation();
                                 e.preventDefault();
-                                clickContestLike(joinData.userid, joinData.joinnum);
+                                deletePost()
                             }}
-                        >
-                            <img src={likeBtn} alt="like"/>
-                        </button>
-                        <span className="contestProfileText2">{joinData.joinlike || 0}</span>
+                        />
                     </div>
-                    {/* 삭제 버튼: 로그인한 사용자와 게시물 작성자가 동일한 경우에만 표시 */}
-                    <input
-                        type="button"
-                        value="삭제"
-                        id="contestPostDelBtn"
-                        className={userid === joinData.userid ? "" : "hidden"} // 조건부로 hidden 클래스 추가
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            e.preventDefault();
-                            deletePost()
-                        }}
-                    />
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 }

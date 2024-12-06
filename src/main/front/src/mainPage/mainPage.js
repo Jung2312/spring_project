@@ -217,7 +217,7 @@ function MainPage() {
                     <span className="mainPage-title-text">카테고리별 상품 찾기</span>
                 </div>
                 <div className="mainPage-category-slider">
-                    <button className="mainPage-slide-button left" onClick={() => slideCategories('left')} disabled={scrollPosition === 0}>&#8678;</button>
+                    <button className="mainPage-slide-button left" onClick={() => slideCategories('left')} disabled={scrollPosition === 0}>&#10094;</button>
                     <div className="mainPage-category-part" ref={categoryContainerRef}>
                         {categories.map((item, index) => (
                             <a href="/shoppingCategory">
@@ -229,7 +229,7 @@ function MainPage() {
                             </a>
                         ))}
                     </div>
-                    <button className="mainPage-slide-button right" onClick={() => slideCategories('right')} disabled={isAtEnd}>&#8680;</button>
+                    <button className="mainPage-slide-button right" onClick={() => slideCategories('right')} disabled={isAtEnd}>&#10095;</button>
                 </div>
             </div>
             <div className="mainPage-mostView-section">

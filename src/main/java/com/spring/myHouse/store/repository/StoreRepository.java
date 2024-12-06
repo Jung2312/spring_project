@@ -1,5 +1,6 @@
 package com.spring.myHouse.store.repository;
 
+import com.spring.myHouse.product.entity.Product;
 import com.spring.myHouse.store.entity.Store;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

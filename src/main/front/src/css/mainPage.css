@@ -244,11 +244,11 @@
 }
 
 .mainPage-slide-button.left {
-    left: -20px; /* 왼쪽 위치 */
+    left: -60px; /* 왼쪽 위치 */
 }
 
 .mainPage-slide-button.right {
-    right: -20px; /* 오른쪽 위치 */
+    right: -50px; /* 오른쪽 위치 */
 }
 
 .mainPage-slide-button:disabled {
