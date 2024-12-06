@@ -17,4 +17,14 @@ public class PaymentService {
     public List<Payment> getPaymentList(String userid){
         return paymentRepository.findByUserid(userid);
     }
+
+    // 주문 확인
+    public boolean paymentExists(Long paymentnum) {
+        return paymentRepository.existsById(paymentnum);
+    }
+
+    // 주문 삭제
+    public void delPayment(Long paymentnum){
+        paymentRepository.deleteById(paymentnum);
+    }
 }

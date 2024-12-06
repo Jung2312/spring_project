@@ -1,5 +1,6 @@
 package com.spring.myHouse.store.repository;
 
+import com.spring.myHouse.product.entity.Product;
 import com.spring.myHouse.store.entity.Store;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -23,5 +24,7 @@ public interface StoreRepository extends CrudRepository<Store, Long> {
     boolean existsByStoreid(String storeid);
     boolean existsByStoreemail(String email);
     boolean existsByStorephone(String phone);
+
+    Store findByStorenum(Long storenum);
 
 }

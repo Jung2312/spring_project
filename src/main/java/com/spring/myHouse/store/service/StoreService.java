@@ -1,5 +1,6 @@
 package com.spring.myHouse.store.service;
 
+import com.spring.myHouse.product.entity.Product;
 import com.spring.myHouse.store.entity.Store;
 import com.spring.myHouse.store.repository.StoreRepository;
 import com.spring.myHouse.user.entity.User;
@@ -75,8 +76,14 @@ public class StoreService {
         return byUser;
     }
 
+    public Store getStoreByStorenum(Long storenum){
+        return storeRepository.findByStorenum(storenum);
+    }
+
+
     // 상점 이름으로 상점 정보 조회
     public Store getStoreByName(String storename) {
         return storeRepository.findByStorename(storename);
     }
+
 }

@@ -2,6 +2,7 @@ package com.spring.myHouse.product.service;
 
 import com.spring.myHouse.product.entity.Product;
 import com.spring.myHouse.product.repository.ProductRepository;
+import com.spring.myHouse.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,11 @@ public class ProductService {
         return productRepository.countByStorenum(storenum);
     }
 
+
+    public Product getProductByProductnum(Long productnum){
+        return productRepository.findByProductnum(productnum);
+    }
+
     // 특정 카테고리와 상점 번호에 해당하는 상품 목록 반환
     public List<Product> getProductsByCategoryAndStore(Long categorynum, Long storenum) {
         return productRepository.findByCategoryCategorynumAndStorenum(categorynum, storenum);
@@ -36,5 +42,6 @@ public class ProductService {
         return productRepository.findByCategoryAndPriceRange(categorynum, minPrice, maxPrice);
 
     }
+
 
 }
