@@ -17,8 +17,10 @@ public class Payment {
     @JoinColumn(name="userid")
     private String userid;
 
-    @JoinColumn(name="cartnum")
-    private Long cartnum;
+    @JoinColumn(name="productnum")
+    private Long productnum;
+
+    private Long payrepair;
 
     @CreationTimestamp
     private String paydate;

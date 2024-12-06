@@ -1,5 +1,10 @@
 package com.spring.myHouse.user.controller;
 
+import com.spring.myHouse.contest.entity.Contestjoin;
+import com.spring.myHouse.coupon.service.CouponService;
+import com.spring.myHouse.couponhistory.service.CouponhistoryService;
+import com.spring.myHouse.grade.service.GradeService;
+import com.spring.myHouse.mileage.service.MileageService;
 import com.spring.myHouse.user.entity.User;
 import com.spring.myHouse.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -12,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +27,9 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
+    private final CouponhistoryService couponhistoryService;
+    private final MileageService mileageService;
+    private final GradeService gradeService;
 
     // 사용자 정보 조회 API
     @GetMapping("/info")
@@ -130,5 +139,22 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 또는 비밀번호가 잘못되었습니다.");
         }
+    }
+
+    @GetMapping("/myShopping")
+    public Map<String, Object> getContestjoinDetail(@RequestParam String userid) {
+        User user = userService.getUserByIds(userid);
+
+        int couponCnt = couponhistoryService.getCountCouponHistory(userid);
+        int balance = mileageService.getBalanceByUserid(userid);
+        String grade = gradeService.getGradeByGradenum(user.getGradenum());
+
+        Map<String, Object> myPageUserData = new HashMap<>();
+
+        myPageUserData.put("count", couponCnt); // 쿠폰 개수
+        myPageUserData.put("mileage", balance); // 마일리지
+        myPageUserData.put("grade", grade); // 등급
+
+        return myPageUserData;
     }
 }

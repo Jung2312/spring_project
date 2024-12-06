@@ -15,4 +15,6 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     List<Product> findProductByStorenum(Long storenum);
 
     Long countByStorenum(Long storenum);
+
+    Product findByProductnum(Long productnum);
 }

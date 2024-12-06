@@ -1,5 +1,6 @@
 package com.spring.myHouse.store.service;
 
+import com.spring.myHouse.product.entity.Product;
 import com.spring.myHouse.store.entity.Store;
 import com.spring.myHouse.store.repository.StoreRepository;
 import com.spring.myHouse.user.entity.User;
@@ -74,4 +75,9 @@ public class StoreService {
         // 비밀번호 일치 여부 확인
         return byUser;
     }
+
+    public Store getStoreByStorenum(Long storenum){
+        return storeRepository.findByStorenum(storenum);
+    }
+
 }

@@ -2,6 +2,7 @@ package com.spring.myHouse.product.service;
 
 import com.spring.myHouse.product.entity.Product;
 import com.spring.myHouse.product.repository.ProductRepository;
+import com.spring.myHouse.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +27,9 @@ public class ProductService {
     // 판매자 번호에 해당하는 상품 개수 반환
     public Long getProductCountByStore(Long storenum) {
         return productRepository.countByStorenum(storenum);
+    }
+
+    public Product getProductByProductnum(Long productnum){
+        return productRepository.findByProductnum(productnum);
     }
 }
