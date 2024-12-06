@@ -25,8 +25,27 @@ public class StoreService {
 
     // Store 정보 업데이트
     public Store updateStore(Store updatedStore) {
-        return storeRepository.save(updatedStore);
+        // storenum을 기준으로 기존 상점 찾기
+        Store existingStore = storeRepository.findByStorenum(updatedStore.getStorenum());
+
+        if (existingStore != null) {
+            // 기존 상점 정보 업데이트
+            existingStore.setStoreid(updatedStore.getStoreid());  // storeid는 변경할 필요가 있을 경우만
+            existingStore.setStorename(updatedStore.getStorename());
+            existingStore.setStorephone(updatedStore.getStorephone());
+            existingStore.setStoreaddress(updatedStore.getStoreaddress());
+            existingStore.setStorenotice(updatedStore.getStorenotice());
+            existingStore.setStoreemail(updatedStore.getStoreemail());
+            existingStore.setStorepostcode(updatedStore.getStorepostcode());
+            existingStore.setStorepwd(updatedStore.getStorepwd());
+
+            // 업데이트된 상점 정보 저장 (기존 storenum 기준으로 업데이트)
+            return storeRepository.save(existingStore); // save()는 존재하는 엔티티를 업데이트합니다.
+        }
+
+        return null; // 해당 storenum에 해당하는 상점이 없으면 null 반환
     }
+
 
     // storeName으로 검색
     public List<Store> searchStoresByName(String query) {

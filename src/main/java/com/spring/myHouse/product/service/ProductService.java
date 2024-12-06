@@ -32,9 +32,6 @@ public class ProductService {
     public List<Product> getProductsByCategoryAndStore(Long categorynum, Long storenum) {
         return productRepository.findByCategoryCategorynumAndStorenum(categorynum, storenum);
 
-    public List<Product> getProductsByCategoryAndPriceRange(Long categorynum, String minPrice, String maxPrice) {
-        return productRepository.findByCategoryAndPriceRange(categorynum, minPrice, maxPrice);
-
     }
 
 }
