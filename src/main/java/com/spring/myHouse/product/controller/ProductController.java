@@ -68,12 +68,4 @@ public class ProductController {
         });
     }
 
-    @GetMapping("/category/{categorynum}/price-range")
-    public List<Product> getProductsByCategoryAndPriceRange(
-            @PathVariable Long categorynum,
-            @RequestParam String minPrice,
-            @RequestParam String maxPrice) {
-        return productService.getProductsByCategoryAndPriceRange(categorynum, minPrice, maxPrice);
-    }
-
 }

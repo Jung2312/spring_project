@@ -25,6 +25,7 @@ public interface StoreRepository extends CrudRepository<Store, Long> {
     boolean existsByStoreemail(String email);
     boolean existsByStorephone(String phone);
 
+    // storenum을 기준으로 Store를 찾는 메서드
     Store findByStorenum(Long storenum);
 
 }
