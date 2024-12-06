@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 import contestBg from '../img/contest_bg.png';
 import likeBtn from '../img/likeBtn.png';
 import "../css/contest.css";
-import Header from '../header.js'
 import {useNavigate} from 'react-router-dom';
+import Header from '../header.js'
 
 function ContestApply() {
     const navigate = useNavigate();
@@ -89,75 +89,78 @@ function ContestApply() {
     }
 
     return (
-        <div className="contestApplyContainer">
+        <div>
             <Header/>
-            <div className="contestBg">
-                <div>
-                    <img src={contestBg} alt="Contest Background"/>
-                    <span className="contestSubjectText">{contestData[0]?.contesttitle || '주제'}</span>
-                    <span className="contestDateText">
-                        {contestData[0]?.conteststartdate || '시작일'} - {contestData[0]?.contestenddate || '종료일'}
-                    </span>
-                    <input
-                        type="button"
-                        className="contestApplyPageBtn"
-                        value="참여하기"
-                        onClick={goContestPost}
-                    />
+            <div className="contestApplyContainer">
+
+                <div className="contestBg">
+                    <div>
+                        <img src={contestBg} alt="Contest Background"/>
+                        <span className="contestSubjectText">{contestData[0]?.contesttitle || '주제'}</span>
+                        <span className="contestDateText">
+                            {contestData[0]?.conteststartdate || '시작일'} - {contestData[0]?.contestenddate || '종료일'}
+                        </span>
+                        <input
+                            type="button"
+                            className="contestApplyPageBtn"
+                            value="참여하기"
+                            onClick={goContestPost}
+                        />
+                    </div>
                 </div>
-            </div>
 
-            <p className="contestApplyTitleText">참여작</p>
-            <p className="contestApplyContentText">주제와 가장 어울리는 인테리어에 투표해주세요.</p>
+                <p className="contestApplyTitleText">참여작</p>
+                <p className="contestApplyContentText">주제와 가장 어울리는 인테리어에 투표해주세요.</p>
 
-            <div className="contestContentContainer">
-                {rows.map((row, rowIndex) => (
-                    <div className="contestRow" key={rowIndex}>
-                        {row.map((join, index) => (
-                            <div className="contentWork" key={join.joinnum}>
-                                <a
-                                    href={`/contest/postDetail/${join.joinnum}`}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        navigate(`/contest/postDetail/${join.joinnum}`);
-                                    }}
-                                >
-                                    <div
-                                        className="contentWork"
-                                        style={{
-                                            backgroundImage: `url("${process.env.PUBLIC_URL}/postImg/${join.joinimg}")`,
+                <div className="contestContentContainer">
+                    {rows.map((row, rowIndex) => (
+                        <div className="contestRow" key={rowIndex}>
+                            {row.map((join, index) => (
+                                <div className="contentWork" key={join.joinnum}>
+                                    <a
+                                        href={`/contest/postDetail/${join.joinnum}`}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            navigate(`/contest/postDetail/${join.joinnum}`);
                                         }}
                                     >
-                                        <div className="contestProfileDiv">
-                                            <img
-                                                src={`${process.env.PUBLIC_URL}/profileImg/${join.profileimage}` || ''}
-                                                className="contestProfileImg"
-                                                alt="profileImg"
-                                            />
-                                            <span id="contestUserId" className="contestProfileText">
-                                                {join.userid || '없음'}
-                                            </span>
+                                        <div
+                                            className="contentWork"
+                                            style={{
+                                                backgroundImage: `url("${process.env.PUBLIC_URL}/postImg/${join.joinimg}")`,
+                                            }}
+                                        >
+                                            <div className="contestProfileDiv">
+                                                <img
+                                                    src={`${process.env.PUBLIC_URL}/profileImg/${join.profileimage}` || ''}
+                                                    className="contestProfileImg"
+                                                    alt="profileImg"
+                                                />
+                                                <span id="contestUserId" className="contestProfileText">
+                                                    {join.userid || '없음'}
+                                                </span>
+                                            </div>
+                                            <div className="contestLikeDiv">
+                                                <button
+                                                    type="button"
+                                                    className="contestLikeBtn"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        e.preventDefault();
+                                                        clickContestLike(join.userid, join.joinnum);
+                                                    }}
+                                                >
+                                                    <img src={likeBtn} alt="like"/>
+                                                </button>
+                                                <span className="contestProfileText">{join.joinlike || 0}</span>
+                                            </div>
                                         </div>
-                                        <div className="contestLikeDiv">
-                                            <button
-                                                type="button"
-                                                className="contestLikeBtn"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    e.preventDefault();
-                                                    clickContestLike(join.userid, join.joinnum);
-                                                }}
-                                            >
-                                                <img src={likeBtn} alt="like"/>
-                                            </button>
-                                            <span className="contestProfileText">{join.joinlike || 0}</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        ))}
-                    </div>
-                ))}
+                                    </a>
+                                </div>
+                            ))}
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );

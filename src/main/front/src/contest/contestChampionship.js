@@ -35,63 +35,67 @@ function ContestChampionship() {
     }
 
     return (
-        <div className="contestApplyContainer">
+        <div>
             <Header/>
-            <div className="contestBg">
-                <div>
-                    <img src={contestBg} alt="Contest Background"/>
-                    <span className="contestSubjectText">나만의 집 역대 수상작</span>
+
+            <div className="contestApplyContainer">
+
+                <div className="contestBg">
+                    <div>
+                        <img src={contestBg} alt="Contest Background"/>
+                        <span className="contestSubjectText">나만의 집 역대 수상작</span>
+                    </div>
                 </div>
-            </div>
 
-            <p className="contestApplyTitleText">역대 수상작</p>
-            <p className="contestApplyContentText">과거에 수상한 작품을 확인해보세요.</p>
+                <p className="contestApplyTitleText">역대 수상작</p>
+                <p className="contestApplyContentText">과거에 수상한 작품을 확인해보세요.</p>
 
-                <div className="contestContent">
-                    {rows.map((row, rowIndex) => (
-                        <div className="contestRow" key={rowIndex}>
-                            {row.map((join, index) => (
-                                <div className="contentWork" key={join.joinnum}>
-                                    <a
-                                        href={`/contest/postDetail/${join.joinnum}`}
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            navigate(`/contest/postDetail/${join.joinnum}`);
-                                        }}
-                                    >
-                                        <div
-                                            className="contentWork"
-                                            style={{
-                                                backgroundImage: `url("${process.env.PUBLIC_URL}/postImg/${join.joinimg}")`,
+                    <div className="contestContent">
+                        {rows.map((row, rowIndex) => (
+                            <div className="contestRow" key={rowIndex}>
+                                {row.map((join, index) => (
+                                    <div className="contentWork" key={join.joinnum}>
+                                        <a
+                                            href={`/contest/postDetail/${join.joinnum}`}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                navigate(`/contest/postDetail/${join.joinnum}`);
                                             }}
                                         >
-                                            <div className="contestProfileDiv">
-                                                <img
-                                                    src={`${process.env.PUBLIC_URL}/profileImg/${join.profileimage}` || ''}
-                                                    className="contestProfileImg"
-                                                    alt="profileImg"
-                                                />
-                                                <span id="contestUserId" className="contestProfileText">
-                                                {join.userid || '없음'}
-                                            </span>
+                                            <div
+                                                className="contentWork"
+                                                style={{
+                                                    backgroundImage: `url("${process.env.PUBLIC_URL}/postImg/${join.joinimg}")`,
+                                                }}
+                                            >
+                                                <div className="contestProfileDiv">
+                                                    <img
+                                                        src={`${process.env.PUBLIC_URL}/profileImg/${join.profileimage}` || ''}
+                                                        className="contestProfileImg"
+                                                        alt="profileImg"
+                                                    />
+                                                    <span id="contestUserId" className="contestProfileText">
+                                                    {join.userid || '없음'}
+                                                </span>
+                                                </div>
+                                                <div className="contestLikeDiv">
+                                                    <button
+                                                        type="button"
+                                                        className="contestEndLikeBtn"
+                                                        disabled="false"
+                                                    >
+                                                        <img src={likeBtn} alt="like" />
+                                                    </button>
+                                                    <span className="contestProfileText">{join.joinlike || 0}</span>
+                                                </div>
                                             </div>
-                                            <div className="contestLikeDiv">
-                                                <button
-                                                    type="button"
-                                                    className="contestEndLikeBtn"
-                                                    disabled="false"
-                                                >
-                                                    <img src={likeBtn} alt="like" />
-                                                </button>
-                                                <span className="contestProfileText">{join.joinlike || 0}</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            ))}
-                        </div>
-                    ))}
-                </div>
+                                        </a>
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
+            </div>
         </div>
     );
 }
