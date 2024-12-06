@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Header from '../header.js'
 
 function MyShoppingPage() {
     const navigate = useNavigate();
@@ -105,6 +106,7 @@ function MyShoppingPage() {
 
     return (
         <div>
+            <Header/>
             <div className="myShoppingPageContainer">
                 <div className="myShoppingPageCategoryBox">
                     <img

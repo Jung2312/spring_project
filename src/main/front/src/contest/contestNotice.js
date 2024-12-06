@@ -28,49 +28,53 @@ function ContestNotice() {
     }, []);
 
     return (
-        <div className="contestApplyContainer">
+        <div>
             <Header/>
-            <div className="contest_notice">
-                <div className="contest_notice_info">
-                    <img className="contest_notice_img" src={contestInfo} alt="contestInfoBg"/>
+
+            <div className="contestApplyContainer">
+
+                <div className="contest_notice">
+                    <div className="contest_notice_info">
+                        <img className="contest_notice_img" src={contestInfo} alt="contestInfoBg"/>
+                        <span className="contestSubjectText">{contestData[0]?.contesttitle || '주제'}</span>
+                        <span className="contestDateText_info">
+                            {contestData[0]?.conteststartdate || '시작일'}{"\n"}-{"\n"}{contestData[0]?.contestenddate || '종료일'}
+                        </span>
+                    </div>
+                    <div>
+                        <div className="contest_info">
+                            <div className="contest_notice_main_text">대회명</div>
+                            <div className="contest_notice_text">{contestData[0]?.contesttitle || '주제'}</div>
+                        </div>
+                        <div className="contest_info">
+                            <div className="contest_notice_main_text">시작일</div>
+                            <div className="contest_notice_text">{contestData[0]?.conteststartdate || '시작일'}</div>
+                        </div>
+                        <div className="contest_info">
+                            <div className="contest_notice_main_text">종료일</div>
+                            <div className="contest_notice_text">{contestData[0]?.contestenddate || '종료일'}</div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    style={{
+                        width: "100%",
+                        textAlign: "center",
+                        borderBottom: "2px solid #aaa",
+                        lineHeight: "0.1em",
+                        margin: "10px 0 20px",
+                        color: "#dddddd"
+                    }}>
+                </div>
+                <div className="contest_notice_bg">
+                    <img src={contestBg} alt="contestBg"/>
                     <span className="contestSubjectText">{contestData[0]?.contesttitle || '주제'}</span>
-                    <span className="contestDateText_info">
-                        {contestData[0]?.conteststartdate || '시작일'}{"\n"}-{"\n"}{contestData[0]?.contestenddate || '종료일'}
+                    <span className="contestDateText_info2">
+                        {contestData[0]?.conteststartdate || '시작일'} - {contestData[0]?.contestenddate || '종료일'}
                     </span>
                 </div>
-                <div>
-                    <div className="contest_info">
-                        <div className="contest_notice_main_text">대회명</div>
-                        <div className="contest_notice_text">{contestData[0]?.contesttitle || '주제'}</div>
-                    </div>
-                    <div className="contest_info">
-                        <div className="contest_notice_main_text">시작일</div>
-                        <div className="contest_notice_text">{contestData[0]?.conteststartdate || '시작일'}</div>
-                    </div>
-                    <div className="contest_info">
-                        <div className="contest_notice_main_text">종료일</div>
-                        <div className="contest_notice_text">{contestData[0]?.contestenddate || '종료일'}</div>
-                    </div>
-                </div>
+                <div className="contest_notice_bg"><img src={contestInfo2} alt="contestBg"/></div>
             </div>
-            <div
-                style={{
-                    width: "100%",
-                    textAlign: "center",
-                    borderBottom: "2px solid #aaa",
-                    lineHeight: "0.1em",
-                    margin: "10px 0 20px",
-                    color: "#dddddd"
-                }}>
-            </div>
-            <div className="contest_notice_bg">
-                <img src={contestBg} alt="contestBg"/>
-                <span className="contestSubjectText">{contestData[0]?.contesttitle || '주제'}</span>
-                <span className="contestDateText_info2">
-                    {contestData[0]?.conteststartdate || '시작일'} - {contestData[0]?.contestenddate || '종료일'}
-                </span>
-            </div>
-            <div className="contest_notice_bg"><img src={contestInfo2} alt="contestBg"/></div>
         </div>
     );
 }

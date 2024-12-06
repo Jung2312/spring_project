@@ -82,29 +82,33 @@ function ContestPostPage() {
     };
 
     return (
-        <div className="contestApplyContainer">
+        <div>
             <Header/>
-            <div className="contestBg">
-                <div>
-                    <img src={contestBg} alt="Contest Background" />
-                    <span className="contestSubjectText">{contestData[0]?.contesttitle || '주제'}</span>
-                    <span className="contestDateText">
-                        {contestData[0]?.conteststartdate || '시작일'} - {contestData[0]?.contestenddate || '종료일'}
-                    </span>
-                </div>
-            </div>
 
-            <div id="contestPostContainer2">
-                <div id="contestImgContainer">
-                    {previewImage ? <img src={previewImage} id="contestPostImg" alt="Preview" /> : <p>미리보기 없음</p>}
-                </div>
+            <div className="contestApplyContainer">
 
-                <div id="contestPostBtnList">
-                    <div className="filebox">
-                        <label htmlFor="file">사진 첨부</label>
-                        <input type="file" id="file" onChange={handleFileChange} />
+                <div className="contestBg">
+                    <div>
+                        <img src={contestBg} alt="Contest Background" />
+                        <span className="contestSubjectText">{contestData[0]?.contesttitle || '주제'}</span>
+                        <span className="contestDateText">
+                            {contestData[0]?.conteststartdate || '시작일'} - {contestData[0]?.contestenddate || '종료일'}
+                        </span>
                     </div>
-                    <input type="button" value="제출하기" id="contestPostBtn" onClick={contestPostSubmit} />
+                </div>
+
+                <div id="contestPostContainer2">
+                    <div id="contestImgContainer">
+                        {previewImage ? <img src={previewImage} id="contestPostImg" alt="Preview" /> : <p>미리보기 없음</p>}
+                    </div>
+
+                    <div id="contestPostBtnList">
+                        <div className="filebox">
+                            <label htmlFor="file">사진 첨부</label>
+                            <input type="file" id="file" onChange={handleFileChange} />
+                        </div>
+                        <input type="button" value="제출하기" id="contestPostBtn" onClick={contestPostSubmit} />
+                    </div>
                 </div>
             </div>
         </div>
