@@ -1,0 +1,168 @@
+* {
+    font-family: 'Pretendard';
+}
+
+.shoppingInform-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.shoppingInform-banner {
+    width: 100%;
+    background-color: #484d50;
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.shoppingInform-banner-content {
+    padding-left: 170px; /* 좌측 여백 추가 */
+    text-align: left; /* 텍스트 왼쪽 정렬 */
+}
+
+.shoppingInform-banner-storename {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.shoppingInform-banner-storeaddress,
+.shoppingInform-banner-storephone {
+    font-size: 1rem;
+}
+
+/* 배너 아래의 메인 콘텐츠 레이아웃 */
+.shoppingInform-content {
+    display: flex;
+    flex: 1; /* 헤더를 제외한 영역 전체 차지 */
+    width: 100%;
+    margin-top: 20px; /* 상단 여백 */
+    position: relative;
+}
+
+.shoppingInform-categories {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 13%; /* 왼쪽 카테고리 공간 */
+    margin-left: 170px;
+    position: sticky;
+    top: 20px;
+    height: 100%;
+    box-sizing: border-box;
+    left: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.shoppingInform-category {
+    padding: 5px;
+}
+
+.shoppingInform-major-category {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 10px; /* 카테고리 간 간격 */
+}
+
+.shoppingInform-major-title {
+    font-size: 20px; /* Major 카테고리 글자 크기 */
+    font-weight: bold;
+}
+
+.shoppingInform-category-arrow {
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    border-right: 2px solid #333;
+    border-bottom: 2px solid #333;
+    transform: rotate(45deg);
+    transition: transform 0.3s ease;
+    margin-left: 6px; /* 화살표와 텍스트 간 간격을 8px로 줄임 */
+}
+
+.shoppingInform-category-arrow.right {
+    transform: rotate(45deg); /* 기본: 오른쪽 화살표 */
+}
+
+.shoppingInform-subcategory-list {
+    margin-top: 8px;
+    padding-left: 20px;
+    list-style: none;
+}
+
+.shoppingInform-subcategory-item {
+    font-size: 16px; /* Subcategory 글자 크기 */
+    font-weight: bold;
+    color: #666;
+    padding: 9px 0; /* Subcategory 항목 간 간격 */
+    cursor: pointer;
+    transition: color 0.2s ease; /* 호버 효과 추가 */
+}
+
+.shoppingInform-subcategory-item:hover {
+    color: #35C5F0; /* 마우스 호버 시 파란색 */
+}
+
+/* 오른쪽 상품 정보 */
+.shoppingInform-products {
+    flex: 1; /* 남은 공간 차지 */
+    margin-left: 20px;
+    overflow-y: auto; /* 스크롤 가능 */
+}
+
+.shoppingInform-product-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.shoppingInform-product-card {
+    width: 200px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: left;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.shoppingInform-product-card:hover {
+    transform: scale(1.05); /* 호버 시 살짝 커지도록 효과 */
+}
+
+.shoppingInform-product-image {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.shoppingInform-product-storename {
+    font-size: 14px;
+    margin-top: 5px;
+    font-weight: bold; /* 가격을 진하게 */
+    text-align: left; /* 왼쪽 정렬 */
+    color: #ff5555;
+}
+
+.shoppingInform-product-name {
+    font-size: 14px;
+    margin: 10px 0;
+    text-align: left;
+    line-height: 1.2; /* 줄 간격 설정 */
+    height: 3.6em; /* 3줄 높이에 해당하는 고정 값 (line-height * 3) */
+    overflow: hidden; /* 넘치는 텍스트 숨김 */
+    text-overflow: ellipsis; /* ... 추가 */
+    white-space: normal; /* 여러 줄 허용 */
+}
+
+.shoppingInform-product-price {
+    font-size: 14px;
+    font-weight: bold; /* 가격을 진하게 */
+    text-align: left; /* 왼쪽 정렬 */
+    margin-top: auto;
+}

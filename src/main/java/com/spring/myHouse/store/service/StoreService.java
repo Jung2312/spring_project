@@ -80,4 +80,10 @@ public class StoreService {
         return storeRepository.findByStorenum(storenum);
     }
 
+
+    // 상점 이름으로 상점 정보 조회
+    public Store getStoreByName(String storename) {
+        return storeRepository.findByStorename(storename);
+    }
+
 }

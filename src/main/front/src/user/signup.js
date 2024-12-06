@@ -4,6 +4,7 @@ import axios, {post} from 'axios';
 import logo from '../img/myhouse_logo.png';
 import DaumPostCode from 'react-daum-postcode';
 import css from '../css/signup.css';
+import {useNavigate} from "react-router-dom";
 
 function Signup() {
     const [inputUser, setInputUser] = useState({
@@ -19,6 +20,7 @@ function Signup() {
     });
 
     const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate(); // useNavigate 훅 사용
 
     const toggle = () => {
         setIsOpen(!isOpen);
@@ -79,7 +81,7 @@ function Signup() {
                 gradenum: 1
             });
             alert("회원가입이 완료되었습니다."); // 성공 메시지
-
+            navigate('/main'); // 메인 페이지로 이동
         } catch (error) {
             alert(error.response?.data || '회원가입 중 오류가 발생했습니다.');
         }
@@ -89,8 +91,10 @@ function Signup() {
         <div className="signup-page">
             <form className="signup-container" onSubmit={handleSubmit} method="post">
                 <div className="signup-logo">
-                    <a href=""><img src={logo} alt="나만의집 로고" /></a>
-                    <span className="signup-logo-name">나만의집</span>
+                    <a href="/">
+                        <img src={logo} alt="나만의집 로고"/>
+                        <span className="signup-logo-name">나만의집</span>
+                    </a>
                 </div>
                 <div className="signup-signup">
                     <span className="signup-signup-text">회원가입</span>

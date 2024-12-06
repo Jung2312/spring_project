@@ -27,10 +27,22 @@ public class CategoryController {
         return categoryService.getSubCategoriesByMajorCategory(majorCategory);
     }
 
+    // 상점 번호를 기준으로 메인 카테고리 조회
+    @GetMapping
+    public List<Category> getCategoriesByStore(@RequestParam int storenum) {
+        return categoryService.getCategoriesByStore(storenum);
+    }
+
     // CategoryController.java
     @GetMapping("/all")
     public List<Category> getAllCategories() {
         return categoryService.getAllCategories();
     }
 
+    @GetMapping("/{majorCategory}/{subCategory}")
+    public List<Category> getCategoriesByMajorAndSubCategory(
+            @PathVariable String majorCategory,
+            @PathVariable String subCategory) {
+        return categoryService.getCategoriesByMajorAndSubCategory(majorCategory, subCategory);
+    }
 }

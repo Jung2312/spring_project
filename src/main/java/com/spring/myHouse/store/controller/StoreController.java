@@ -1,5 +1,7 @@
 package com.spring.myHouse.store.controller;
 
+import com.spring.myHouse.category.entity.Category;
+import com.spring.myHouse.product.entity.Product;
 import com.spring.myHouse.store.entity.Store;
 import com.spring.myHouse.store.service.StoreService;
 import com.spring.myHouse.user.entity.User;
@@ -25,6 +27,17 @@ public class StoreController {
     public Store getStoreInfo(@PathVariable String storeid) {
         return storeService.getStoreById(storeid);
     }*/
+
+    // 특정 상점 이름으로 상점 정보 조회
+    @GetMapping
+    public ResponseEntity<Store> getStoreByName(@RequestParam String storename) {
+        Store store = storeService.getStoreByName(storename);
+        if (store != null) {
+            return ResponseEntity.ok(store);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     // 사용자 정보 조회 API
     @GetMapping("/info")

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import contestBg from '../img/contest_bg.png';
 import likeBtn from '../img/likeBtn.png';
 import "../css/contest.css";
-import { useNavigate } from 'react-router-dom';
+import Header from '../header.js'
+import {useNavigate} from 'react-router-dom';
 
 function ContestApply() {
     const navigate = useNavigate();
@@ -89,9 +90,10 @@ function ContestApply() {
 
     return (
         <div className="contestApplyContainer">
+            <Header/>
             <div className="contestBg">
                 <div>
-                    <img src={contestBg} alt="Contest Background" />
+                    <img src={contestBg} alt="Contest Background"/>
                     <span className="contestSubjectText">{contestData[0]?.contesttitle || '주제'}</span>
                     <span className="contestDateText">
                         {contestData[0]?.conteststartdate || '시작일'} - {contestData[0]?.contestenddate || '종료일'}
@@ -146,7 +148,7 @@ function ContestApply() {
                                                     clickContestLike(join.userid, join.joinnum);
                                                 }}
                                             >
-                                                <img src={likeBtn} alt="like" />
+                                                <img src={likeBtn} alt="like"/>
                                             </button>
                                             <span className="contestProfileText">{join.joinlike || 0}</span>
                                         </div>

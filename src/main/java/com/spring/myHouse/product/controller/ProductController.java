@@ -26,6 +26,14 @@ public class ProductController {
         return productService.getProductsByCategory(categorynum);
     }
 
+    @GetMapping("/category/{categorynum}/store/{storenum}")
+    public List<Product> getProductsByCategoryAndStore(
+            @PathVariable Long categorynum,
+            @PathVariable Long storenum) {
+        System.out.println("Fetching products for category: " + categorynum + ", store: " + storenum);
+        return productService.getProductsByCategoryAndStore(categorynum, storenum);
+    }
+
     @GetMapping("/productList")
     public List<Product> getProductsByStore(@RequestParam Long storenum) {
         System.out.println("Fetching products by store : " + storenum);
@@ -59,4 +67,13 @@ public class ProductController {
             return result;
         });
     }
+
+    @GetMapping("/category/{categorynum}/price-range")
+    public List<Product> getProductsByCategoryAndPriceRange(
+            @PathVariable Long categorynum,
+            @RequestParam String minPrice,
+            @RequestParam String maxPrice) {
+        return productService.getProductsByCategoryAndPriceRange(categorynum, minPrice, maxPrice);
+    }
+
 }

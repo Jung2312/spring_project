@@ -24,4 +24,8 @@ public class RecommendService {
         recommendRepository.save(recommend);
     }
 
+    public int countPostsByUserid(String userid) {
+        return recommendRepository.countPostsByUserid(userid);
+    }
+
 }

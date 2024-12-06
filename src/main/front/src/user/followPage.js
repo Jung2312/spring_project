@@ -8,14 +8,28 @@ import furniture2 from "../img/furniture2.png";
 import like from "../img/like.png";
 import comment from "../img/comment.png";
 import Header from "../header";
+import ex from "../img/exProfile.png";
 
 function FollowPage() {
     const [likeCount, setLikeCount] = useState(0); // 좋아요 초기값
+    const [postList, setPostList] = useState([]); // 게시글 데이터
 
     // 좋아요 클릭 시 숫자 증가
     const handleLikeClick = () => {
         setLikeCount(likeCount + 1);
     };
+
+    // 서버에서 게시글 데이터 가져옴
+    useEffect(() => {
+        axios
+            .get('http://localhost:80/recommend') // Spring Boot API URL
+            .then((response) => {
+                setPostList(response.data);
+            })
+            .catch((error) => {
+                console.error("데이터를 가져오는 중 오류가 발생했습니다.", error);
+            });
+    }, []);
     return (
         <div className="followPage">
             <Header/>
@@ -38,37 +52,63 @@ function FollowPage() {
                     </div>
                 </div>
                 <div className="followPage_post_section">
-                    <div className="followPage_post_container">
-                        <div className="followPage_post_profile">
-                            <div className="followPage_post_profile_img">
-                                <img src={nongdamgom} alt="프로필 사진"/>
-                            </div>
-                            <div className="followPage_post_profile_content">
-                                <div className="followPage_post_profile_text">
-                                    <span className="followPage_post_profile_name">회원명</span>
-                                    <span style={{margin: '0 10px', color: '#b6b6b6'}}> | </span>
-                                    <span className="followPage_post_profile_follow">팔로우</span>
+                    {postList.map((post) => (
+                        <div className="recommend-section" key={post.postnum}>
+                            {/* 프로필 섹션 */}
+                            <div className="profile-section">
+                                <div className="profile-img">
+                                    <img className="profile-img"
+                                         src={`${process.env.PUBLIC_URL}/profileImg/${post.profileimage}`} alt="프로필 사진"
+                                         onError={(e) => {
+                                             e.target.src = ex;
+                                         }}/>
                                 </div>
-                                <span className="followPage_post_profile_one_liner_text">나의 자취생활</span>
+                                <div className="profile-content">
+                                    <div className="profile-name">
+                                        <span className="nick-name">{post.userid}</span> {/* 닉네임 */}
+                                        <span>·</span>
+                                        <button className="follow">팔로우</button>
+                                    </div>
+                                    <div>
+                                        <span className="profile-text">{post.introduce}</span> {/* 자기소개 */}
+                                    </div>
+                                </div>
+                            </div>
+                            {/* 게시글 사진 */}
+                            <img className="post-img" src={`${process.env.PUBLIC_URL}/postImg/${post.postimg}`}
+                                 alt="게시글 사진"
+                                 onError={(e) => {
+                                     e.target.src = ex;
+                                 }}/>
+                            {/* 좋아요와 댓글 */}
+                            <div className="like-comment" onClick={handleLikeClick} style={{cursor: 'pointer'}}>
+                                <div className="like">
+                                    <img className="like-img" src={like} alt="마음"/>
+                                    <span>{post.postlike + likeCount}</span>
+                                </div>
+                                <div className="comment">
+                                    <img className="comment-img" src={comment} alt="댓글"/>
+                                    <span>{post.postview}</span>
+                                </div>
+                            </div>
+                            {/* 게시글 내용 */}
+                            <div className="cotent-section">
+                                <div>
+                                    <span className="cotent-text">{post.postcontent}</span>
+                                </div>
+                            </div>
+                            {/* 댓글 내용 */}
+                            <div className="comment-section">
+                                <div className="comment">
+                                    <img className="comment-profile" src={ex} alt="프로필사진"/>
+                                    <div className="comment-content">
+                                        <div><span className="name">{post.userid}</span></div>
+                                        <span className="comment-text">{post.userid}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div className="followPage_post_image">
-                            <img src={furniture2} alt="게시글 사진"/>
-                        </div>
-                        <div className="followPage_post_cotent">
-                            <span className="followPage_post_cotent_text">이 고구마를 봐, 때깔곱지</span>
-                        </div>
-                        <div className="followPage_post_like_comment">
-                            <div className="followPage_post_like" onClick={handleLikeClick} style={{cursor: 'pointer'}}>
-                                <img className="followPage_post_like_img" src={like} alt="좋아요"/>
-                                <span className="followPage_post_like_number">{likeCount}</span>
-                            </div>
-                            <div className="followPage_post_comment">
-                                <img className="followPage_post_comment_img" src={comment} alt="댓글"/>
-                                <span className="followPage_post_comment_number">12</span>
-                            </div>
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </div>
         </div>
