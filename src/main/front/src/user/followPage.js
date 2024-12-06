@@ -53,35 +53,41 @@ function FollowPage() {
                 </div>
                 <div className="followPage_post_section">
                     {postList.map((post) => (
-                        <div className="recommend-section" key={post.postnum}>
+                        <div className="followPage_post_part" key={post.postnum}>
                             {/* 프로필 섹션 */}
-                            <div className="profile-section">
-                                <div className="profile-img">
-                                    <img className="profile-img"
+                            <div className="followPage_post_profile-section">
+                                <div className="followPage_post_profile-img">
+                                    <img className="followPage_post_profile-img"
                                          src={`${process.env.PUBLIC_URL}/profileImg/${post.profileimage}`} alt="프로필 사진"
                                          onError={(e) => {
                                              e.target.src = ex;
                                          }}/>
                                 </div>
-                                <div className="profile-content">
-                                    <div className="profile-name">
+                                <div className="followPage_post_profile-content">
+                                    <div className="followPage_post_profile-name">
                                         <span className="nick-name">{post.userid}</span> {/* 닉네임 */}
                                         <span>·</span>
                                         <button className="follow">팔로우</button>
                                     </div>
                                     <div>
-                                        <span className="profile-text">{post.introduce}</span> {/* 자기소개 */}
+                                        <span className="followPage_post_profile-text">{post.introduce}</span> {/* 자기소개 */}
                                     </div>
                                 </div>
                             </div>
                             {/* 게시글 사진 */}
-                            <img className="post-img" src={`${process.env.PUBLIC_URL}/postImg/${post.postimg}`}
+                            <img className="followPage_post_post-img" src={`${process.env.PUBLIC_URL}/postImg/${post.postimg}`}
                                  alt="게시글 사진"
                                  onError={(e) => {
                                      e.target.src = ex;
                                  }}/>
+                            {/* 게시글 내용 */}
+                            <div className="followPage_post_cotent-section">
+                                <div>
+                                    <span className="cotent-text">{post.postcontent}</span>
+                                </div>
+                            </div>
                             {/* 좋아요와 댓글 */}
-                            <div className="like-comment" onClick={handleLikeClick} style={{cursor: 'pointer'}}>
+                            <div className="followPage_like_comment" onClick={handleLikeClick} style={{cursor: 'pointer'}}>
                                 <div className="like">
                                     <img className="like-img" src={like} alt="마음"/>
                                     <span>{post.postlike + likeCount}</span>
@@ -89,22 +95,6 @@ function FollowPage() {
                                 <div className="comment">
                                     <img className="comment-img" src={comment} alt="댓글"/>
                                     <span>{post.postview}</span>
-                                </div>
-                            </div>
-                            {/* 게시글 내용 */}
-                            <div className="cotent-section">
-                                <div>
-                                    <span className="cotent-text">{post.postcontent}</span>
-                                </div>
-                            </div>
-                            {/* 댓글 내용 */}
-                            <div className="comment-section">
-                                <div className="comment">
-                                    <img className="comment-profile" src={ex} alt="프로필사진"/>
-                                    <div className="comment-content">
-                                        <div><span className="name">{post.userid}</span></div>
-                                        <span className="comment-text">{post.userid}</span>
-                                    </div>
                                 </div>
                             </div>
                         </div>
