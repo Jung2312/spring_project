@@ -1,0 +1,18 @@
+.payment-main{
+    width: 1280px;
+    margin: auto;
+    .payment-title-section {
+        margin: 70px 0;
+        span{
+            font-size: 26px;
+            font-weight: bold;
+        }
+    }
+    .payment-bill-section{
+        .payment-order-user-title{
+            font-size: 20px;
+            font-weight: bold;
+            border-bottom: 1px #D5D5D5 solid;
+        }
+    }
+}

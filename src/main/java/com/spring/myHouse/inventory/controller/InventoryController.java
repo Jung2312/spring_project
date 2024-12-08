@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/inventory")
@@ -28,7 +29,13 @@ public class InventoryController {
     }
 
     @PutMapping("/updateCount/{productnum}")
-    public ResponseEntity<?> updateInventory(@PathVariable Long productnum, @RequestParam Long inventorycount) {
+    public ResponseEntity<?> updateInventory(@PathVariable Long productnum, @RequestBody Map<String, Long> requestBody) {
+        Long inventorycount = requestBody.get("inventorycount");
+        System.out.println(productnum + ", " + inventorycount);
+        if (inventorycount == null) {
+            return ResponseEntity.badRequest().body("inventorycount 값이 누락되었습니다.");
+        }
+
         boolean isUpdated = inventoryService.updateInventory(productnum, inventorycount);
 
         if (isUpdated) {
@@ -37,4 +44,5 @@ public class InventoryController {
             return ResponseEntity.status(404).body("상품 번호를 찾을 수 없습니다.");
         }
     }
+
 }
