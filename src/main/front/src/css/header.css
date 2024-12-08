@@ -43,6 +43,9 @@ img{
         a{
             margin-right: 30px;
         }
+        a:last-child{
+            margin: 0;
+        }
     }
 }
 
@@ -114,4 +117,60 @@ img{
     margin-right: 10px;
     cursor: pointer;
     font-size: 16px;
+}
+
+.sub-header{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border-bottom: 1px #D5D5D5 solid;
+    margin-bottom: 30px;
+    height: 60px;
+    .sub-header-category-box{
+        margin-left: 2rem;
+        margin-right: 5rem;
+        display: flex;
+        height: inherit;
+        a{
+            margin-right: 30px;
+            text-align: center;
+            display: inline-flex;
+            flex-direction: column;
+            -webkit-box-pack: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+        #sub-header-shopping{
+            color: #35C5F0;
+            border-bottom: 3px #35C5F0 solid;
+        }
+        a:last-child{
+            margin: 0;
+        }
+    }
+}
+
+.sub-header-realtime-search-box{
+    display: flex;
+    .sub-header-realtime-search, .sub-header-realtime-search-href{
+        display: flex;
+        font-weight: bold;
+        margin-right: 5%;
+        .sub-header-realtime-search-rank{
+            margin-right: 10px;
+        }
+        .sub-header-realtime-search-img{
+            font-size: 14px;
+            color: #FF0000;
+            margin-right: 10px;
+        }
+        .sub-header-realtime-search-product-name{
+            width: 105px;
+        }
+    }
+    .sub-header-more-btn{
+        background-color: #ffffff;
+        border: none;
+        cursor: pointer;
+    }
 }
