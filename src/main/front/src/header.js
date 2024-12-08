@@ -43,7 +43,7 @@ function Header() {
         <header className="main-header">
             <div className="logo-name-box"><a href="/" className="logo-name">나만의집</a></div>
             <div className="top-category-box">
-                <a href="" id="community">커뮤니티</a>
+                <a href="/recommend" id="community">커뮤니티</a>
                 <a href="/shoppinghome" id="shopping">쇼핑</a>
                 <a href="/contest" id="contest">콘테스트</a>
             </div>
