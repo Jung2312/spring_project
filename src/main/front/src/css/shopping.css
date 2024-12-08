@@ -371,3 +371,136 @@
     font-size: 20px;
     text-align: center;
 }
+
+
+
+/* 상품 베스트 화면 */
+.shoppingBest {
+    width: 1280px;
+    margin: auto;
+    display: flex;
+    position: relative;
+    justify-content: center;
+    flex-direction: column;
+}
+
+/* 쇼핑 베스트 버튼 컨테이너 */
+.shoppingBest_btn_container {
+    padding: 60px;
+    margin: auto;
+    display: flex;
+    position: relative;
+    justify-content: center;
+}
+
+/* 쇼핑 베스트 버튼 */
+.shoppingBest_btn {
+    border: none;
+    background-color: #35C5F0;
+    color: #ffffff;
+    width: 160px;
+    height: 50px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 오늘 날짜 */
+.shoppingBest_date {
+    font-size: 20px;
+    color: #888;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+
+/* 상품 목록 */
+.shoppingBest_product_section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: space-between;
+    margin: 20px auto auto;
+}
+
+/* 상품 */
+.shoppingBest_product {
+    width: 400px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+    transition: transform 0.3s;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 상품 베스트 번호 */
+.shoppingBest_flag {
+    position: absolute;
+    left: 10px;
+    background-color: #35C5F0;
+    color: white;
+    font-size: 25px;
+    font-weight: bold;
+    border-radius: 2px;
+    padding: 2px 5px;
+    width: 40px;
+    height: 60px;
+    line-height: 40px;
+    text-align: center;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+}
+
+/* 이미지 컨테이너 */
+.shoppingBest_img_container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* 이미지 */
+.shoppingBest_img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s;
+}
+
+/* 글자 영역 */
+.shoppingBest_text {
+    padding: 13px;
+    text-align: left;
+}
+
+/* 스토어 이름 */
+.shoppingBest_store_name {
+    font-size: 18px;
+    font-weight: bold;
+    padding-bottom: 6px;
+    color: #888;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* 상품 이름 */
+.shoppingBest_product_name {
+    padding-bottom: 6px;
+    font-size: 18px;
+    color: #333;
+    display: block;
+}
+
+/* 상품 가격 */
+.shoppingBest_product_price {
+    padding-bottom: 4px;
+    font-size: 20px;
+    color: #000000;
+    font-weight: bold;
+    display: block;
+}
+
+/* 상품 리뷰 */
+.shoppingBest_review {
+    font-size: 14px;
+    color: #888;
+    font-weight: bold;
+}

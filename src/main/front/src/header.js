@@ -40,21 +40,21 @@ function Header() {
         window.location.reload();
     }
     return (
-        <div className="header">
-            <header className="main-header">
-                <div className="logo-name-box"><a href="/" className="logo-name">나만의집</a></div>
-                <div className="top-category-box">
-                    <a href="" id="community">커뮤니티</a>
-                    <a href="/shoppinghome" id="shopping">쇼핑</a>
-                    <a href="/contest" id="contest">콘테스트</a>
-                </div>
-                <div className="search-box">
-                    <img className="search-img" src={SearchImg}/>
-                    <input className="search-field" type="text" placeholder="통합검색"/>
-                </div>
-                <div className="cart-box">
-                    <a href=""><img src={CartImg}/></a>
-                </div>
+    <div className="header">
+        <header className="main-header">
+            <div className="logo-name-box"><a href="/" className="logo-name">나만의집</a></div>
+            <div className="top-category-box">
+                <a href="/recommend" id="community">커뮤니티</a>
+                <a href="/shoppinghome" id="shopping">쇼핑</a>
+                <a href="/contest" id="contest">콘테스트</a>
+            </div>
+            <div className="search-box">
+                <img className="search-img" src={SearchImg} />
+                <input className="search-field" type="text" placeholder="통합검색" />
+            </div>
+            <div className="cart-box">
+                <a href=""><img src={CartImg} /></a>
+            </div>
                 {isLogin ? (
                     // Display user information if logged in
                     <div className="header-user-box">
