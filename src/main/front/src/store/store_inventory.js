@@ -56,11 +56,10 @@ function StoreInventory({ productData, inventoryInfo }) {
         try {
             // 모든 상품에 대해 개별적으로 요청 전송
             const requests = inventoryCounts.map(item =>
-                axios.put(`http://localhost:80/inventory/updateCount/${item.productnum}`, null, {
-                    params: { inventorycount: item.count },
+                axios.put(`http://localhost:80/inventory/updateCount/${item.productnum}`, {
+                    inventorycount: item.count, // 데이터를 JSON 형식으로 전달
                 })
             );
-            console.log(inventoryCounts);
 
             const responses = await Promise.allSettled(requests); // 모든 요청 병렬 처리
             const failedUpdates = responses.filter(res => res.status === "rejected");
@@ -76,6 +75,7 @@ function StoreInventory({ productData, inventoryInfo }) {
             alert("재고 저장에 실패했습니다.");
         }
     };
+
 
     return (
         <div className="inventory-container">

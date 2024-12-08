@@ -25,6 +25,7 @@ import FollowPage from "./user/followPage";
 import Profile from "./user/profile";
 import ShoppingInformation from "./shopping/shoppingInformation";
 import ShoppingBest from "./shopping/shoppingBest";
+import Payment from "./shopping/payment";
 
 function App() {
     return (
@@ -54,6 +55,7 @@ function App() {
                 <Route path="/productDetail" element={<ProductDetail />} />
                 <Route path="/shoppingInformation/:storename" element={<ShoppingInformation />} />
                 <Route path="/shoppingBest" element={<ShoppingBest />} />
+                <Route path="/payment" element={<Payment />} />
             </Routes>
         </BrowserRouter>
     );

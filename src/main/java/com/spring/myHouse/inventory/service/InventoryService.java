@@ -26,7 +26,7 @@ public class InventoryService {
 
     public boolean updateInventory(Long productnum, Long inventorycount) {
         // 업데이트 된 행의 수 리턴
-        Long updateCount = inventoryRepository.updateInventoryCount(productnum, inventorycount);
+        int updateCount = inventoryRepository.updateInventoryCount(productnum, inventorycount);
         return updateCount > 0;
     }
 }
