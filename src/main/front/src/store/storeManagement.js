@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import ProductManagement from "./productManagement";
 import InfoUpdate from "./infoUpdate";
 import { SidebarItem } from './sidebarItem';
 import '../css/store.css';
