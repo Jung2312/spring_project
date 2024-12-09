@@ -1,5 +1,7 @@
 package com.spring.myHouse.community.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.myHouse.community.entity.Recommend;
 import com.spring.myHouse.community.service.RecommendService;
 import com.spring.myHouse.contest.entity.Contestjoin;
@@ -62,11 +64,20 @@ public class RecommendController {
 
     @PostMapping("/post")
     public ResponseEntity<String> uploadFileAndSaveData(
-            @RequestParam("file") MultipartFile file,
-            @RequestBody Map<String, Object> postData) {
+            @RequestPart("file") MultipartFile file,
+            @RequestPart("postData") String postDataJson) {
 
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("파일이 비어있습니다.");
+        }
+
+        // JSON 문자열을 Map으로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> postData;
+        try {
+            postData = objectMapper.readValue(postDataJson, Map.class);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body("JSON 데이터를 파싱할 수 없습니다.");
         }
 
         // 파일 저장 경로 설정
@@ -75,24 +86,21 @@ public class RecommendController {
         if (!uploadPath.exists()) {
             uploadPath.mkdirs();
         }
-        System.out.println("postDate" + postData);
         try {
             // 파일 저장
             String fileName = file.getOriginalFilename();
-            String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
-
-            UUID uuid = UUID.randomUUID();
-            String newFileName = uuid.toString() + extension;
-
+            String extension = fileName.substring(fileName.lastIndexOf("."));
+            String newFileName = UUID.randomUUID() + extension;
             String filePath = uploadDir + newFileName;
             file.transferTo(new File(filePath));
 
             // DB에 저장할 recommend 객체 생성
             Recommend recommend = new Recommend();
+            recommend.setUserid((String) postData.get("userid"));
             recommend.setHashtaglist((String) postData.get("hashtaglist"));
-            recommend.setPostimg((String) postData.get("postImg"));
+            recommend.setPostimg(newFileName);
             recommend.setPostlike(0L);
-            recommend.setPaynum((Long) postData.get("paynum"));
+            recommend.setPaynum(Long.parseLong(postData.get("paynum").toString()));
             recommend.setPostcontent((String) postData.get("postcontent"));
             recommend.setPosttitle((String) postData.get("posttitle"));
             recommend.setPostview(0L);
@@ -106,6 +114,8 @@ public class RecommendController {
             return ResponseEntity.status(500).body("파일 업로드 중 오류 발생");
         }
     }
+
+
 
     @GetMapping("/count")
     public ResponseEntity<Integer> getPostCountByUser(@RequestParam("userid") String userid) {

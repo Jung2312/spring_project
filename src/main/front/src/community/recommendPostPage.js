@@ -9,7 +9,8 @@ function RecommendPostPage() {
     const [isProductBoxVisible, setProductBoxVisible] = useState(false); // 상품 선택 박스 상태
     const [hashtags, setHashtags] = useState([]); // 해시태그 상태
     const [newTag, setNewTag] = useState(""); // 새로운 해시태그 입력 상태
-    const [previewImage, setPreviewImage] = useState(null); // 미리보기 이미지 상태
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewImage, setPreviewImage] = useState(null);
     const [postData, setPostData] = useState({ posttitle: "", postcontent: "" }); // 게시글 데이터
     const [products, setProducts] = useState([]); // 상품 데이터
     const navigate = useNavigate();
@@ -26,19 +27,29 @@ function RecommendPostPage() {
             alert("로그인이 필요합니다.");
             window.location.href = "/login";
         } else {
-            navigate('/recommend/post');
-            // userid로 주문한 상품 가져오기
-            axios.get(`/payment/orders?userid=${userid}`)
-                .then((response) => setProducts(response.data))
-                .catch((error) => console.error("상품 불러오기 실패", error));
+            axios.get("http://localhost:80/payment/orders", {
+                params: { userid: userid },
+            })
+            .then((response) => {
+                if (response.data.orders) {
+                    setProducts(response.data.orders); // orders 배열을 직접 상태로 저장
+                } else {
+                    console.error("데이터 구조를 확인하세요:", response.data);
+                }
+            })
+            .catch((error) => console.error("상품 불러오기 실패", error));
         }
     }, []);
 
+    // 파일 선택 처리
     const handleFileChange = (e) => {
         const file = e.target.files[0];
+        setSelectedFile(file);
         if (file) {
             const reader = new FileReader();
-            reader.onload = () => setPreviewImage(reader.result); // 미리보기 설정
+            reader.onloadend = () => {
+                setPreviewImage(reader.result);
+            };
             reader.readAsDataURL(file);
         }
     };
@@ -71,50 +82,85 @@ function RecommendPostPage() {
         setPostData({ ...postData, [name]: value });
     };
 
-    const handleSubmit = () => {
-        const userid = sessionStorage.getItem("userid");
-        if (!userid) return alert("로그인이 필요합니다.");
-
-        const formData = new FormData();
-        formData.append("file", document.getElementById("fileInput").files[0]);
-        formData.append("postData", JSON.stringify({
-            userid,
-            posttitle: postData.posttitle,
-            postcontent: postData.postcontent,
-            hashtaglist: hashtags.join(","),
-            paynum: 1,
-        }));
-
-        axios.post("/recommend/post", formData, {
-            headers: { "Content-Type": "multipart/form-data" }
-        })
-            .then(() => {
-                alert("게시글이 작성되었습니다.");
-                window.location.reload();
-            })
-            .catch((error) => console.error("게시글 작성 실패", error));
+    const goRecommed = () => {
+        navigate('/recommend');
     };
+
+    const recommendPostSubmit = async () => {
+        const userid = sessionStorage.getItem("userid");
+        if (!userid) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
+
+        if (!selectedProduct) {
+            alert("상품을 선택해주세요.");
+            return;
+        }
+
+        if (!selectedFile) {
+            alert("사진을 선택해주세요.");
+            return;
+        }
+
+        // FormData 객체 생성
+        const formData = new FormData();
+        formData.append("file", selectedFile); // 파일 추가
+        formData.append(
+            "postData",
+            JSON.stringify({
+                userid,
+                posttitle: postData.posttitle,
+                postcontent: postData.postcontent,
+                hashtaglist: hashtags.join(","),
+                paynum: selectedProduct,
+            })
+        );
+
+        try {
+            const response = await fetch("http://localhost:80/recommend/post", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (response.ok) {
+                alert("작성되었습니다.");
+                setSelectedFile(null);
+                setPreviewImage(null);
+                navigate("/recommend");
+            } else {
+                throw new Error("작성 실패. 다시 시도해주세요.");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("작성 중 문제가 발생했습니다.");
+        }
+    };
+
 
     return (
         <div className="recommendPostPageContainer">
             <div className="recommendPostPageBox">
                 <p className="recommendPostText">사진</p>
-                <div
-                    className="recommendPostImgContainer"
-                    style={{
-                        backgroundImage: previewImage ? `url(${previewImage})` : "none",
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                    }}
-                >
+
+                <div className="recommendPostImgContainer">
+                    <div
+                        className="recommendPostImgPreview"
+                        style={{
+                            backgroundImage: previewImage ? `url(${previewImage})` : "none",
+                        }}
+                    />
+                    <label htmlFor="fileInput" className="customFileUpload">
+                        파일 선택
+                    </label>
                     <input
                         type="file"
                         id="fileInput"
                         className="recommendPostImgBtn"
                         onChange={handleFileChange}
                     />
-                    {!previewImage && <span>사진 첨부</span>} {/* 미리보기가 없을 때 기본 텍스트 */}
                 </div>
+
 
                 <p className="recommendPostText">제목</p>
                 <input
@@ -171,25 +217,26 @@ function RecommendPostPage() {
                     type="button"
                     value="작성하기"
                     className="recommendPostBtn"
-                    onClick={handleSubmit}
+                    onClick={recommendPostSubmit}
                 />
 
                 {isProductBoxVisible && (
                     <div className="recommendPostSelectProduct">
                         <span className="recommendPostText">상품 선택</span>
                         <div>
-                            {currentProducts.map((product) => (
-                                <div key={product.id} className="productItem">
+                            {currentProducts.map((product, index) => (
+                                <div key={index} className="productItem">
                                     <input
                                         type="radio"
                                         name="product"
-                                        value={product.id}
-                                        onChange={() => setSelectedProduct(product.id)}
-                                        checked={selectedProduct === product.id}
+                                        value={product.payNum} // 실제 데이터 필드 이름 사용
+                                        onChange={() => setSelectedProduct(product.payNum)}
+                                        checked={selectedProduct === product.payNum}
                                     />
-                                    <span className="recommendPostSelectImgText">{product.name}</span>
+                                    <img src={product.productMainImage} className="recommendPostSelectImg"/>
+                                    <span className="recommendPostSelectImgText">{product.productName}</span>
                                     <span className="recommendPostSelectImgText">|</span>
-                                    <span className="recommendPostSelectImgText">주문일: {product.orderDate}</span>
+                                    <span className="recommendPostSelectImgText">주문일: {product.payDate}</span>
                                 </div>
                             ))}
                             <div className="pagination">
