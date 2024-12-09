@@ -2,17 +2,166 @@
     width: 1280px;
     margin: auto;
     .payment-title-section {
-        margin: 70px 0;
+        margin: 50px 0;
         span{
             font-size: 26px;
             font-weight: bold;
         }
     }
     .payment-bill-section{
-        .payment-order-user-title{
-            font-size: 20px;
-            font-weight: bold;
+        .payment-order-user,
+        .payment-order-delivery,
+        .payment-order-product{
             border-bottom: 1px #D5D5D5 solid;
+            padding: 20px 0;
+            display: flex;
+            .payment-order-user-title,
+            .payment-order-delivery-title,
+            .payment-order-product-title{
+                font-size: 20px;
+                font-weight: bold;
+            }
+            .payment-order-delivery-same-fill-btn,
+            .payment-order-product-count-title{
+                margin-left: 40px;
+            }
+            .payment-order-delivery-same-fill-btn{
+                color: #35C5F0;
+                background-color: #ffffff;
+                border: none;
+                cursor: pointer;
+                font-weight: bold;
+            }
+        }
+    }
+    .payment-order-user-form-section,
+    .payment-order-delivery-form-section,
+    .payment-order-product-form-section{
+        margin: 30px 0;
+        .payment-order-user-name-box,
+        .payment-order-user-email-box,
+        .payment-order-user-phone-box,
+        .payment-order-delivery-destination-box,
+        .payment-order-delivery-name-box,
+        .payment-order-delivery-phone-box,
+        .payment-order-delivery-address-box{
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            margin: 20px 0;
+        }
+        .payment-order-user-name-text,
+        .payment-order-user-email-text,
+        .payment-order-user-destination-text,
+        .payment-order-user-name-text,
+        .payment-order-user-phone-text,
+        .payment-order-delivery-address-text{
+             display: flex;
+             align-items: center;
+         }
+        .payment-order-user-email-input-box,
+        .payment-order-user-phone-input-box{
+            display: flex;
+            div{
+                margin-right: 10px;
+            }
+            select{
+                font-size: 14px;
+                border-radius: 5px;
+                padding: 5px;
+                height: 30px;
+            }
+            option{
+                font-size: 14px;
+                padding: 5px;
+            }
+        }
+        .payment-order-user-name-input,
+        .payment-order-user-email-input,
+        .payment-order-user-phone-input-box,
+        .payment-order-user-destination-input,
+        .payment-order-delivery-address-main-box,
+        .payment-order-delivery-address-detail-box{
+            input{
+                border: 1px #B3B3B3 solid;
+                border-radius: 5px;
+                width: 250px;
+                height: 30px;
+                padding: 0 10px;
+            }
+        }
+        .payment-order-user-phone-id-num-input input{
+            width: 30px;
+        }
+        .payment-order-user-phone-serial-num-input input{
+            width: 171px;
+        }
+        .payment-order-delivery-address-zipcode-box{
+            button{
+                border: 1px #35C5F0 solid;
+                border-radius: 10px;
+                background-color: #ffffff;
+                color: #35C5F0;
+                font-size: 14px;
+                padding: 5px 10px;
+                margin-right: 10px;
+            }
+            input{
+                border: 1px #B3B3B3 solid;
+                border-radius: 5px;
+                width: 158px;
+                height: 30px;
+                padding: 0 10px;
+            }
+        }
+        .payment-order-delivery-address-zipcode-box,
+        .payment-order-delivery-address-main-box,
+        .payment-order-delivery-address-detail-box{
+            margin-bottom: 10px;
+        }
+
+        .payment-order-product-detail-box{
+            border: 1px #B3B3B3 solid;
+            border-radius: 5px;
+            .payment-order-product-store-box{
+                background-color: #EEEEEE;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-radius: 5px 5px 0 0;
+                padding: 20px;
+                .payment-delivery-pay-title{
+                    margin-right: 10px;
+                }
+            }
+        }
+        .payment-order-product-box{
+            display: flex;
+            padding: 20px;
+            .payment-order-product-img-box{
+                img{
+                    width: 120px;
+                }
+            }
+            .payment-order-product-detail{
+                margin-left: 20px;
+                .payment-order-product-name-box,
+                .payment-order-product-option-box{
+                    margin-bottom: 10px;
+                }
+                .payment-order-product-name span{
+                    font-weight: bold;
+                }
+                .payment-order-product-option span{
+                    color: #828c94;
+                }
+                .payment-order-product-cost-box{
+                    display: flex;
+                    .payment-order-product-cost::after{
+                        content: "|";
+                        margin: 0 10px;
+                    }
+                }
+            }
         }
     }
 }
