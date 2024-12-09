@@ -44,49 +44,6 @@ function AddContest() {
         }
     }, [productCount, productInfo]);
 
-    useEffect(() => {
-        const productnum = sessionStorage.getItem("productnum");
-        if (productnum) {
-            fetchInventoryInfo(productnum);
-        }
-    }, []);
-
-    // 서버에서 사용자 정보를 가져오는 함수
-    const fetchUserInfo = async (storeid) => {
-        try {
-            const response = await fetch(`http://localhost:80/store/info?storeid=${storeid}`, {
-                method: 'GET',
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                setStoreInfo(data);
-                console.log(isLogin);
-            } else {
-                console.error('Failed to fetch user info');
-            }
-        } catch (error) {
-            console.error('Error fetching user info:', error);
-        }
-    };
-
-    const printStoreInfo = () => {
-        sessionStorage.setItem("storenum", storeInfo.storenum);
-        return (
-            <div className="store-name-box">
-                <span className="store-name">{storeInfo.storename} 님</span>
-            </div>
-        );
-    };
-
-    const printLoading = () => {
-        return (
-            <div className="store-name-box">
-                <span className="store-name">로딩중...</span>
-            </div>
-        );
-    };
-
     const navigate = useNavigate();
 
     const logoutButtonClick = () => {
@@ -103,7 +60,6 @@ function AddContest() {
                 <div className="logo-box">
                     <a className="store-title">나만의집</a>
                 </div>
-                {storeInfo ? printStoreInfo() : printLoading()}
             </header>
             <div className="store-content-wrapper">
                 {/* 사이드바 */}

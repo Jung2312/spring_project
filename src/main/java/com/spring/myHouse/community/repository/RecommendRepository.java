@@ -12,4 +12,7 @@ import java.util.List;
 public interface RecommendRepository extends JpaRepository<Recommend, Long> {
     @Query("SELECT COUNT(r) FROM Recommend r WHERE r.userid = :userid")
     int countPostsByUserid(@Param("userid") String userid);
+
+    @Query("SELECT r.postimg FROM Recommend r WHERE r.userid = :userid")
+    List<String> findPostimgByUserid(@Param("userid") String userid);
 }

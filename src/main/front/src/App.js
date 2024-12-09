@@ -40,18 +40,18 @@ function App() {
                 <Route path="/recommend" element={<Recommend />} />
                 <Route path="/recommend/post" element={<RecommendPostPage />} />
                 <Route path="/cart" element={<Cart />} />
-                <Route path="/myPageSet" element={<MyPageSet />} />
+                <Route path="/myPage/setting" element={<MyPageSet />} />
                 <Route path="/shoppingHome" element={<ShoppingHome />} />
                 <Route path="/main" element={<MainPage />} />
                 <Route path="/storeManagement" element={<StoreManagement />} />
-                <Route path="/myPage" element={<MyPage />} />
+                <Route path="/myPage/profile" element={<MyPage />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/followPage" element={<FollowPage />} />
                 <Route path="/contest/post" element={<ContestPostPage />} />
                 <Route path="/contest/postDetail/:joinnum" element={<ContestPostDetailPage />} />
                 <Route path="/contest/notice" element={<ContestNotice />} />
                 <Route path="/shoppingCategory" element={<ShoppingCategory />} />
-                <Route path="/myShoppingPage" element={<MyShoppingPage />} />
+                <Route path="/myPage/myShoppingPage" element={<MyShoppingPage />} />
                 <Route path="/productDetail" element={<ProductDetail />} />
                 <Route path="/shoppingInformation/:storename" element={<ShoppingInformation />} />
                 <Route path="/shoppingBest" element={<ShoppingBest />} />
