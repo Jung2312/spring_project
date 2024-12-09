@@ -13,6 +13,12 @@ const ShoppingInformation = () => {
     const [products, setProducts] = useState([]); // 상품 정보를 저장하는 상태
     const [activeCategory, setActiveCategory] = useState(null); // 서브카테고리 펼치기/닫기 상태
 
+    // 전화번호 포맷 변환 함수
+    const formatPhoneNumber = (phoneNumber) => {
+        if (!phoneNumber) return '';
+        return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+    };
+
     // 상점 정보 가져오기
     useEffect(() => {
         fetch(`http://localhost:80/store?storename=${encodeURIComponent(storename)}`)
@@ -55,8 +61,9 @@ const ShoppingInformation = () => {
                 {storeInfo && (
                     <div className="shoppingInform-banner-content">
                         <h1 className={"shoppingInform-banner-storename"}>{storeInfo.storename}</h1>
+                        <p className={"shoppingInform-banner-storenotice"}>notice: {storeInfo.storenotice}</p>
                         <p className={"shoppingInform-banner-storeaddress"}>addr: {storeInfo.storeaddress}</p>
-                        <p className={"shoppingInform-banner-storephone"}>phone: {storeInfo.storephone}</p>
+                        <p className={"shoppingInform-banner-storephone"}>tel: {formatPhoneNumber(storeInfo.storephone)}</p>
                     </div>
                 )}
             </div>
