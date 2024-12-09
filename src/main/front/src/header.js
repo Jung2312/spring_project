@@ -49,9 +49,9 @@ function Header() {
             <header className="main-header">
                 <div className="logo-name-box"><a href="/" className="logo-name">나만의집</a></div>
                 <div className="top-category-box">
-                    <a href="/recommend" id="community">커뮤니티</a>
-                    <a href="/shoppinghome" id="shopping">쇼핑</a>
-                    <a href="/contest" id="contest">콘테스트</a>
+                    <a href="/main" id="community" className={isActive("/main") || isActive("/community/recommend") ? "active" : ""}>커뮤니티</a>
+                    <a href="/shopping/shoppinghome" id="shopping" className={isActive("/shopping/shoppinghome") || isActive("/shopping/shoppingCategory") || isActive("/shopping/shoppingBest") ? "active" : ""}>쇼핑</a>
+                    <a href="/contest" id="contest" className={isActive("/contest") ? "active" : ""}>콘테스트</a>
                 </div>
                 <div className="search-box">
                     <img className="search-img" src={SearchImg}/>
@@ -80,13 +80,14 @@ function Header() {
                     <button className="post-btn"><span>글쓰기</span></button>
                 </div>
             </header>
-            {/* 현재 경로가 /myPage로 시작하지 않을 때만 sub-header 표시 */}
-            {!location.pathname.startsWith("/myPage") && (
+
+            {/* 현재 경로가 /myPage로 시작할 때만 sub-header 표시 */}
+            {location.pathname.startsWith("/shopping") && (
                 <div className="sub-header">
                     <div className="sub-header-category-box">
-                        <a href="" id="sub-header-shopping">쇼핑홈</a>
-                        <a href="" id="sub-header-category">카테고리</a>
-                        <a href="" id="sub-header-best">베스트</a>
+                        <a href="/shopping/shoppinghome" id="sub-header-shopping" className={isActive("/shopping/shoppinghome") ? "active" : ""}>쇼핑홈</a>
+                        <a href="/shopping/shoppingCategory" id="sub-header-category" className={isActive("/shopping/shoppingCategory") ? "active" : ""}>카테고리</a>
+                        <a href="/shopping/shoppingBest" id="sub-header-best" className={isActive("/shopping/shoppingBest") ? "active" : ""}>베스트</a>
                     </div>
                     <div className="sub-header-realtime-search-box">
                         <div className="sub-header-realtime-search">
@@ -102,6 +103,53 @@ function Header() {
                     </div>
                 </div>
             )}
+
+            {/* 현재 경로가 /community/recommend와 메인페이지에서만 sub-header 표시 */}
+            {(location.pathname === "/community/recommend" || location.pathname === "/main") &&(
+                <div className="community-sub-header">
+                    <div className="community-sub-header-category-box">
+                        <a href="/main" id="community-sub-header-shopping"
+                           className={isActive("/main") ? "active" : ""}>홈</a>
+                        <a href="/community/recommend" id="community-sub-header-category"
+                           className={isActive("/community/recommend") ? "active" : ""}>추천</a>
+                    </div>
+                    <div className="sub-header-realtime-search-box">
+                        <div className="sub-header-realtime-search">
+                            <a href="" className="sub-header-realtime-search-href">
+                                <span className="sub-header-realtime-search-rank">1</span>
+                                <span className="sub-header-realtime-search-img">new</span>
+                                <span className="sub-header-realtime-search-product-name">리바트 소파</span>
+                            </a>
+                        </div>
+                        <div className="sub-header-realtime-search-more-btn">
+                            <button className="sub-header-more-btn">▼</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* 경로가 /contest 페이지에서만 sub-header 표시 */}
+            {location.pathname.startsWith("/contest") &&(
+                <div className="contest-sub-header">
+                    <div className="contest-sub-header-category-box">
+                        <a href="/contest" id="contest-sub-header-shopping" className={isActive("/contest") ? "active" : ""}>콘테스트 홈</a>
+                        <a href="/contest/champion" id="contest-sub-header-category" className={isActive("/contest/champion") ? "active" : ""}>지난 수상작</a>
+                    </div>
+                    <div className="sub-header-realtime-search-box">
+                        <div className="sub-header-realtime-search">
+                            <a href="" className="sub-header-realtime-search-href">
+                                <span className="sub-header-realtime-search-rank">1</span>
+                                <span className="sub-header-realtime-search-img">new</span>
+                                <span className="sub-header-realtime-search-product-name">리바트 소파</span>
+                            </a>
+                        </div>
+                        <div className="sub-header-realtime-search-more-btn">
+                            <button className="sub-header-more-btn">▼</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* 현재 경로가 /myPage로 시작할 때만 mypage_header 표시 */}
             {location.pathname.startsWith("/myPage") && (
                 <div className="mypage_header">

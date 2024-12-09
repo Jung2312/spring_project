@@ -43,6 +43,9 @@ img{
         a{
             margin-right: 30px;
         }
+        a.active {
+            color: #35C5F0;
+        }
         a:last-child{
             margin: 0;
         }
@@ -140,9 +143,9 @@ img{
             justify-content: center;
             box-sizing: border-box;
         }
-        #sub-header-shopping{
+        a.active {
             color: #35C5F0;
-            border-bottom: 3px #35C5F0 solid;
+            border-bottom: 3px solid #35C5F0;
         }
         a:last-child{
             margin: 0;
@@ -175,6 +178,68 @@ img{
     }
 }
 
+.community-sub-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    border-bottom: 1px #D5D5D5 solid;
+    margin-bottom: 30px;
+    height: 60px;
+    .community-sub-header-category-box{
+        margin-left: 2rem;
+        margin-right: 5rem;
+        display: flex;
+        height: inherit;
+        a{
+            margin-right: 30px;
+            text-align: center;
+            display: inline-flex;
+            flex-direction: column;
+            -webkit-box-pack: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+        a.active {
+            color: #35C5F0;
+            border-bottom: 3px solid #35C5F0;
+        }
+        a:last-child{
+            margin: 0;
+        }
+    }
+}
+
+.contest-sub-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    border-bottom: 1px #D5D5D5 solid;
+    margin-bottom: 30px;
+    height: 60px;
+    .contest-sub-header-category-box{
+        margin-left: 2rem;
+        margin-right: 5rem;
+        display: flex;
+        height: inherit;
+        a{
+            margin-right: 30px;
+            text-align: center;
+            display: inline-flex;
+            flex-direction: column;
+            -webkit-box-pack: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+        a.active {
+            color: #35C5F0;
+            border-bottom: 3px solid #35C5F0;
+        }
+        a:last-child{
+            margin: 0;
+        }
+    }
+}
+
 .mypage_header{
     display: flex;
     justify-content: space-evenly;
@@ -196,13 +261,12 @@ img{
             justify-content: center;
             box-sizing: border-box;
         }
+        a.active {
+            color: #35C5F0;
+            border-bottom: 3px solid #35C5F0;
+        }
         a:last-child{
             margin: 0;
         }
     }
-}
-
-.mypage_header_category-box a.active {
-    color: #35C5F0;
-    border-bottom: 3px solid #35C5F0;
 }

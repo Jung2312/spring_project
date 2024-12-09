@@ -103,30 +103,32 @@ function ShoppingBest() {
     }, []);
 
     return (
-        <div className="shoppingBest">
+        <div>
             <Header/>
-            <div className="shoppingBest_btn_container">
-                <button className="shoppingBest_btn" type="submit">오늘 베스트</button>
-                <button className="shoppingBest_btn" type="submit">역대 베스트</button>
-            </div>
-            <span className="shoppingBest_date">{setToday}</span>
-            <div className="shoppingBest_product_section">
-                {products.map((product, index) => (
-                    <div className="shoppingBest_product" key={index}>
-                        <div className="shoppingBest_img_container">
-                            <div className="shoppingBest_flag">{index + 1}</div>
-                            <img className="shoppingBest_img" src={product.productMainImage} alt={product.productName}/>
+            <div className="shoppingBest">
+                <div className="shoppingBest_btn_container">
+                    <button className="shoppingBest_btn" type="submit">오늘 베스트</button>
+                    <button className="shoppingBest_btn" type="submit">역대 베스트</button>
+                </div>
+                <span className="shoppingBest_date">{setToday}</span>
+                <div className="shoppingBest_product_section">
+                    {products.map((product, index) => (
+                        <div className="shoppingBest_product" key={index}>
+                            <div className="shoppingBest_img_container">
+                                <div className="shoppingBest_flag">{index + 1}</div>
+                                <img className="shoppingBest_img" src={product.productMainImage} alt={product.productName}/>
+                            </div>
+                            <div className="shoppingBest_text">
+                                <span className="shoppingBest_store_name">{product.storeName}</span>
+                                <span className="shoppingBest_product_name">{product.productName}</span>
+                                <span className="shoppingBest_product_price">{formatPrice(product.productPrice)}원</span>
+                                <span className="shoppingBest_review">리뷰 123</span>
+                            </div>
                         </div>
-                        <div className="shoppingBest_text">
-                            <span className="shoppingBest_store_name">{product.storeName}</span>
-                            <span className="shoppingBest_product_name">{product.productName}</span>
-                            <span className="shoppingBest_product_price">{formatPrice(product.productPrice)}원</span>
-                            <span className="shoppingBest_review">리뷰 123</span>
-                        </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
+                {loading && <div>로딩 중...</div>}
             </div>
-            {loading && <div>로딩 중...</div>}
         </div>
     );
 }

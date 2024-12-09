@@ -4,7 +4,7 @@ import Recommend from "./community/recommend";
 import Cart from "./shopping/cart";
 import MyPageSet from "./user/myPageSet";
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import Login from "./user/login";
 import Signup from './user/signup';
 import MainPage from "./mainPage/mainPage";
@@ -31,17 +31,17 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<MainPage />} />
+                <Route path="/" element={<Navigate to="/main" replace />} />
                 <Route path="/contest" element={<ContestApply />} />
                 <Route path="/contest/champion" element={<ContestChampionship />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/storeSignup" element={<StoreSignup />} />
-                <Route path="/recommend" element={<Recommend />} />
+                <Route path="/community/recommend" element={<Recommend />} />
                 <Route path="/recommend/post" element={<RecommendPostPage />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/myPage/setting" element={<MyPageSet />} />
-                <Route path="/shoppingHome" element={<ShoppingHome />} />
+                <Route path="/shopping/shoppingHome" element={<ShoppingHome />} />
                 <Route path="/main" element={<MainPage />} />
                 <Route path="/storeManagement" element={<StoreManagement />} />
                 <Route path="/myPage/profile" element={<MyPage />} />
@@ -50,11 +50,11 @@ function App() {
                 <Route path="/contest/post" element={<ContestPostPage />} />
                 <Route path="/contest/postDetail/:joinnum" element={<ContestPostDetailPage />} />
                 <Route path="/contest/notice" element={<ContestNotice />} />
-                <Route path="/shoppingCategory" element={<ShoppingCategory />} />
+                <Route path="/shopping/shoppingCategory" element={<ShoppingCategory />} />
                 <Route path="/myPage/myShoppingPage" element={<MyShoppingPage />} />
                 <Route path="/productDetail" element={<ProductDetail />} />
                 <Route path="/shoppingInformation/:storename" element={<ShoppingInformation />} />
-                <Route path="/shoppingBest" element={<ShoppingBest />} />
+                <Route path="/shopping/shoppingBest" element={<ShoppingBest />} />
                 <Route path="/payment" element={<Payment />} />
             </Routes>
         </BrowserRouter>

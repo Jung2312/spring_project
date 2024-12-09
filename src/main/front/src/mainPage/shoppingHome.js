@@ -172,73 +172,75 @@ function ShoppingHome() {
     };
 
     return (
-        <div className="shoppingHome">
+        <div>
             <Header/>
-            <div className="shoppingHome-banner-section">
-                <div className="shoppingHome-banner">
-                    <img className="shoppingHome-banner-img" src={banner} alt="배너(광고)"/>
-                </div>
-            </div>
-            <div className="shoppingHome-recommend-product-section">
-                <div className="shoppingHome-recommend-product-title">
-                    <span className="shoppingHome-title-text">추천 상품</span>
-                    <span className="shoppingHome-title-more">더보기</span>
-                </div>
-                <div className="shoppingHome-recommend-product-part">
-                    {products.slice(0,4).map((product, index) => (
-                    <div className="shoppingHome-recommend-product-content" key={index}>
-                        <div className="shoppingHome-image-container">
-                            <img className="shoppingHome-recommend-product-img" src={product.productMainImage} alt={product.productName}/>
-                        </div>
-                        <div className="shoppingHome-recommend-product-text">
-                            <span className="shoppingHome-store-name">{product.storeName}</span>
-                            <span className="shoppingHome-product-name">{product.productName}</span>
-                            <span className="shoppingHome-product-price">{formatPrice(product.productPrice)}원</span>
-                            <span className="shoppingHome-product-review">리뷰 37,213</span>
-                        </div>
+            <div className="shoppingHome">
+                <div className="shoppingHome-banner-section">
+                    <div className="shoppingHome-banner">
+                        <img className="shoppingHome-banner-img" src={banner} alt="배너(광고)"/>
                     </div>
-                    ))}
                 </div>
-            </div>
-            <div className="shoppingHome-category-section">
-                <div className="shoppingHome-category-title">
-                    <span className="shoppingHome-title-text">카테고리</span>
-                </div>
-                <div className="mainPage-category-slider">
-                    <button className="mainPage-slide-button left" onClick={() => slideCategories('left')}
-                            disabled={scrollPosition === 0}>&#8678;</button>
-                    <div className="mainPage-category-part" ref={categoryContainerRef}>
-                        {categories.map((item, index) => (
-                            <div className="mainPage-category-content" key={index}>
-                                <img className="mainPage-categoty-img" src={item.categoryimage}
-                                     alt={item.majorcategory}/>
-                                <span className="mainPage-category-name">{item.majorcategory}</span>
-                            </div>
-                        ))}
+                <div className="shoppingHome-recommend-product-section">
+                    <div className="shoppingHome-recommend-product-title">
+                        <span className="shoppingHome-title-text">추천 상품</span>
+                        <span className="shoppingHome-title-more">더보기</span>
                     </div>
-                    <button className="mainPage-slide-button right" onClick={() => slideCategories('right')}
-                            disabled={isAtEnd}>&#8680;</button>
-                </div>
-            </div>
-            <div className="shoppingHome-product-section">
-                <div className="shoppingHome-product-part">
-                    {products.map((product, index) => (
-                        <div className="shoppingHome-product-content" key={index}>
+                    <div className="shoppingHome-recommend-product-part">
+                        {products.slice(0,4).map((product, index) => (
+                        <div className="shoppingHome-recommend-product-content" key={index}>
                             <div className="shoppingHome-image-container">
-                                <img className="shoppingHome-product-img" src={product.productMainImage}
-                                     alt={product.productName}/>
+                                <img className="shoppingHome-recommend-product-img" src={product.productMainImage} alt={product.productName}/>
                             </div>
-                            <div className="shoppingHome-product-text">
+                            <div className="shoppingHome-recommend-product-text">
                                 <span className="shoppingHome-store-name">{product.storeName}</span>
                                 <span className="shoppingHome-product-name">{product.productName}</span>
                                 <span className="shoppingHome-product-price">{formatPrice(product.productPrice)}원</span>
                                 <span className="shoppingHome-product-review">리뷰 37,213</span>
                             </div>
                         </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
+                <div className="shoppingHome-category-section">
+                    <div className="shoppingHome-category-title">
+                        <span className="shoppingHome-title-text">카테고리</span>
+                    </div>
+                    <div className="mainPage-category-slider">
+                        <button className="mainPage-slide-button left" onClick={() => slideCategories('left')}
+                                disabled={scrollPosition === 0}>&#8678;</button>
+                        <div className="mainPage-category-part" ref={categoryContainerRef}>
+                            {categories.map((item, index) => (
+                                <div className="mainPage-category-content" key={index}>
+                                    <img className="mainPage-categoty-img" src={item.categoryimage}
+                                         alt={item.majorcategory}/>
+                                    <span className="mainPage-category-name">{item.majorcategory}</span>
+                                </div>
+                            ))}
+                        </div>
+                        <button className="mainPage-slide-button right" onClick={() => slideCategories('right')}
+                                disabled={isAtEnd}>&#8680;</button>
+                    </div>
+                </div>
+                <div className="shoppingHome-product-section">
+                    <div className="shoppingHome-product-part">
+                        {products.map((product, index) => (
+                            <div className="shoppingHome-product-content" key={index}>
+                                <div className="shoppingHome-image-container">
+                                    <img className="shoppingHome-product-img" src={product.productMainImage}
+                                         alt={product.productName}/>
+                                </div>
+                                <div className="shoppingHome-product-text">
+                                    <span className="shoppingHome-store-name">{product.storeName}</span>
+                                    <span className="shoppingHome-product-name">{product.productName}</span>
+                                    <span className="shoppingHome-product-price">{formatPrice(product.productPrice)}원</span>
+                                    <span className="shoppingHome-product-review">리뷰 37,213</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                {loading && <div className="loading-indicator">로딩 중...</div>}
             </div>
-            {loading && <div className="loading-indicator">로딩 중...</div>}
         </div>
     );
 }
