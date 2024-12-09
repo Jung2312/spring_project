@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../css/shoppingCategory.css";
+import ex from '../img/product_basic.png';
 import Header from '../header.js'
 
 function ShoppingCategory() {
@@ -84,9 +85,16 @@ function ShoppingCategory() {
                             {products.map((product, index) => (
                                 <div key={index} className="category-product-card">
                                     <img
-                                        src={product.productmainimage}
+                                        src={
+                                            product.productmainimage.startsWith('https://')
+                                                ? product.productmainimage
+                                                : `${process.env.PUBLIC_URL}/productImg/${product.productmainimage}`
+                                        }
                                         alt={product.productname}
                                         className="category-product-image"
+                                        onError={(e) => {
+                                            e.target.src = ex;
+                                        }} // 이미지 오류 처리
                                     />
                                     <h2 className="category-product-name">{product.productname}</h2>
                                     <p className="category-product-store">{product.storeName}</p>

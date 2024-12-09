@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/product")
@@ -115,7 +116,7 @@ public class ProductController {
 
     private String saveFile(MultipartFile imageFile) throws IOException {
         // 디렉터리 경로를 원하는 경로로 지정
-        String uploadDir = "C:/spring_project/src/main/resources/static/productImg/";
+        String uploadDir = "C:\\spring_project\\src\\main\\front\\public\\productImg\\";
         File dir = new File(uploadDir);
 
         // 디렉터리가 존재하지 않으면 생성
@@ -124,13 +125,15 @@ public class ProductController {
         }
 
         String fileName = imageFile.getOriginalFilename();
+        String extension = fileName.substring(fileName.lastIndexOf("."));
+        String newFileName = UUID.randomUUID() + extension;
         String filePath = uploadDir + fileName;
 
         // 파일 저장
         imageFile.transferTo(new File(filePath));
 
         // 브라우저에서 접근 가능한 URL 경로를 반환
-        return "/productImg/" + fileName;
+        return fileName;
     }
 
     @DeleteMapping("/delete")
