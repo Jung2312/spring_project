@@ -174,3 +174,35 @@ img{
         cursor: pointer;
     }
 }
+
+.mypage_header{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border-bottom: 1px #D5D5D5 solid;
+    height: 50px;
+    .mypage_header_category-box{
+        margin-left: 2rem;
+        margin-right: 5rem;
+        display: flex;
+        height: inherit;
+        a{
+            font-weight: bold;
+            margin-right: 30px;
+            text-align: center;
+            display: inline-flex;
+            flex-direction: column;
+            -webkit-box-pack: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+        a:last-child{
+            margin: 0;
+        }
+    }
+}
+
+.mypage_header_category-box a.active {
+    color: #35C5F0;
+    border-bottom: 3px solid #35C5F0;
+}

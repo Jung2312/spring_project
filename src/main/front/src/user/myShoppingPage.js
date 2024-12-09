@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Header from '../header.js'
+import MyPageHeader from "../mypageHeader";
 
 function MyShoppingPage() {
     const navigate = useNavigate();
@@ -107,79 +108,80 @@ function MyShoppingPage() {
     return (
         <div>
             <Header/>
-            <div className="myShoppingPageContainer">
-                <div className="myShoppingPageCategoryBox">
-                    <img
-                        src={`${process.env.PUBLIC_URL}/mypageImg/couponIcon.png` || ""}
-                        alt="Coupon Icon"
-                    />
-                    <span className="myShoppingPageCategoryTitle">내 쿠폰</span>
-                    <span className="myShoppingPageCategoryContent">{userData.count}</span>
+            <div className="myPage_myShoppingPage">
+                <div className="myShoppingPageContainer">
+                    <div className="myShoppingPageCategoryBox">
+                        <img
+                            src={`${process.env.PUBLIC_URL}/mypageImg/couponIcon.png` || ""}
+                            alt="Coupon Icon"
+                        />
+                        <span className="myShoppingPageCategoryTitle">내 쿠폰</span>
+                        <span className="myShoppingPageCategoryContent">{userData.count}</span>
+                    </div>
+                    <div className="myShoppingPageVline"></div>
+                    <div className="myShoppingPageCategoryBox">
+                        <img
+                            src={`${process.env.PUBLIC_URL}/mypageImg/mlieIcon.png` || ""}
+                            alt="Mileage Icon"
+                        />
+                        <span className="myShoppingPageCategoryTitle">마일리지</span>
+                        <span className="myShoppingPageCategoryContent">{formatNumberWithCommas(userData.mileage)}</span>
+                    </div>
+                    <div className="myShoppingPageVline2"></div>
+                    <div className="myShoppingPageCategoryBox">
+                        <img
+                            src={`${process.env.PUBLIC_URL}/mypageImg/cardIcon.png` || ""}
+                            alt="Grade Icon"
+                        />
+                        <span className="myShoppingPageCategoryTitle">등급</span>
+                        <span className="myShoppingPageCategoryContent">{userData.grade}</span>
+                    </div>
                 </div>
-                <div className="myShoppingPageVline"></div>
-                <div className="myShoppingPageCategoryBox">
-                    <img
-                        src={`${process.env.PUBLIC_URL}/mypageImg/mlieIcon.png` || ""}
-                        alt="Mileage Icon"
-                    />
-                    <span className="myShoppingPageCategoryTitle">마일리지</span>
-                    <span className="myShoppingPageCategoryContent">
-            {formatNumberWithCommas(userData.mileage)}
-          </span>
-                </div>
-                <div className="myShoppingPageVline2"></div>
-                <div className="myShoppingPageCategoryBox">
-                    <img
-                        src={`${process.env.PUBLIC_URL}/mypageImg/cardIcon.png` || ""}
-                        alt="Grade Icon"
-                    />
-                    <span className="myShoppingPageCategoryTitle">등급</span>
-                    <span className="myShoppingPageCategoryContent">{userData.grade}</span>
-                </div>
-            </div>
 
-            <div className="myShoppingPageOrderBox">
-                <div>
-                    <select className="myShoppingPageSelect" onChange={handleFilterChange}>
-                        <option value="7">1주일 전</option>
-                        <option value="30">1개월 전</option>
-                        <option value="90">3개월 전</option>
-                        <option value="180">6개월 전</option>
-                        <option value="365">1년 전</option>
-                    </select>
-                </div>
-                {Object.entries(groupedOrdersByDate).map(([date, items]) => (
-                    <div key={date} className="dateGroup">
-                        <div>
-                            <h3>
-                                {date} | 주문 {items.length}건
-                            </h3>
-                        </div>
-                        {items.map((item) => (
-                            <div key={item.payNum} className="myShoppingPageContainer2">
-                                <img
-                                    src={item.productMainImage}
-                                    alt={item.productName}
-                                    className="myShoppingPageOrderImg"
-                                />
-                                <div className="myShoppingPageOrderDetails">
-                                    <span className="myShoppingPageOrderTitle">{item.storeName}</span>
+                <div className="myShoppingPageOrderBox">
+                    <div>
+                        <select className="myShoppingPageSelect" onChange={handleFilterChange}>
+                            <option value="7">1주일 전</option>
+                            <option value="30">1개월 전</option>
+                            <option value="90">3개월 전</option>
+                            <option value="180">6개월 전</option>
+                            <option value="365">1년 전</option>
+                        </select>
+                    </div>
+                    {Object.entries(groupedOrdersByDate).map(([date, items]) => (
+                        <div key={date} className="dateGroup">
+                            <div>
+                                <h3>
+                                    {date} | 주문 {items.length}건
+                                </h3>
+                            </div>
+                            {items.map((item) => (
+                                <div key={item.payNum} className="myShoppingPageContainer2">
+                                    <img
+                                        src={item.productMainImage}
+                                        alt={item.productName}
+                                        className="myShoppingPageOrderImg"
+                                    />
+                                    <div className="myShoppingPageOrderDetails">
+                                        <span className="myShoppingPageOrderTitle">{item.storeName}</span>
 
-                                    <span className="myShoppingPageOrderTitle">
+                                        <span className="myShoppingPageOrderTitle">
                                         {item.productName}
                                     </span>
-                                    <span className="myShoppingPageOrderPrice">{formatNumberWithCommas(item.payPrice)}원 | {formatNumberWithCommas(item.productPrice)} X {item.payRepair}개</span>
+                                        <span
+                                            className="myShoppingPageOrderPrice">{formatNumberWithCommas(item.payPrice)}원 | {formatNumberWithCommas(item.productPrice)} X {item.payRepair}개</span>
+                                    </div>
+                                    <input
+                                        type="button"
+                                        value="주문 취소"
+                                        className="myShoppingPageOrderDelBtn"
+                                        onClick={() => handleCancelOrder(item.payNum)}
+                                    />
                                 </div>
-                                <input
-                                    type="button"
-                                    value="주문 취소"
-                                    className="myShoppingPageOrderDelBtn"
-                                    onClick={() => handleCancelOrder(item.payNum)}
-                                />
-                            </div>
-                        ))}
-                    </div>
-                ))}
+                            ))}
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );

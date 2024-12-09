@@ -123,5 +123,9 @@ public class RecommendController {
         return ResponseEntity.ok(postCount);
     }
 
-
+    @GetMapping("/post/images")
+    public ResponseEntity<List<String>> getPostImages(@RequestParam String userid) {
+        List<String> joinImages = recommendService.getPostImagesByUserid(userid);
+        return ResponseEntity.ok(joinImages);
+    }
 }

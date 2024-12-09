@@ -87,8 +87,8 @@ function FollowPage() {
                                 </div>
                             </div>
                             {/* 좋아요와 댓글 */}
-                            <div className="followPage_like_comment" onClick={handleLikeClick} style={{cursor: 'pointer'}}>
-                                <div className="like">
+                            <div className="followPage_like_comment" style={{cursor: 'pointer'}}>
+                                <div className="like" onClick={handleLikeClick} >
                                     <img className="like-img" src={like} alt="마음"/>
                                     <span>{post.postlike + likeCount}</span>
                                 </div>

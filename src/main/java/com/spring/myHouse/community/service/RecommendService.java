@@ -2,13 +2,11 @@ package com.spring.myHouse.community.service;
 
 import com.spring.myHouse.community.entity.Recommend;
 import com.spring.myHouse.community.repository.RecommendRepository;
-import com.spring.myHouse.contest.entity.Contestjoin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -26,6 +24,10 @@ public class RecommendService {
 
     public int countPostsByUserid(String userid) {
         return recommendRepository.countPostsByUserid(userid);
+    }
+
+    public List<String> getPostImagesByUserid(String userid) {
+        return recommendRepository.findPostimgByUserid(userid);
     }
 
 }

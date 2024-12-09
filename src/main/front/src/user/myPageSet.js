@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import '../css/myPage.css'
+import Header from "../header";
+import MyPageHeader from "../mypageHeader";
 
 function MyPageSet() {
     const [formData, setFormData] = useState({
@@ -55,27 +57,32 @@ function MyPageSet() {
     };
 
     return (
-        <div className="set-container">
-            <div className="set-image"><img src={formData.profileimage  ? formData.profileimage : require("../img/exProfile.png")} alt="profile"/></div>
-            <div className="user-box">
-                <div className="user">이름</div>
-                <input className="user-text" id="user-name" name="name" value={formData.name || ""} onChange={changeUser}/>
-            </div>
-            <div className="user-box">
-                <div className="user">이메일</div>
-                <input className="user-text" id="user-email" name="email" value={formData.email || ""} onChange={changeUser}/>
-            </div>
-            <div className="user-box">
-                <div className="user">전화번호</div>
-                <input className="user-text" id="user-phone" name="phone" value={formData.phone || ""} onChange={changeUser}/>
-            </div>
-            <div className="user-box">
-                <div className="user">자기소개</div>
-                <textarea className="user-intro" id="user-intro" name="introduce" value={formData.introduce || ""} onChange={changeUser}/>
-            </div>
-            <div><a className="leave" href="#">탈퇴하기 ></a></div>
-            <div className="user-box">
-                <button className="save" onClick={saveChanges}>저장</button>
+        <div>
+            <Header/>
+            <div className="myPage_mypagesetting">
+                <div className="set-container">
+                    <div className="set-image"><img src={formData.profileimage  ? formData.profileimage : require("../img/exProfile.png")} alt="profile"/></div>
+                    <div className="user-box">
+                        <div className="user">이름</div>
+                        <input className="user-text" id="user-name" name="name" value={formData.name || ""} onChange={changeUser}/>
+                    </div>
+                    <div className="user-box">
+                        <div className="user">이메일</div>
+                        <input className="user-text" id="user-email" name="email" value={formData.email || ""} onChange={changeUser}/>
+                    </div>
+                    <div className="user-box">
+                        <div className="user">전화번호</div>
+                        <input className="user-text" id="user-phone" name="phone" value={formData.phone || ""} onChange={changeUser}/>
+                    </div>
+                    <div className="user-box">
+                        <div className="user">자기소개</div>
+                        <textarea className="user-intro" id="user-intro" name="introduce" value={formData.introduce || ""} onChange={changeUser}/>
+                    </div>
+                    <div><a className="leave" href="#">탈퇴하기 ></a></div>
+                    <div className="user-box">
+                        <button className="save" onClick={saveChanges}>저장</button>
+                    </div>
+                </div>
             </div>
         </div>
     )
