@@ -183,7 +183,6 @@
 }
 
 .recommendPostSelectProduct{
-    width: 510px;
     height: 403px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 80px;
@@ -206,7 +205,7 @@
 }
 
 .recommendPostText{
-    margin-top: 40px;
+    margin-top: 120px;
     font-weight: bold;
     font-size: 18px;
     margin-right: 20px;
@@ -244,18 +243,41 @@
     font-size: 13px;
     border-radius: 3px;
 }
+/* 이미지 미리보기 */
+.recommendPostImgPreview {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+}
 
-.recommendPostImgBtn{
-    width: 123px;
+/* 숨겨진 파일 입력 */
+.recommendPostImgBtn {
+    display: none; /* 파일 입력 필드를 숨김 */
+}
+
+/* 사용자 정의 업로드 버튼 */
+.customFileUpload {
+    display: flex; /* Flexbox 활성화 */
+    justify-content: center; /* 수평 정렬 */
+    align-items: center; /* 수직 정렬 */
+    width: 76px;
     height: 37px;
-    background-color: #d9d9d9;
+    background-color: #35C5F0;
     border: none;
     border-radius: 3px;
-    font-weight: bolder;
-    float: right;
-    margin-top: 580px;
-    margin-right: 40px;
+    color: white;
+    font-size: 13px;
+    margin-top: 20px;
+    margin-bottom: 80px;
+    cursor: pointer;
 }
+
+.customFileUpload:hover, .recommendPostBtn:hover {
+    background-color: #1d9ec6;
+}
+
 
 .recommendPostPageSelect{
     width: 100px;
