@@ -167,44 +167,26 @@ function StoreProduct({ productData }) {
                 productname: productToEdit.productname,
                 productprice: productToEdit.productprice,
                 categorynum: productToEdit.categorynum || '0',
-                productImage: productToEdit.productImage || '',
+                productImage: '',
             });
             setEditModalOpen(true);
         }
     };
 
     const handleUpdateProduct = async () => {
-        console.log("Selected Sub Category: ", selectedSubCategory);
-
-        const storenum = sessionStorage.getItem("storenum");
-
-        console.log("storenum 값 확인:", storenum); // 값이 올바른지 확인
-
         const formData = new FormData();
 
-        // Ensure valid image file
-        if (editProduct.productImage && editProduct.productImage instanceof File) {
-            formData.append("image", editProduct.productImage);
-        } else {
-            console.error("Valid image file is not provided.");
-        }
-
-        // JSON.stringify로 product 정보 추가
-        formData.append(
-            "product",
-            JSON.stringify({
-                productnum: editProduct.productnum,
-                productname: editProduct.productname,
-                productprice: editProduct.productprice,
-            })
-        );
-
-        formData.append("storenum", storenum);
+        formData.append("product", JSON.stringify({
+            productnum: editProduct.productnum,
+            productname: editProduct.productname,
+            productprice: editProduct.productprice,
+        }));
+        formData.append("storenum", sessionStorage.getItem("storenum"));
         formData.append("categorynum", selectedSubCategory ? selectedSubCategory : "0");
 
-        console.log("FormData Contents for update:");
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ": ", pair[1]);
+        // 이미지 파일 추가
+        if (productImage) {
+            formData.append("image", productImage);
         }
 
         try {
@@ -212,8 +194,6 @@ function StoreProduct({ productData }) {
                 method: "PUT",
                 body: formData,
             });
-
-            console.log("Response Status:", response.status);
 
             if (response.ok) {
                 alert("상품이 수정되었습니다.");
@@ -226,6 +206,8 @@ function StoreProduct({ productData }) {
             console.error("Error updating product:", error);
         }
     };
+
+
     return (
         <div className="product-container">
             <div className="product-main-box">
@@ -241,7 +223,7 @@ function StoreProduct({ productData }) {
                 <div className="product-table-box table-box">
                     <table className="product-table">
                         <colgroup>
-                            <col width="20%"/>
+                            <col width="10%"/>
                             <col width="50%"/>
                             <col width="20%"/>
                             <col width="20%" />
@@ -364,37 +346,13 @@ function StoreProduct({ productData }) {
                         {/* 상품 이미지 업로드 */}
                         <label>
                             상품 이미지:
-                            <input
-                                type="file"
-                                onChange={(e) => {
-                                    const file = e.target.files[0];
-                                    if (file) {
-                                        const reader = new FileReader();
-                                        reader.onload = (e) => {
-                                            setEditProduct({ ...editProduct, productImage: e.target.result });
-                                        };
-                                        reader.readAsDataURL(file);
-                                    }
-                                }}
-                            />
+                            <input type="file" onChange={handleImageChange}/>
+                            {productImagePreview && (
+                                <div className="store-insert-image-preview">
+                                    <img src={productImagePreview} alt="상품 미리보기"/>
+                                </div>
+                            )}
                         </label>
-
-                        {/* 이미지 미리보기 */}
-                        {editProduct.productImage && (
-                            <div className="image-preview-container">
-                                <h4>이미지 미리보기:</h4>
-                                <img
-                                    src={editProduct.productImage}
-                                    alt="미리보기"
-                                    style={{
-                                        width: '100px',
-                                        height: '100px',
-                                        objectFit: 'cover',
-                                        border: '1px solid #000',
-                                    }}
-                                />
-                            </div>
-                        )}
 
                         {/* 카테고리 선택 */}
                         <label>

@@ -152,7 +152,6 @@ public class ProductController {
         }
     }
 
-    // 제품 수정 기능
     @PutMapping(value = "/update", consumes = {"multipart/form-data"})
     public String updateProduct(
             @RequestPart("product") String productJson,
@@ -160,37 +159,35 @@ public class ProductController {
             @RequestPart("storenum") String storenum,
             @RequestPart("categorynum") String categorynum) {
 
-        System.out.println("Received categorynum: " + categorynum);
+        System.out.println("Received imageFile: " + (imageFile != null ? imageFile.getOriginalFilename() : "No file"));
 
         ObjectMapper mapper = new ObjectMapper();
         Product product;
 
         try {
+            // JSON에서 Product 객체로 변환
             product = mapper.readValue(productJson, Product.class);
 
-            // Category 객체 생성 및 매핑
+            // 카테고리 객체 설정
             com.spring.myHouse.category.entity.Category category = new com.spring.myHouse.category.entity.Category();
             category.setCategorynum(Integer.parseInt(categorynum));
             product.setCategory(category);
 
-            // 이미지 파일 확인 및 저장 처리
+            // 이미지 파일이 비어 있지 않다면 저장
             if (imageFile != null && !imageFile.isEmpty()) {
-                System.out.println("Image received: " + imageFile.getOriginalFilename());
                 String imagePath = saveFile(imageFile);
-                if (imagePath != null) {
-                    product.setProductmainimage(imagePath);
-                    System.out.println("Saved image path: " + imagePath);
-                } else {
-                    System.out.println("Failed to save image file.");
-                }
+                product.setProductmainimage(imagePath);
             } else {
-                System.out.println("No image file received.");
+                // 기존 이미지 유지
+                Product existingProduct = productRepository.findById(product.getProductnum())
+                        .orElseThrow(() -> new RuntimeException("Product not found"));
+                product.setProductmainimage(existingProduct.getProductmainimage());
             }
 
-
+            // StoreNum 설정
             product.setStorenum(Long.parseLong(storenum));
 
-            // DB에 업데이트 처리
+            // DB 업데이트
             productRepository.save(product);
 
         } catch (Exception e) {
