@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useParams, useNavigate  } from "react-router-dom"; // useParams 훅 임포트
 import css from '../css/addContest.css';
-import {useNavigate} from "react-router-dom";
 
-const ContestRegistration = () => {
+const ContestEdit = ({ match }) => {
+    const { contestnum } = useParams(); // useParams로 contestnum 가져오기
+
     const [formData, setFormData] = useState({
         contesttitle: "",
         conteststartdate: "",
@@ -15,63 +17,87 @@ const ContestRegistration = () => {
     const [imagePreviewUrl, setImagePreviewUrl] = useState(""); // 이미지 미리보기 URL
     const navigate = useNavigate();
 
-    // 시작 날짜를 동적으로 설정 (현재 날짜 이후로 설정)
+    // 초기 데이터 가져오기
     useEffect(() => {
-        const today = new Date();
-        const yyyy = today.getFullYear();
-        const mm = (today.getMonth() + 1).toString().padStart(2, '0');
-        const dd = today.getDate().toString().padStart(2, '0');
-        const formattedDate = `${yyyy}-${mm}-${dd}`; // "YYYY-MM-DD" 형식으로 변환
-        setFormData((prevState) => ({
-            ...prevState,
-            conteststartdate: formattedDate, // 현재 날짜를 시작일로 설정
-            contestenddate: formattedDate,   // 종료일도 현재 날짜로 초기화
-        }));
-    }, []);
+        const fetchContestData = async () => {
+            try {
+                const response = await fetch(`http://localhost:80/contest/${contestnum}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setFormData({
+                        contesttitle: data.contesttitle,
+                        conteststartdate: data.conteststartdate,
+                        contestenddate: data.contestenddate,
+                        couponnum: data.couponnum,
+                    });
+                    setImagePreviewUrl(data.contestimg); // 기존 이미지 URL 설정
+                    // 쿠폰 데이터를 가져온 뒤 쿠폰 이름 설정
+                    const couponResponse = await fetch("http://localhost:80/coupon/coupons");
+                    if (couponResponse.ok) {
+                        const couponData = await couponResponse.json();
+                        setCoupons(couponData);
 
-    // 쿠폰 목록을 가져오는 함수
-    const fetchCoupons = async () => {
-        try {
-            const response = await fetch("http://localhost:80/coupon/coupons"); // 정확한 URL 사용
-            if (response.ok) {
-                const data = await response.json();
-                setCoupons(data); // 쿠폰 목록 업데이트
-
-                // 초기 쿠폰 이름 설정
-                const initialCoupon = data.find(coupon => coupon.couponnum === formData.couponnum);
-                setSelectedCouponName(initialCoupon ? initialCoupon.couponname : "");
-            } else {
-                console.error('Failed to fetch coupons:', response.status);
-                alert('쿠폰 목록을 가져오는 데 실패했습니다.');
+                        // 데이터에서 해당 쿠폰 이름 설정
+                        const initialCoupon = couponData.find(coupon => coupon.couponnum === data.couponnum);
+                        setSelectedCouponName(initialCoupon ? initialCoupon.couponname : "");
+                    } else {
+                        console.error('Failed to fetch coupons:', couponResponse.status);
+                        alert('쿠폰 목록을 가져오는 데 실패했습니다.');
+                    }
+                } else {
+                    alert('콘테스트 데이터를 불러오는 데 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('Error fetching contest data:', error);
+                alert('콘테스트 데이터를 불러오는 중 문제가 발생했습니다.');
             }
-        } catch (error) {
-            console.error('Error fetching coupons:', error);
-            alert('쿠폰 목록을 가져오는 데 실패했습니다.');
-        }
-    };
+        };
 
+        fetchContestData();
+    }, [contestnum]);
 
-    // 쿠폰 목록을 컴포넌트가 마운트될 때 한 번만 가져오기
+// 쿠폰 목록 가져오기
     useEffect(() => {
+        const fetchCoupons = async () => {
+            try {
+                const response = await fetch("http://localhost:80/coupon/coupons");
+                if (response.ok) {
+                    const data = await response.json();
+                    setCoupons(data);
+
+                    // formData.couponnum에 해당하는 쿠폰 이름 설정
+                    const initialCoupon = data.find(coupon => coupon.couponnum === parseInt(formData.couponnum));
+                    setSelectedCouponName(initialCoupon ? initialCoupon.couponname : "");
+                } else {
+                    console.error('Failed to fetch coupons:', response.status);
+                    alert('쿠폰 목록을 가져오는 데 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('Error fetching coupons:', error);
+                alert('쿠폰 목록을 가져오는 중 문제가 발생했습니다.');
+            }
+        };
+
         fetchCoupons();
-    }, []);
+    }, []); // 빈 배열로 설정하여 쿠폰 목록은 한 번만 가져옵니다.
 
-    // 쿠폰 선택 시 해당 쿠폰 이름을 입력란에 설정
+// 쿠폰 번호 변경 시 쿠폰 이름 업데이트
     const handleCouponChange = (e) => {
-        const couponnum = e.target.value;
-        setFormData({ ...formData, couponnum });
+        const selectedCouponNum = e.target.value;
+        setFormData({ ...formData, couponnum: selectedCouponNum });
 
-        // 선택된 쿠폰 번호에 해당하는 쿠폰 이름을 찾기
-        const selectedCoupon = coupons.find(coupon => coupon.couponnum === parseInt(couponnum));
+        // 선택한 쿠폰 번호에 맞는 쿠폰 이름 찾기
+        const selectedCoupon = coupons.find(coupon => coupon.couponnum === parseInt(selectedCouponNum));
         setSelectedCouponName(selectedCoupon ? selectedCoupon.couponname : "");
     };
 
+    // 입력 값 변경 핸들러
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    // 사진 첨부 핸들러
+    // 이미지 업로드 핸들러
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -83,11 +109,12 @@ const ContestRegistration = () => {
         }
     };
 
+    // 수정 폼 제출 핸들러
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const formDataToSend = new FormData(); // FormData 객체 생성
+            const formDataToSend = new FormData();
             formDataToSend.append("contesttitle", formData.contesttitle);
             formDataToSend.append("conteststartdate", formData.conteststartdate);
             formDataToSend.append("contestenddate", formData.contestenddate);
@@ -99,15 +126,15 @@ const ContestRegistration = () => {
                 formDataToSend.append("contestimg", fileInput.files[0]);
             }
 
-            const response = await fetch("http://localhost:80/contest/register", {
-                method: "POST",
-                body: formDataToSend, // JSON 대신 FormData 전송
+            const response = await fetch(`http://localhost:80/contest/update/${contestnum}`, {
+                method: "PUT", // 수정 요청
+                body: formDataToSend,
             });
 
             if (response.ok) {
-                alert("콘테스트 등록 성공!");
+                alert("콘테스트 수정 성공!");
             } else {
-                alert("콘테스트 등록 실패!");
+                alert("콘테스트 수정 실패!");
             }
         } catch (error) {
             console.error("Fetch Error:", error);
@@ -129,9 +156,9 @@ const ContestRegistration = () => {
             <form className="addContest_container" onSubmit={handleSubmit}>
                 <div className="addContest_sidebar">
                     <ul>
-                        <li onClick={() => navigate("/ContestRegistration")} className="addContest_active" style={{color: '#00bfff', fontWeight: 'bold', cursor: "pointer"}}>콘테스트 등록</li>
+                        <li onClick={() => navigate("/ContestRegistration")} style={{ cursor: "pointer" }}>콘테스트 등록</li>
                         <hr/>
-                        <li>콘테스트 수정</li>
+                        <li className="addContest_active" style={{color: '#00bfff', fontWeight: 'bold'}}>콘테스트 수정</li>
                     </ul>
                 </div>
                 <div className="addContest_content">
@@ -153,8 +180,7 @@ const ContestRegistration = () => {
                             name="conteststartdate"
                             value={formData.conteststartdate}
                             onChange={handleChange}
-                            // 시작 날짜가 변경될 때마다 min 속성 갱신
-                            min={new Date().toLocaleDateString("en-CA")} // 로컬 날짜 기준 // 항상 현재 날짜 이후만 선택
+                            min={new Date().toLocaleDateString("en-CA")} // 현재 날짜 이후만 선택 가능
                         />
                     </div>
                     <div className="addContest_form-group">
@@ -184,7 +210,7 @@ const ContestRegistration = () => {
                             type="text"
                             placeholder="불러낸 쿠폰 이름"
                             className="addContest_coupon-name"
-                            value={selectedCouponName} // 선택된 쿠폰 이름을 출력
+                            value={selectedCouponName}
                             disabled
                         />
                     </div>
@@ -217,17 +243,16 @@ const ContestRegistration = () => {
                             </button>
                         </div>
                     </div>
-                        <hr/>
+                    <hr/>
                     <div className="addContest_submit_button_div">
                         <button type="submit" className="addContest_submit-button">
-                            등록하기
+                            수정하기
                         </button>
                     </div>
                 </div>
             </form>
         </div>
-);
+    );
 };
 
-export default ContestRegistration;
-
+export default ContestEdit;

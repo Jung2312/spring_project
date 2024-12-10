@@ -1,0 +1,168 @@
+.admin_addContest {
+    width: 1280px;
+    margin: auto;
+}
+
+.addContest_container {
+    display: flex;
+    height: 100vh;
+}
+
+.addContest_header{
+    display: flex;
+    align-items: center;
+    width: 80%;
+    padding: 10px 0;
+    .addContest_logo_box{
+        margin: 0 50px 0 80px;
+        a{
+            font-family: 'Dovemayo_gothic';
+            font-size: 40px;
+        }
+    }
+}
+
+.addContest_sidebar {
+    background-color: black;
+    color: white;
+    width: 200px;
+    padding: 20px;
+}
+
+.addContest_sidebar h1 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.addContest_sidebar ul {
+    list-style: none;
+    padding: 0;
+    hr {
+        width: 80%;
+    }
+}
+
+.addContest_sidebar ul li {
+    padding: 10px 0;
+    margin-left: 20px;
+}
+
+.addContest_content {
+    padding: 20px;
+}
+
+.addContest_content_title {
+    display: flex;
+    align-items: center;
+    border-top: 3px solid #000000;
+    border-bottom: 1px solid #5c5c5c;
+    padding: 5px 0;
+    span {
+        margin-left: 30px;
+        margin-right: 30px;
+        font-size: 43px;
+        font-weight: bold;
+    }
+}
+
+.addContest_title-input {
+    width: 600px;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.addContest_form-group {
+    display: flex;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    align-items: center;
+    label {
+    display: block;
+    margin-left: 26px;
+    margin-right: 30px;
+        font-size: 24px;
+    }
+    input {
+        width: 30%;
+        padding: 5px 15px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        font-size: 24px;
+    }
+    select {
+        width: 20%;
+        padding: 5px;
+        padding-left: 15px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        margin-right: 20px;
+        margin-left: 68px;
+        height: 40px;
+    }
+}
+
+.addContest_coupon-name {
+    background-color: #B9B9B9;
+}
+
+.addContest_image_attach {
+    margin-left: 51px;
+}
+
+.addContest_description {
+    width: 800px;
+    height: auto;
+    margin-left: 25px;
+    border: 1px solid #999999;
+    border-radius: 10px;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.addContest_image-preview {
+    max-width: 700px; /* 이미지의 최대 가로 크기 */
+    width: 100%; /* 이미지의 가로 크기를 부모 컨테이너에 맞게 조정 */
+    height: auto; /* 비율을 유지하며 자동으로 높이 조정 */
+    display: block; /* 이미지가 블록 요소로 취급되어 가로/세로 가운데 정렬 */
+    margin: 0 auto; /* 이미지의 가로 가운데 정렬 */
+}
+
+.file-upload-container {
+    display: flex;
+    flex-direction: row-reverse;
+    height: 40px;
+    margin-top: 10px;
+    margin-bottom: 50px;
+}
+
+.addContest_image_button {
+    background-color: lightgray;
+    border: none;
+    padding: 10px 30px;
+    cursor: pointer;
+    color: black;
+    border-radius: 5px;
+    font-size: 22px;
+    transition: background-color 0.3s ease;
+}
+
+.addContest_image_button:hover {
+    background-color: #7d7d7d;
+}
+
+.addContest_submit_button_div {
+    display: flex;
+    justify-content: center;
+    margin-top: 70px;
+}
+
+.addContest_submit-button {
+    background-color: #00bfff;
+    color: white;
+    padding: 10px 40px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 36px;
+}

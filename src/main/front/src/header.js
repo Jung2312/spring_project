@@ -132,8 +132,12 @@ function Header() {
             {location.pathname.startsWith("/contest") &&(
                 <div className="contest-sub-header">
                     <div className="contest-sub-header-category-box">
-                        <a href="/contest" id="contest-sub-header-shopping" className={isActive("/contest") ? "active" : ""}>콘테스트 홈</a>
-                        <a href="/contest/champion" id="contest-sub-header-category" className={isActive("/contest/champion") ? "active" : ""}>지난 수상작</a>
+                        <a href="/contest" id="contest-sub-header-shopping"
+                           className={isActive("/contest") ? "active" : ""}>콘테스트 홈</a>
+                        <a href="/contest/champion" id="contest-sub-header-category"
+                           className={isActive("/contest/champion") ? "active" : ""}>지난 수상작</a>
+                        <a href="/contest/notice" id="contest-sub-header-category"
+                           className={isActive("/contest/notice") ? "active" : ""}>콘테스트 공지</a>
                     </div>
                     <div className="sub-header-realtime-search-box">
                         <div className="sub-header-realtime-search">

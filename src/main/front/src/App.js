@@ -26,6 +26,8 @@ import Profile from "./user/profile";
 import ShoppingInformation from "./shopping/shoppingInformation";
 import ShoppingBest from "./shopping/shoppingBest";
 import Payment from "./shopping/payment";
+import ContestRegistration from "./admin/addContest";
+import ContestEdit from "./admin/editContest";
 
 function App() {
     return (
@@ -56,6 +58,8 @@ function App() {
                 <Route path="/shoppingInformation/:storename" element={<ShoppingInformation />} />
                 <Route path="/shopping/shoppingBest" element={<ShoppingBest />} />
                 <Route path="/payment" element={<Payment />} />
+                <Route path="/ContestRegistration" element={<ContestRegistration />} />
+                <Route path="/ContestEdit/:contestnum" element={<ContestEdit />} />
             </Routes>
         </BrowserRouter>
     );
