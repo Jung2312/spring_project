@@ -36,6 +36,7 @@ public class RecommendService {
 
     public void decrementRecommendLike(Long postnum) {
         recommendRepository.decrementRecommendLike(postnum);
+    }
 
     // postnum을 기준으로 추천 글 찾기
     public Recommend getPostByPostnumber(Long postnum) {

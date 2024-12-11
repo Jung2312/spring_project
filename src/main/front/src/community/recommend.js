@@ -13,6 +13,7 @@ function Recommend() {
     const [likedPosts, setLikedPosts] = useState([]);
     const [replies, setReplies] = useState({});
     const userid = sessionStorage.getItem("userid");
+    const navigate = useNavigate();
 
     // 서버에서 게시글 데이터 가져옴
     useEffect(() => {
