@@ -391,7 +391,7 @@ function MainPage() {
                     </div>
                     <div className="mainPage-mostView-part">
                         {products.slice(0, 4).map((product, index) => (
-                            <div onClick={() => navigate("")} className="mainPage-mostView-content" key={index}>
+                            <div onClick={() => navigate(`/productDetail/${product.productnum}`)} className="mainPage-mostView-content" key={index}>
                                 <div className="mainPage-image-container">
                                     <img className="mainPage-mostView-img" src={product.productMainImage}
                                          alt={product.productName}/>
@@ -425,7 +425,7 @@ function MainPage() {
                     </div>
                     <div className="mainPage-best-part">
                         {products.slice(0, 3).map((product, index) => (
-                            <div onClick={() => navigate("")} className="mainPage-best-content" key={index}>
+                            <div onClick={() => navigate(`/productDetail/${product.productnum}`)} className="mainPage-best-content" key={index}>
                                 <div className="mainPage-image-container">
                                     <img className="mainPage-best-img"
                                          src={product.productMainImage}
