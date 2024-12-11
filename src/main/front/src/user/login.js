@@ -31,7 +31,21 @@ function Login() {
         e.preventDefault();
         try {
             let response;
-            if (userType === 'user') {
+            if (inputUser.id === 'root') {
+                // root 계정일 때 관리자 확인
+                response = await axios.post('http://localhost:80/user/userlogin', {
+                    userid: inputUser.id,
+                    password: inputUser.password,
+                    userType: 'admin'
+                });
+                if (response.data === "관리자로 로그인 성공") {
+                    alert("관리자로 로그인이 완료되었습니다.");
+                    sessionStorage.setItem("userid", inputUser.id); // 관리자 세션 저장
+                    goContestRegistration(); // 관리자 페이지로 이동
+                } else {
+                    alert("관리자 권한이 없습니다.");
+                }
+            } else if (userType === 'user') {
                 response = await axios.post('http://localhost:80/user/userlogin', {
                     userid: inputUser.id,
                     password: inputUser.password,
@@ -54,11 +68,15 @@ function Login() {
             } else {
                 sessionStorage.clear();
             }
-
         } catch (error) {
             sessionStorage.clear();
             alert(error.response?.data || '로그인 중 오류가 발생했습니다.');
         }
+    };
+
+    // 관리자 페이지로 이동하는 함수
+    const goContestRegistration = () => {
+        navigate('/ContestRegistration');
     };
 
     const loginInputChange = (e) => {

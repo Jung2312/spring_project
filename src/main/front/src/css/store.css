@@ -265,3 +265,132 @@ input::-webkit-inner-spin-button {
         text-align: right;
     }
 }
+
+.store-insert-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.store-insert-modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 420px;
+    max-height: 90vh; /* 화면 높이에 맞게 최대 높이 제한 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    position: relative;
+    text-align: center; /* 중앙 정렬 */
+    overflow-y: auto; /* 스크롤 가능 */
+}
+
+.store-insert-modal-content h2 {
+    margin-bottom: 25px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+}
+
+.store-insert-modal-content label {
+    display: block;
+    margin-bottom: 20px;
+    text-align: left;
+    font-weight: bold;
+    color: #555;
+}
+
+.store-insert-modal-content input,
+.store-insert-modal-content select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.95em;
+    box-sizing: border-box;
+}
+
+.store-insert-modal-content input:focus,
+.store-insert-modal-content select:focus {
+    outline: none;
+    border-color: #00aaff;
+    box-shadow: 0 0 4px rgba(92, 184, 92, 0.5);
+}
+
+.store-insert-modal-content .button-container {
+    display: flex;
+    justify-content: center; /* 버튼 중앙 정렬 */
+    gap: 10px; /* 버튼 간격 */
+    margin-top: 20px;
+}
+
+.store-insert-modal-content .submit-button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #00aaff; /* 등록하기 버튼 색상 (초록) */
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+.store-insert-modal-content .submit-button:hover {
+    background-color: #1b80b3; /* 등록하기 버튼 호버 색상 */
+}
+
+.store-insert-modal-content .close-button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #d9534f; /* 닫기 버튼 색상 (빨강) */
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.store-insert-modal-content .close-button:hover {
+    background-color: #c9302c; /* 닫기 버튼 호버 색상 */
+}
+
+
+.store-insert-image-preview {
+    margin-top: 10px;
+    width: 100%;
+    height: auto;
+    max-height: 200px; /* 최대 높이 제한 */
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 6px;
+    background: #f9f9f9;
+}
+
+.store-insert-image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.store-insert-modal-content select {
+    background: #fefefe;
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath fill='%23999' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 10px 6px;
+}
+
+.store-insert-modal-content select:hover {
+    border-color: #00aaff;
+}

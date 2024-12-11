@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import "../css/shoppingInformation.css";
 import Header from '../header.js';
+import ex from "../img/product_basic.png";
 
 const ShoppingInformation = () => {
     const { storename } = useParams(); // URL에서 storename 파라미터 추출
@@ -12,6 +13,12 @@ const ShoppingInformation = () => {
     const [selectedSubCategory, setSelectedSubCategory] = useState(null); // 선택된 서브 카테고리
     const [products, setProducts] = useState([]); // 상품 정보를 저장하는 상태
     const [activeCategory, setActiveCategory] = useState(null); // 서브카테고리 펼치기/닫기 상태
+
+    // 전화번호 포맷 변환 함수
+    const formatPhoneNumber = (phoneNumber) => {
+        if (!phoneNumber) return '';
+        return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+    };
 
     // 상점 정보 가져오기
     useEffect(() => {
@@ -55,8 +62,9 @@ const ShoppingInformation = () => {
                 {storeInfo && (
                     <div className="shoppingInform-banner-content">
                         <h1 className={"shoppingInform-banner-storename"}>{storeInfo.storename}</h1>
+                        <p className={"shoppingInform-banner-storenotice"}>notice: {storeInfo.storenotice}</p>
                         <p className={"shoppingInform-banner-storeaddress"}>addr: {storeInfo.storeaddress}</p>
-                        <p className={"shoppingInform-banner-storephone"}>phone: {storeInfo.storephone}</p>
+                        <p className={"shoppingInform-banner-storephone"}>tel: {formatPhoneNumber(storeInfo.storephone)}</p>
                     </div>
                 )}
             </div>
@@ -103,9 +111,16 @@ const ShoppingInformation = () => {
                                 index < 4 && (
                                     <div key={product.productnum} className="shoppingInform-product-card">
                                         <img
-                                            src={product.productmainimage}
+                                            src={
+                                                product.productmainimage.startsWith('https://')
+                                                    ? product.productmainimage
+                                                    : `${process.env.PUBLIC_URL}/productImg/${product.productmainimage}`
+                                            }
                                             alt={product.productname}
-                                            className="shoppingInform-product-image"
+                                            className="category-product-image"
+                                            onError={(e) => {
+                                                e.target.src = ex;
+                                            }} // 이미지 오류 처리
                                         />
                                         <h1 className="shoppingInform-product-storename">{storeInfo.storename}</h1>
                                         <p className="shoppingInform-product-name">{product.productname}</p>
