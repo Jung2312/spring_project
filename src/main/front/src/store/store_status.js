@@ -72,12 +72,13 @@ function StoreStatus() {
         <div className="status_container">
             {/* 월별 상태 섹션 (작년/올해) */}
             <div className="monthly_status_section">
-                <h2>Monthly Framework Usage</h2>
+                <h2>월별 매출 현황</h2>
                 <Bar data={data} options={options} />
             </div>
             {/* 판매 및 제품 섹션 (상위 5개만 출력) */}
             <div className="sales_product_section">
-                <p>Sales Product Section Placeholder</p>
+                <p>상품별 판매량</p>
+                <Bar data={data} options={options} />
             </div>
         </div>
     );

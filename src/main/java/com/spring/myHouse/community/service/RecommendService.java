@@ -30,6 +30,13 @@ public class RecommendService {
         return recommendRepository.findPostimgByUserid(userid);
     }
 
+    public void incrementRecommendLike(Long postnum) {
+        recommendRepository.incrementRecommendLike(postnum);
+    }
+
+    public void decrementRecommendLike(Long postnum) {
+        recommendRepository.decrementRecommendLike(postnum);
+
     // postnum을 기준으로 추천 글 찾기
     public Recommend getPostByPostnumber(Long postnum) {
         return recommendRepository.findById(postnum).orElse(null);
