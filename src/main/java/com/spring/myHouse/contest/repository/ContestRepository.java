@@ -13,5 +13,7 @@ public interface ContestRepository extends CrudRepository<Contest, Long> {
     List<Contest> findByContestprogress(Long contest_progress);
 
     // 현재 진행 중인 콘테스트 조회
-    Optional<Contest> findByConteststartdateBeforeAndContestenddateAfter(LocalDate startDate, LocalDate endDate);
+    Optional<Contest> findByConteststartdateLessThanEqualAndContestenddateAfter(LocalDate conteststartdate, LocalDate contestenddate);
+
+
 }

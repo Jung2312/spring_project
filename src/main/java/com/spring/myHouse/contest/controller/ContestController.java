@@ -68,7 +68,7 @@ public class ContestController {
     @GetMapping("/update")
     public Contest getOngoingContestForUpdate() {
         LocalDate today = LocalDate.now();
-        return contestRepository.findByConteststartdateBeforeAndContestenddateAfter(today, today)
+        return contestRepository.findByConteststartdateLessThanEqualAndContestenddateAfter(today, today)
                 .orElseThrow(() -> new IllegalArgumentException("현재 진행 중인 콘테스트가 없습니다."));
     }
 
