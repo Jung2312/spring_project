@@ -47,9 +47,11 @@ public class ContestJoinService {
         contestJoinRepository.deleteById(joinnum);
     }
 
-    public List<String> getJoinImagesByUserid(String userid) {
-        return contestJoinRepository.findJoinimgByUserid(userid);
+    // 수정된 부분: List<Contestjoin> 반환
+    public List<Contestjoin> getJoinImagesByUserid(String userid) {
+        return contestJoinRepository.findContestjoinByUserid(userid);  // Contestjoin 객체 반환
     }
+
 
     public long getCountByUserId(String userid) {
         return contestJoinRepository.countByUserId(userid);

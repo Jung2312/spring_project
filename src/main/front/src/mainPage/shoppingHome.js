@@ -1,13 +1,13 @@
 import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
-import banner from '../img/banner.png';
-import like from '../img/like.png';
-import comment from '../img/comment.png';
-import nongdamgom  from '../img/nongdamgom.png';
-import blacknongdamgom  from '../img/blacknongdamgom.png';
-import furniture from '../img/furniture.png';
 import css from '../css/shoppingHome.css';
+import banner1 from '../img/banner1.jpg';
+import banner2 from '../img/banner2.jpg';
+import banner3 from '../img/banner3.jpg';
+import banner4 from '../img/banner4.jpg';
+import banner5 from '../img/banner5.jpg';
 import Header from "../header";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 function ShoppingHome() {
 
@@ -22,6 +22,81 @@ function ShoppingHome() {
     const [majorCategories, setMajorCategories] = useState([]); // majorCategory 데이터
     const [categoryImages, setCategoryImages] = useState([]); // categoryImage 데이터
     const [categories, setCategories] = useState([]); // 모든 카테고리 데이터를 저장
+    const navigate = useNavigate();
+    const banners = [banner1, banner2, banner3, banner4, banner5];
+    const totalBanners = banners.length;
+    const [currentIndex, setCurrentIndex] = useState(1); // 초기 위치는 첫 번째 슬라이드
+    const containerRef = useRef(null);
+    const isTransitioning = useRef(false);
+
+    // 앞뒤 복제 슬라이드 추가
+    const extendedBanners = [banners[totalBanners - 1], ...banners, banners[0]];
+
+    // 다음 슬라이드로 이동
+    const handleNext = () => {
+        if (isTransitioning.current) return; // 애니메이션 중 중복 실행 방지
+        isTransitioning.current = true;
+        setCurrentIndex((prevIndex) => prevIndex + 1);
+    };
+
+    // 이전 슬라이드로 이동
+    const handlePrev = () => {
+        if (isTransitioning.current) return; // 애니메이션 중 중복 실행 방지
+        isTransitioning.current = true;
+        setCurrentIndex((prevIndex) => prevIndex - 1);
+    };
+
+    // 슬라이드 위치와 애니메이션 처리
+    useEffect(() => {
+        const container = containerRef.current;
+
+        if (container) {
+            // 무한 슬라이드를 위한 위치 조정
+            if (currentIndex === 0) {
+                // 첫 번째 복제 슬라이드에서 마지막 슬라이드로 이동
+                container.style.transition = 'none'; // 애니메이션 비활성화
+                setTimeout(() => {
+                    setCurrentIndex(totalBanners); // 마지막 슬라이드로 즉시 이동
+                    container.style.transform = `translateX(-${totalBanners * 100}%)`;
+                }, 50); // DOM 업데이트 지연 후 적용
+            } else if (currentIndex === totalBanners + 1) {
+                // 마지막 복제 슬라이드에서 첫 번째 슬라이드로 이동
+                container.style.transition = 'none'; // 애니메이션 비활성화
+                setTimeout(() => {
+                    setCurrentIndex(1); // 첫 번째 슬라이드로 즉시 이동
+                    container.style.transform = 'translateX(-100%)';
+                }, 50); // DOM 업데이트 지연 후 적용
+            } else {
+                // 일반적인 슬라이드 이동
+                container.style.transition = 'transform 0.5s ease-in-out';
+                container.style.transform = `translateX(-${currentIndex * 100}%)`;
+            }
+        }
+
+        // 애니메이션 완료 후 상태 초기화
+        const handleTransitionEnd = () => {
+            isTransitioning.current = false;
+        };
+
+        if (container) {
+            container.addEventListener('transitionend', handleTransitionEnd);
+        }
+
+        return () => {
+            if (container) {
+                container.removeEventListener('transitionend', handleTransitionEnd);
+            }
+        };
+    }, [currentIndex, totalBanners]);
+
+    // 자동 슬라이드
+    useEffect(() => {
+        const interval = setInterval(() => {
+            handleNext();
+        }, 5000); // 5초마다 다음 슬라이드로 이동
+
+        return () => clearInterval(interval); // 컴포넌트 언마운트 시 정리
+    }, []);
 
     // 상품 데이터를 로드하는 함수
     const loadProducts = async (currentPage, limit = 8) => {
@@ -177,17 +252,28 @@ function ShoppingHome() {
             <div className="shoppingHome">
                 <div className="shoppingHome-banner-section">
                     <div className="shoppingHome-banner">
-                        <img className="shoppingHome-banner-img" src={banner} alt="배너(광고)"/>
+                        <div className="banner-container" ref={containerRef}>
+                            {extendedBanners.map((banner, index) => (
+                                <img
+                                    key={index}
+                                    className="mainPage-banner-img"
+                                    src={banner}
+                                    alt={`배너 ${index}`}
+                                />
+                            ))}
+                        </div>
                     </div>
+                    <button className="banner-button left" onClick={handlePrev}>&#10094;</button>
+                    <button className="banner-button right" onClick={handleNext}>&#10095;</button>
                 </div>
                 <div className="shoppingHome-recommend-product-section">
                     <div className="shoppingHome-recommend-product-title">
                         <span className="shoppingHome-title-text">추천 상품</span>
-                        <span className="shoppingHome-title-more">더보기</span>
+                        <span onClick={() => navigate("/")} className="shoppingHome-title-more">더보기</span>
                     </div>
                     <div className="shoppingHome-recommend-product-part">
-                        {products.slice(0,4).map((product, index) => (
-                        <div className="shoppingHome-recommend-product-content" key={index}>
+                        {products.slice(0, 4).map((product, index) => (
+                            <div onClick={() => navigate("")} className="shoppingHome-recommend-product-content" key={index}>
                             <div className="shoppingHome-image-container">
                                 <img className="shoppingHome-recommend-product-img" src={product.productMainImage} alt={product.productName}/>
                             </div>
@@ -210,11 +296,13 @@ function ShoppingHome() {
                                 disabled={scrollPosition === 0}>&#8678;</button>
                         <div className="mainPage-category-part" ref={categoryContainerRef}>
                             {categories.map((item, index) => (
-                                <div className="mainPage-category-content" key={index}>
-                                    <img className="mainPage-categoty-img" src={item.categoryimage}
-                                         alt={item.majorcategory}/>
-                                    <span className="mainPage-category-name">{item.majorcategory}</span>
-                                </div>
+                                <a href="/shopping/shoppingCategory">
+                                    <div className="mainPage-category-content" key={index}>
+                                        <img className="mainPage-categoty-img" src={item.categoryimage}
+                                             alt={item.majorcategory}/>
+                                        <span className="mainPage-category-name">{item.majorcategory}</span>
+                                    </div>
+                                </a>
                             ))}
                         </div>
                         <button className="mainPage-slide-button right" onClick={() => slideCategories('right')}
@@ -224,7 +312,7 @@ function ShoppingHome() {
                 <div className="shoppingHome-product-section">
                     <div className="shoppingHome-product-part">
                         {products.map((product, index) => (
-                            <div className="shoppingHome-product-content" key={index}>
+                            <div onClick={() => navigate("")} className="shoppingHome-product-content" key={index}>
                                 <div className="shoppingHome-image-container">
                                     <img className="shoppingHome-product-img" src={product.productMainImage}
                                          alt={product.productName}/>

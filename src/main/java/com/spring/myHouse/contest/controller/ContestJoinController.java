@@ -177,10 +177,11 @@ public class ContestJoinController {
     }
 
     @GetMapping("/join/images")
-    public ResponseEntity<List<String>> getContestImages(@RequestParam String userid) {
-        List<String> joinImages = contestJoinService.getJoinImagesByUserid(userid);
-        return ResponseEntity.ok(joinImages);
+    public ResponseEntity<List<Contestjoin>> getContestImages(@RequestParam String userid) {
+        List<Contestjoin> contestjoins = contestJoinService.getJoinImagesByUserid(userid);
+        return ResponseEntity.ok(contestjoins);
     }
+
 
     @GetMapping("/join/count")
     public ResponseEntity<Long> getCountByUserId(@RequestParam String userid) {

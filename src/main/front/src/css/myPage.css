@@ -306,11 +306,11 @@
     cursor: pointer;
 }
 
-.myPage_profile_activity_post:hover, .myPage_profile_activity_like:hover, .myPage_profile_activity_coupons:hover {
+.myPage_profile_activity_like:hover, .myPage_profile_activity_coupons:hover {
     color: #7d7d7d; /* 텍스트 색상 변경 */
 }
 
-.myPage_profile_activity_post:hover > img, .myPage_profile_activity_like:hover > img, .myPage_profile_activity_coupons:hover > img {
+.myPage_profile_activity_like:hover > img, .myPage_profile_activity_coupons:hover > img {
     filter: invert(51%) sepia(4%) saturate(12%) hue-rotate(315deg) brightness(95%) contrast(92%);
 }
 
@@ -388,4 +388,5 @@
     height: 300px;
     border-radius: 10px;
     margin: 20px 30px;
+    cursor: pointer;
 }

@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import contestBg from '../img/contest_bg.png';
 import "../css/contest.css";
 import Header from '../header.js'
-import { useNavigate } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 
 function ContestPostPage() {
     const navigate = useNavigate();
     const [contestData, setContestData] = useState([]);
     const [selectedFile, setSelectedFile] = useState(null);
     const [previewImage, setPreviewImage] = useState(null);
-    const [userid, setUserid] = useState("aaa"); // 사용자 ID (예제 데이터)
-    const [contestnum, setContestnum] = useState(1); // 콘테스트 번호 (예제 데이터)
+    const userid = sessionStorage.getItem('userid');
+    const { contestnum } = useParams(); // URL에서 contestnum 파라미터 추출
 
     // 콘테스트 정보 가져오기
     useEffect(() => {
@@ -51,6 +51,12 @@ function ContestPostPage() {
     const contestPostSubmit = async () => {
         if (!selectedFile) {
             alert("사진을 선택해주세요!");
+            return;
+        }
+
+        if(!userid){
+            alert("로그인을 진행하세요.");
+            navigate('/login');
             return;
         }
         

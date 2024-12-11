@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RecommendRepository extends JpaRepository<Recommend, Long> {
@@ -27,4 +28,9 @@ public interface RecommendRepository extends JpaRepository<Recommend, Long> {
     @Transactional
     @Query("UPDATE Recommend r SET r.postlike = r.postlike - 1 WHERE r.postnum = :postnum")
     void decrementRecommendLike(@Param("postnum") Long postnum);
+
+    // postnum을 기준으로 추천 글 찾기
+    Optional<Recommend> findById(Long postnum);
+  
+    Recommend findByPostnum(Long postnum);
 }
