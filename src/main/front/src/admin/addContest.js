@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import css from '../css/addContest.css';
 import {useNavigate} from "react-router-dom";
+import axios from "axios";
 
 const ContestRegistration = () => {
     const [formData, setFormData] = useState({
@@ -14,6 +15,7 @@ const ContestRegistration = () => {
     const [selectedCouponName, setSelectedCouponName] = useState(""); // 선택된 쿠폰 이름
     const [imagePreviewUrl, setImagePreviewUrl] = useState(""); // 이미지 미리보기 URL
     const navigate = useNavigate();
+    const [isAdmin, setIsAdmin] = useState(false); // 관리자인지 확인하는 상태
 
     // 시작 날짜를 동적으로 설정 (현재 날짜 이후로 설정)
     useEffect(() => {
@@ -49,7 +51,6 @@ const ContestRegistration = () => {
             alert('쿠폰 목록을 가져오는 데 실패했습니다.');
         }
     };
-
 
     // 쿠폰 목록을 컴포넌트가 마운트될 때 한 번만 가져오기
     useEffect(() => {
@@ -93,12 +94,6 @@ const ContestRegistration = () => {
             formDataToSend.append("contestenddate", formData.contestenddate);
             formDataToSend.append("couponnum", formData.couponnum);
 
-            // 이미지 파일 추가
-            const fileInput = document.querySelector('input[type="file"]');
-            if (fileInput && fileInput.files[0]) {
-                formDataToSend.append("contestimg", fileInput.files[0]);
-            }
-
             const response = await fetch("http://localhost:80/contest/register", {
                 method: "POST",
                 body: formDataToSend, // JSON 대신 FormData 전송
@@ -119,11 +114,17 @@ const ContestRegistration = () => {
         document.getElementById("hiddenFileInput").click();
     };
 
+    const logoutButtonClick = () => {
+        sessionStorage.clear();
+        window.location.reload();
+    }
+
     return (
         <div className="admin_addContest">
             <header className="addContest_header">
                 <div className="addContest_logo_box">
                     <a href="/main" className="addContest_title">나만의집</a>
+                    <button id="admin_logout" onClick={() => logoutButtonClick()}>로그아웃</button>
                 </div>
             </header>
             <form className="addContest_container" onSubmit={handleSubmit}>
@@ -131,7 +132,7 @@ const ContestRegistration = () => {
                     <ul>
                         <li onClick={() => navigate("/ContestRegistration")} className="addContest_active" style={{color: '#00bfff', fontWeight: 'bold', cursor: "pointer"}}>콘테스트 등록</li>
                         <hr/>
-                        <li>콘테스트 수정</li>
+                        <li onClick={() => navigate("/ContestEdit")} style={{cursor: "pointer"}}>콘테스트 수정</li>
                     </ul>
                 </div>
                 <div className="addContest_content">
@@ -188,36 +189,6 @@ const ContestRegistration = () => {
                             disabled
                         />
                     </div>
-                    <div className="addContest_description">
-                        {imagePreviewUrl ? (
-                            <img
-                                src={imagePreviewUrl}
-                                alt="미리보기"
-                                className="addContest_image-preview"
-                            />
-                        ) : (
-                            <p>이미지가 여기에 표시됩니다.</p>
-                        )}
-                    </div>
-                    <div className="file-upload-container">
-                        <div className="addContest_form-group">
-                            <input
-                                type="file"
-                                id="hiddenFileInput"
-                                accept="image/*"
-                                style={{display: "none"}}
-                                onChange={handleImageUpload}
-                            />
-                            <button
-                                type="button"
-                                className="addContest_image_button"
-                                onClick={handleButtonClick}
-                            >
-                                이미지 업로드
-                            </button>
-                        </div>
-                    </div>
-                        <hr/>
                     <div className="addContest_submit_button_div">
                         <button type="submit" className="addContest_submit-button">
                             등록하기
@@ -226,7 +197,7 @@ const ContestRegistration = () => {
                 </div>
             </form>
         </div>
-);
+    );
 };
 
 export default ContestRegistration;

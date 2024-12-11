@@ -3,8 +3,6 @@ import { useParams, useNavigate  } from "react-router-dom"; // useParams 훅 임
 import css from '../css/addContest.css';
 
 const ContestEdit = ({ match }) => {
-    const { contestnum } = useParams(); // useParams로 contestnum 가져오기
-
     const [formData, setFormData] = useState({
         contesttitle: "",
         conteststartdate: "",
@@ -14,47 +12,58 @@ const ContestEdit = ({ match }) => {
 
     const [coupons, setCoupons] = useState([]); // 쿠폰 목록 상태
     const [selectedCouponName, setSelectedCouponName] = useState(""); // 선택된 쿠폰 이름
-    const [imagePreviewUrl, setImagePreviewUrl] = useState(""); // 이미지 미리보기 URL
+    const [contestnum, setContestnum] = useState(null); // 진행 중인 콘테스트 번호 상태
     const navigate = useNavigate();
 
-    // 초기 데이터 가져오기
+// 진행 중인 콘테스트 번호 확인 및 데이터 로드
     useEffect(() => {
-        const fetchContestData = async () => {
+        const fetchOngoingContest = async () => {
             try {
-                const response = await fetch(`http://localhost:80/contest/${contestnum}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setFormData({
-                        contesttitle: data.contesttitle,
-                        conteststartdate: data.conteststartdate,
-                        contestenddate: data.contestenddate,
-                        couponnum: data.couponnum,
-                    });
-                    setImagePreviewUrl(data.contestimg); // 기존 이미지 URL 설정
-                    // 쿠폰 데이터를 가져온 뒤 쿠폰 이름 설정
-                    const couponResponse = await fetch("http://localhost:80/coupon/coupons");
-                    if (couponResponse.ok) {
-                        const couponData = await couponResponse.json();
-                        setCoupons(couponData);
+                // 진행 중인 콘테스트 가져오기
+                const ongoingResponse = await fetch("http://localhost:80/contest/update");
+                if (ongoingResponse.ok) {
+                    const ongoingData = await ongoingResponse.json();
+                    setContestnum(ongoingData.contestnum); // 진행 중인 콘테스트 번호 설정
 
-                        // 데이터에서 해당 쿠폰 이름 설정
-                        const initialCoupon = couponData.find(coupon => coupon.couponnum === data.couponnum);
-                        setSelectedCouponName(initialCoupon ? initialCoupon.couponname : "");
+                    // 콘테스트 데이터 로드
+                    const contestResponse = await fetch(`http://localhost:80/contest/${ongoingData.contestnum}`);
+                    if (contestResponse.ok) {
+                        const data = await contestResponse.json();
+                        setFormData({
+                            contesttitle: data.contesttitle,
+                            conteststartdate: data.conteststartdate,
+                            contestenddate: data.contestenddate,
+                            couponnum: data.couponnum,
+                        });
+
+                        // 쿠폰 데이터 로드
+                        const couponResponse = await fetch("http://localhost:80/coupon/coupons");
+                        if (couponResponse.ok) {
+                            const couponData = await couponResponse.json();
+                            setCoupons(couponData);
+
+                            // 초기 쿠폰 이름 설정
+                            const initialCoupon = couponData.find(coupon => coupon.couponnum === data.couponnum);
+                            setSelectedCouponName(initialCoupon ? initialCoupon.couponname : "");
+                        } else {
+                            console.error("Failed to fetch coupons:", couponResponse.status);
+                            alert("쿠폰 목록을 가져오는 데 실패했습니다.");
+                        }
                     } else {
-                        console.error('Failed to fetch coupons:', couponResponse.status);
-                        alert('쿠폰 목록을 가져오는 데 실패했습니다.');
+                        alert("콘테스트 데이터를 불러오는 데 실패했습니다.");
                     }
                 } else {
-                    alert('콘테스트 데이터를 불러오는 데 실패했습니다.');
+                    alert("현재 진행 중인 콘테스트가 없습니다.");
+                    navigate("/ContestRegistration"); // 진행 중인 콘테스트가 없으면 등록 페이지로 이동
                 }
             } catch (error) {
-                console.error('Error fetching contest data:', error);
-                alert('콘테스트 데이터를 불러오는 중 문제가 발생했습니다.');
+                console.error("Error fetching ongoing contest data:", error);
+                alert("데이터를 가져오는 중 문제가 발생했습니다.");
             }
         };
 
-        fetchContestData();
-    }, [contestnum]);
+        fetchOngoingContest();
+    }, [navigate]);
 
 // 쿠폰 목록 가져오기
     useEffect(() => {
@@ -97,18 +106,6 @@ const ContestEdit = ({ match }) => {
         setFormData({ ...formData, [name]: value });
     };
 
-    // 이미지 업로드 핸들러
-    const handleImageUpload = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                setImagePreviewUrl(reader.result); // 이미지 미리보기 URL 설정
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
     // 수정 폼 제출 핸들러
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -119,12 +116,6 @@ const ContestEdit = ({ match }) => {
             formDataToSend.append("conteststartdate", formData.conteststartdate);
             formDataToSend.append("contestenddate", formData.contestenddate);
             formDataToSend.append("couponnum", formData.couponnum);
-
-            // 이미지 파일 추가
-            const fileInput = document.querySelector('input[type="file"]');
-            if (fileInput && fileInput.files[0]) {
-                formDataToSend.append("contestimg", fileInput.files[0]);
-            }
 
             const response = await fetch(`http://localhost:80/contest/update/${contestnum}`, {
                 method: "PUT", // 수정 요청
@@ -142,15 +133,21 @@ const ContestEdit = ({ match }) => {
         }
     };
 
-    const handleButtonClick = () => {
-        document.getElementById("hiddenFileInput").click();
-    };
+    if (contestnum === null) {
+        return <div>Loading...</div>;
+    }
+
+    const logoutButtonClick = () => {
+        sessionStorage.clear();
+        window.location.reload();
+    }
 
     return (
         <div className="admin_addContest">
             <header className="addContest_header">
                 <div className="addContest_logo_box">
                     <a href="/main" className="addContest_title">나만의집</a>
+                    <button id="admin_logout" onClick={() => logoutButtonClick()}>로그아웃</button>
                 </div>
             </header>
             <form className="addContest_container" onSubmit={handleSubmit}>
@@ -214,36 +211,6 @@ const ContestEdit = ({ match }) => {
                             disabled
                         />
                     </div>
-                    <div className="addContest_description">
-                        {imagePreviewUrl ? (
-                            <img
-                                src={imagePreviewUrl}
-                                alt="미리보기"
-                                className="addContest_image-preview"
-                            />
-                        ) : (
-                            <p>이미지가 여기에 표시됩니다.</p>
-                        )}
-                    </div>
-                    <div className="file-upload-container">
-                        <div className="addContest_form-group">
-                            <input
-                                type="file"
-                                id="hiddenFileInput"
-                                accept="image/*"
-                                style={{display: "none"}}
-                                onChange={handleImageUpload}
-                            />
-                            <button
-                                type="button"
-                                className="addContest_image_button"
-                                onClick={handleButtonClick}
-                            >
-                                이미지 업로드
-                            </button>
-                        </div>
-                    </div>
-                    <hr/>
                     <div className="addContest_submit_button_div">
                         <button type="submit" className="addContest_submit-button">
                             수정하기

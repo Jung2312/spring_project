@@ -34,39 +34,15 @@ public class ContestController {
             @RequestParam("contesttitle") String contestTitle,
             @RequestParam("conteststartdate") String contestStartDate,
             @RequestParam("contestenddate") String contestEndDate,
-            @RequestParam("couponnum") Long couponNum,
-            @RequestParam(value = "contestimg", required = false) MultipartFile contestImg
+            @RequestParam("couponnum") Long couponNum
     ) {
         try {
-            String savedFilePath = null;
-
-            // 이미지 파일 저장
-            if (contestImg != null && !contestImg.isEmpty()) {
-                // 파일 저장 경로 설정
-                String baseDir = "C:/spring_project/src/main/front/public/uploads"; // 원하는 경로로 설정
-                File directory = new File(baseDir);
-                if (!directory.exists()) {
-                    directory.mkdirs(); // 디렉토리가 없으면 생성
-                }
-
-                // 저장 파일 이름 생성
-                String fileName = UUID.randomUUID() + "_" + contestImg.getOriginalFilename();
-                File file = new File(directory, fileName);
-
-                // 파일 저장
-                contestImg.transferTo(file);
-
-                // 저장된 파일 경로 설정
-                savedFilePath = "/uploads/" + fileName; // 클라이언트에서 접근 가능한 상대 경로
-            }
-
             // Contest 객체 생성
             Contest contest = new Contest();
             contest.setContesttitle(contestTitle);
             contest.setConteststartdate(LocalDate.parse(contestStartDate));
             contest.setContestenddate(LocalDate.parse(contestEndDate));
             contest.setCouponnum(couponNum);
-            contest.setContestimg(savedFilePath);
             contest.setContestprogress(1L);
 
             contestService.saveContest(contest);
@@ -89,6 +65,12 @@ public class ContestController {
                 .orElseThrow(() -> new IllegalArgumentException("해당 번호의 콘테스트를 찾을 수 없습니다."));
     }
 
+    @GetMapping("/update")
+    public Contest getOngoingContestForUpdate() {
+        LocalDate today = LocalDate.now();
+        return contestRepository.findByConteststartdateBeforeAndContestenddateAfter(today, today)
+                .orElseThrow(() -> new IllegalArgumentException("현재 진행 중인 콘테스트가 없습니다."));
+    }
 
     // ContestController.java
     @PutMapping("/update/{contestnum}")
@@ -97,34 +79,11 @@ public class ContestController {
             @RequestParam("contesttitle") String contestTitle,
             @RequestParam("conteststartdate") String contestStartDate,
             @RequestParam("contestenddate") String contestEndDate,
-            @RequestParam("couponnum") Long couponNum,
-            @RequestParam(value = "contestimg", required = false) MultipartFile contestImg
+            @RequestParam("couponnum") Long couponNum
     ) {
         try {
-            String savedFilePath = null;
-
-            // 이미지 파일이 첨부되었으면 처리
-            if (contestImg != null && !contestImg.isEmpty()) {
-                // 파일 저장 경로 설정
-                String baseDir = "C:/spring_project/src/main/front/public/uploads";
-                File directory = new File(baseDir);
-                if (!directory.exists()) {
-                    directory.mkdirs();
-                }
-
-                // 저장 파일 이름 생성
-                String fileName = UUID.randomUUID() + "_" + contestImg.getOriginalFilename();
-                File file = new File(directory, fileName);
-
-                // 파일 저장
-                contestImg.transferTo(file);
-
-                // 저장된 파일 경로 설정
-                savedFilePath = "/uploads/" + fileName;
-            }
-
             // 서비스 호출
-            contestService.updateContest(contestNum, contestTitle, contestStartDate, contestEndDate, couponNum, savedFilePath);
+            contestService.updateContest(contestNum, contestTitle, contestStartDate, contestEndDate, couponNum);
 
             return "콘테스트가 성공적으로 수정되었습니다.";
         } catch (Exception e) {
@@ -132,5 +91,4 @@ public class ContestController {
             return "콘테스트 수정 실패: " + e.getMessage();
         }
     }
-
 }
