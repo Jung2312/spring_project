@@ -47,12 +47,12 @@ function App() {
                 <Route path="/myPage/profile" element={<MyPage />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/followPage" element={<FollowPage />} />
-                <Route path="/contest/post" element={<ContestPostPage />} />
+                <Route path="/contest/post/:contestnum" element={<ContestPostPage />} />
                 <Route path="/contest/postDetail/:joinnum" element={<ContestPostDetailPage />} />
                 <Route path="/contest/notice" element={<ContestNotice />} />
                 <Route path="/shopping/shoppingCategory" element={<ShoppingCategory />} />
                 <Route path="/myPage/myShoppingPage" element={<MyShoppingPage />} />
-                <Route path="/productDetail" element={<ProductDetail />} />
+                <Route path="/productDetail/:productnum" element={<ProductDetail />} />
                 <Route path="/shoppingInformation/:storename" element={<ShoppingInformation />} />
                 <Route path="/shopping/shoppingBest" element={<ShoppingBest />} />
                 <Route path="/payment" element={<Payment />} />

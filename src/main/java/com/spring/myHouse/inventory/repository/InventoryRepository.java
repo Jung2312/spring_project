@@ -20,4 +20,7 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     @Transactional
     @Query("UPDATE Inventory i SET i.inventorycount = :inventorycount  WHERE i.productnum = :productnum")
     int updateInventoryCount(Long productnum, Long inventorycount);
+
+    @Query("SELECT i.inventorycount FROM Inventory i WHERE i.productnum = :productnum")
+    int getProductInventoryCount(Long productnum);
 }

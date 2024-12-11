@@ -1,7 +1,12 @@
 package com.spring.myHouse.product.controller;
 
+import com.spring.myHouse.contest.entity.Contestjoin;
+import com.spring.myHouse.inventory.repository.InventoryRepository;
 import com.spring.myHouse.product.entity.Product;
 import com.spring.myHouse.product.service.ProductService;
+import com.spring.myHouse.store.entity.Store;
+import com.spring.myHouse.store.service.StoreService;
+import com.spring.myHouse.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +23,9 @@ public class ProductController {
 
     private final ProductService productService;
     private final JdbcTemplate jdbcTemplate;
+    private final StoreService storeService;
+
+    private final InventoryRepository inventoryRepository;
 
     // 특정 카테고리에 속한 상품 목록 조회
     @GetMapping("/category/{categorynum}")
@@ -66,6 +74,24 @@ public class ProductController {
             result.put("storeName", rs.getString("storename"));
             return result;
         });
+    }
+
+    @GetMapping("/productDetail")
+    public Map<String, Object> getProductDetail(@RequestParam Long productnum) {
+        Product product = productService.getProductByProductnum(productnum);
+        Map<String, Object> productWithStore = new HashMap<>();
+        productWithStore.put("productnum", product.getProductnum());
+        productWithStore.put("productname", product.getProductname());
+        productWithStore.put("productprice", Integer.parseInt(product.getProductprice()));
+        productWithStore.put("productmainimage", product.getProductmainimage());
+
+        Store store = storeService.getStoreByStorenum(product.getStorenum());
+        productWithStore.put("storename", store.getStorename());
+
+        int inventoryCount = inventoryRepository.getProductInventoryCount(productnum);
+        productWithStore.put("inventorycount", inventoryCount);
+
+        return productWithStore;
     }
 
 }
