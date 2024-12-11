@@ -112,7 +112,7 @@ public class RecommendController {
         }
     }
 
-    @PostMapping("/like")
+    @PostMapping("/user/like")
     public ResponseEntity<String> likePost(@RequestParam("postnum") Long postnum) {
         // 추천 글을 찾아서
         Recommend recommend = recommendService.getPostByPostnumber(postnum);
