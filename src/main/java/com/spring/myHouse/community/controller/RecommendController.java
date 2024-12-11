@@ -4,12 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.myHouse.community.entity.Recommend;
 import com.spring.myHouse.community.service.RecommendService;
-import com.spring.myHouse.contest.entity.Contestjoin;
+import com.spring.myHouse.liked.entity.Liked;
+import com.spring.myHouse.liked.service.LikedService;
 import com.spring.myHouse.user.entity.User;
 import com.spring.myHouse.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,12 +28,8 @@ import java.util.stream.Collectors;
 public class RecommendController {
     private final RecommendService recommendService;
     private final UserService userService;
+    private final LikedService likedService;
 
-//        @GetMapping("/post")
-//    public List<Recommend> getAllPosts() {
-//        List<Recommend> recommends = recommendService.getAllPosts();
-//        return recommends;
-//    }
     @GetMapping("")
     public List<Map<String, Object>> getAllPosts() {
         List<Recommend> recommends = recommendService.getAllPosts();
@@ -115,8 +111,6 @@ public class RecommendController {
         }
     }
 
-
-
     @GetMapping("/count")
     public ResponseEntity<Integer> getPostCountByUser(@RequestParam("userid") String userid) {
         int postCount = recommendService.countPostsByUserid(userid);
@@ -128,4 +122,30 @@ public class RecommendController {
         List<String> joinImages = recommendService.getPostImagesByUserid(userid);
         return ResponseEntity.ok(joinImages);
     }
+
+    @PostMapping("/like")
+    public ResponseEntity<String> toggleLike(@RequestHeader("userid") String userid, @RequestParam Long postnum) {
+        if (userid == null || postnum == null) {
+            return ResponseEntity.badRequest().body("파라미터가 유효하지 않습니다.");
+        }
+
+        Liked liked = likedService.getByUseridAndPostnum(userid, postnum);
+
+        if (liked == null) {
+            liked = new Liked();
+            liked.setUserid(userid);
+            liked.setPostnum(postnum);
+
+            recommendService.incrementRecommendLike(postnum);
+            likedService.saveLiked(liked);
+
+            return ResponseEntity.ok("좋아요 추가 완료");
+        } else {
+            recommendService.decrementRecommendLike(postnum);
+            likedService.deleteLiked(liked);
+
+            return ResponseEntity.ok("좋아요 취소 완료");
+        }
+    }
+
 }

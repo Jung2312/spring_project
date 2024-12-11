@@ -65,7 +65,7 @@ function MainPage() {
     // 서버에서 게시글 데이터 가져옴
     useEffect(() => {
         axios
-            .get('http://localhost:80/recommend') // Spring Boot API URL
+            .get('http://localhost:80/community/recommend') // Spring Boot API URL
             .then((response) => {
                 setPostList(response.data);
             })
@@ -220,9 +220,9 @@ function MainPage() {
                     <div className="mainPage-category-slider">
                         <button className="mainPage-slide-button left" onClick={() => slideCategories('left')} disabled={scrollPosition === 0}>&#10094;</button>
                         <div className="mainPage-category-part" ref={categoryContainerRef}>
-                            {categories.map((item, index) => (
-                                <a href="/shoppingCategory">
-                                    <div className="mainPage-category-content" key={index}>
+                            {categories.map((item) => (
+                                <a href="/shopping/shoppingCategory" key={item.categorynum}>
+                                    <div className="mainPage-category-content">
                                         <img className="mainPage-categoty-img" src={item.categoryimage}
                                              alt={item.majorcategory}/>
                                         <span className="mainPage-category-name">{item.majorcategory}</span>

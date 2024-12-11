@@ -11,7 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "product")
 public class Product {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long productnum;
