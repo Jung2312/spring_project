@@ -14,7 +14,7 @@ function MyPage() {
     const [isLogin, setIsLogin] = useState(false);
     const [userInfo, setUserInfo] = useState(null);
     const [contestImages, setContestImages] = useState([]); // 콘테스트 이미지 상태 추가
-    const [postImages, setPostImages] = useState([]); // 콘테스트 이미지 상태 추가
+    const [postImages, setPostImages] = useState([]); // 커뮤니티 이미지 상태 추가
     const [contestCount, setContestCount] = useState(0); // 콘테스트 글 개수 상태 추가
     const [likeCount, setLikeCount] = useState(0);
     const [postCount, setPostCount] = useState(0);
@@ -170,7 +170,7 @@ function MyPage() {
                     <div className="myPage_community_content">
                         {/* 게시글 사진 */}
                         {postImages.map((image, index) => (
-                            <img key={index} className="myPage_community_img" src={`/postImg/${image}`} alt="게시글 사진"
+                            <img onClick={() => navigate("")} key={index} className="myPage_community_img" src={`/postImg/${image}`} alt="게시글 사진"
                                  onError={(e) => {
                                      e.target.src = ex;
                                  }}/>
@@ -184,7 +184,7 @@ function MyPage() {
                     <div className="myPage_contest_content">
                         {/* 콘테스트 사진 */}
                         {contestImages.map((image, index) => (
-                            <img key={index} className="myPage_contest_img" src={`/postImg/${image}`} alt="콘테스트 참여 사진"
+                            <img onClick={() => navigate(`/contest/postDetail/${image.joinnum}`)} key={index} className="myPage_contest_img" src={`/postImg/${image.joinimg}`} alt="콘테스트 참여 사진"
                                  onError={(e) => {
                                      e.target.src = ex;
                                  }}
