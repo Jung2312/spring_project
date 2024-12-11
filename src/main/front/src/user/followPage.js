@@ -66,7 +66,6 @@ function FollowPage() {
             });
     };
 
-
     return (
         <div className="followPage">
             <Header/>
