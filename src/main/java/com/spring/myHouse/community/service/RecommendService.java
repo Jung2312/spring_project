@@ -31,8 +31,9 @@ public class RecommendService {
     }
 
     // postnum을 기준으로 추천 글 찾기
-    public Recommend getPostByPostnum(Long postnum) {
+    public Recommend getPostByPostnumber(Long postnum) {
         return recommendRepository.findById(postnum).orElse(null);
+    }
 
     // postnum으로 게시글 조회
     public Recommend getPostByPostnum(Long postnum) {

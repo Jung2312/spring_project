@@ -119,7 +119,7 @@ public class RecommendController {
     @PostMapping("/like")
     public ResponseEntity<String> likePost(@RequestParam("postnum") Long postnum) {
         // 추천 글을 찾아서
-        Recommend recommend = recommendService.getPostByPostnum(postnum);
+        Recommend recommend = recommendService.getPostByPostnumber(postnum);
         if (recommend == null) {
             return ResponseEntity.status(404).body("게시글을 찾을 수 없습니다.");
         }
