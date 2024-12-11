@@ -15,10 +15,14 @@ function ShoppingBest() {
     const [loading, setLoading] = useState(false); // 로딩 상태
     const [hasMore, setHasMore] = useState(true); // 더 불러올 상품 여부
     const [categories, setCategories] = useState([]); // 모든 카테고리 데이터를 저장
+    const categoryContainerRef = useRef(null); // 카테고리 컨테이너 참조
+    const [scrollPosition, setScrollPosition] = useState(0);
+    const [isAtEnd, setIsAtEnd] = useState(false); // 오른쪽 끝 여부 상태
+    const [selectedButton, setSelectedButton] = useState("todayBest"); // 선택된 버튼 상태
 
     // 상품 데이터를 로드하는 함수
     const loadProducts = async (currentPage, limit = 6) => {
-        if (loading || !hasMore) return; // 이미 로딩 중이거나 더 로드할 상품이 없으면 중단
+        if (loading || !hasMore || products.length >= 30) return; // 이미 로딩 중이거나 더 로드할 상품이 없으면 중단
         setLoading(true);
         try {
             const response = await axios.get(`http://localhost:80/product/productslist?page=${currentPage}&limit=${limit}`);
@@ -62,10 +66,6 @@ function ShoppingBest() {
         return () => window.removeEventListener("scroll", handleScroll); // 컴포넌트 언마운트 시 이벤트 제거
     }, [loading, hasMore]);
 
-    const categoryContainerRef = useRef(null); // 카테고리 컨테이너 참조
-    const [scrollPosition, setScrollPosition] = useState(0);
-    const [isAtEnd, setIsAtEnd] = useState(false); // 오른쪽 끝 여부 상태
-
     // 초기 스크롤 상태 업데이트 (수정됨)
     useEffect(() => {
         const container = categoryContainerRef.current;
@@ -102,13 +102,50 @@ function ShoppingBest() {
         }
     }, []);
 
+    const handleButtonClick = (buttonType) => {
+        setSelectedButton(buttonType);
+        fetchBestProducts(buttonType);
+    };
+
+    const fetchBestProducts = async (type) => {
+        try {
+            const response = await axios.get(`http://localhost:80/payment/best/${type === "todayBest" ? "today" : "all"}`);
+            setProducts(response.data);
+        } catch (error) {
+            console.error("Error fetching best products:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchBestProducts(selectedButton); // 초기 로드
+    }, []);
+
+
     return (
         <div>
             <Header/>
             <div className="shoppingBest">
                 <div className="shoppingBest_btn_container">
-                    <button className="shoppingBest_btn" type="submit">오늘 베스트</button>
-                    <button className="shoppingBest_btn" type="submit">역대 베스트</button>
+                    <button
+                        className="shoppingBest_btn"
+                        style={{
+                            backgroundColor: selectedButton === "todayBest" ? "#35C5F0" : "#FFFFFF",
+                            color: selectedButton === "todayBest" ? "#FFFFFF" : "#000000"
+                        }}
+                        type="submit"
+                        onClick={() => handleButtonClick("todayBest")}
+                    >오늘 베스트
+                    </button>
+                    <button
+                        className="shoppingBest_btn"
+                        style={{
+                            backgroundColor: selectedButton === "allBest" ? "#35C5F0" : "#FFFFFF",
+                            color: selectedButton === "allBest" ? "#FFFFFF" : "#000000"
+                        }}
+                        type="submit"
+                        onClick={() => handleButtonClick("allBest")}
+                    >역대 베스트
+                    </button>
                 </div>
                 <span className="shoppingBest_date">{setToday}</span>
                 <div className="shoppingBest_product_section">
@@ -116,7 +153,8 @@ function ShoppingBest() {
                         <div className="shoppingBest_product" key={index}>
                             <div className="shoppingBest_img_container">
                                 <div className="shoppingBest_flag">{index + 1}</div>
-                                <img className="shoppingBest_img" src={product.productMainImage} alt={product.productName}/>
+                                <img className="shoppingBest_img" src={product.productMainImage}
+                                     alt={product.productName}/>
                             </div>
                             <div className="shoppingBest_text">
                                 <span className="shoppingBest_store_name">{product.storeName}</span>
