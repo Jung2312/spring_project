@@ -27,9 +27,23 @@ function MainPage() {
     const [currentIndex, setCurrentIndex] = useState(1); // 초기 위치는 첫 번째 슬라이드
     const containerRef = useRef(null);
     const isTransitioning = useRef(false);
-    const [likeCount, setLikeCount] = useState(0); // 좋아요 초기값
     const [postList, setPostList] = useState([]); // 게시글 데이터
     const [likedPosts, setLikedPosts] = useState([]); // 좋아요를 누른 게시글 리스트 (postnum)
+    const [reviewCounts, setReviewCounts] = useState({}); // 리뷰 개수 저장
+
+    // 리뷰 개수를 가져오는 함수
+    const fetchReviewStatistics = async (productNum) => {
+        try {
+            const response = await axios.get(`http://localhost:80/review/statistics?productnum=${productNum}`);
+            console.log('Review statistics response:', response.data);  // API 응답 로그 추가
+            setReviewCounts((prevCounts) => ({
+                ...prevCounts,
+                [productNum]: response.data.reviewcount, // 리뷰 개수 저장
+            }));
+        } catch (error) {
+            console.error(`Error fetching review statistics for productnum ${productNum}:`, error);
+        }
+    };
 
     // 서버에서 게시글 데이터 가져옴
     useEffect(() => {
@@ -176,16 +190,20 @@ function MainPage() {
             });
     }, []);
 
-    // 모든 제품 데이터를 가져옴
+// 모든 제품 데이터를 가져옴
     useEffect(() => {
         axios.get('http://localhost:80/product/productslist')
-            .then(response => {
+            .then((response) => {
                 setProducts(response.data); // 모든 제품 저장
+                response.data.forEach((product) => {
+                    fetchReviewStatistics(product.productNum);  // 각 제품에 대해 리뷰 개수를 가져옴
+                });
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error('Error fetching products:', error);
             });
     }, []);
+
 
     // 서버에서 게시글 데이터 가져옴
     useEffect(() => {
@@ -198,38 +216,6 @@ function MainPage() {
                 console.error("데이터를 가져오는 중 오류가 발생했습니다.", error);
             });
     }, []);
-
-    // 특정 Major 카테고리 탭 클릭 시 데이터 필터링
-    const showTab = (tabName) => {
-        setActiveTab(tabName); // 활성화된 탭 설정
-
-        if (tabName === "전체") {
-            axios.get('http://localhost:80/product/productslist')
-                .then(response => {
-                    setProducts(response.data); // 모든 제품 업데이트
-                })
-                .catch(error => {
-                    console.error('Error fetching all products:', error);
-                });
-        } else {
-            axios.get(`http://localhost:80/api/categories/${tabName}/sub`)
-                .then(response => {
-                    const subCategoryNums = response.data.map(category => category.categorynum);
-                    axios.get('http://localhost:80/product/productslist', {
-                        params: { categoryNums: subCategoryNums } // 필터 조건 전달
-                    })
-                        .then(response => {
-                            setProducts(response.data); // 필터링된 제품 저장
-                        })
-                        .catch(error => {
-                            console.error(`Error fetching products for ${tabName}:`, error);
-                        });
-                })
-                .catch(error => {
-                    console.error(`Error fetching subcategories for ${tabName}:`, error);
-                });
-        }
-    };
 
     // 초기 스크롤 상태 업데이트 (수정됨)
     useEffect(() => {
@@ -400,7 +386,7 @@ function MainPage() {
                                     <span className="mainPage-store-name">{product.storeName}</span>
                                     <span className="mainPage-product-name">{product.productName}</span>
                                     <span className="mainPage-product-price">{formatPrice(product.productPrice)}원</span>
-                                    <span className="mainPage-product-review">리뷰 37,213</span>
+                                    <span className="mainPage-product-review">리뷰 {reviewCounts[product.productNum] || 0}</span>
                                 </div>
                             </div>
                         ))}
@@ -412,16 +398,6 @@ function MainPage() {
                         <a href="/shopping/shoppingBest">
                             <span className="mainPage-title-more">더보기</span>
                         </a>
-                    </div>
-                    {/* 탭 버튼 */}
-                    <div className="mainPage-tab-buttons-wrapper">
-                        <div className="mainPage-tab-buttons">
-                            {majorCategories.map((category, index) => (
-                                <button key={index}
-                                        className={`mainPage-tab-button ${activeTab === category ? 'active' : ''}`}
-                                        onClick={() => showTab(category)}>{category}</button>
-                            ))}
-                        </div>
                     </div>
                     <div className="mainPage-best-part">
                         {products.slice(0, 3).map((product, index) => (
@@ -436,7 +412,7 @@ function MainPage() {
                                     <span className="mainPage-store-name">{product.storeName}</span>
                                     <span className="mainPage-product-name">{product.productName}</span>
                                     <span className="mainPage-product-price">{formatPrice(product.productPrice)}원</span>
-                                    <span className="mainPage-product-review">리뷰 37,213</span>
+                                    <span className="mainPage-product-review">리뷰 {reviewCounts[product.productNum] || 0}</span>
                                 </div>
                             </div>
                         ))}

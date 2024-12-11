@@ -28,6 +28,21 @@ function ShoppingHome() {
     const [currentIndex, setCurrentIndex] = useState(1); // 초기 위치는 첫 번째 슬라이드
     const containerRef = useRef(null);
     const isTransitioning = useRef(false);
+    const [reviewCounts, setReviewCounts] = useState({}); // 리뷰 개수 저장
+
+    // 리뷰 개수를 가져오는 함수
+    const fetchReviewStatistics = async (productNum) => {
+        try {
+            const response = await axios.get(`http://localhost:80/review/statistics?productnum=${productNum}`);
+            console.log('Review statistics response:', response.data);  // API 응답 로그 추가
+            setReviewCounts((prevCounts) => ({
+                ...prevCounts,
+                [productNum]: response.data.reviewcount, // 리뷰 개수 저장
+            }));
+        } catch (error) {
+            console.error(`Error fetching review statistics for productnum ${productNum}:`, error);
+        }
+    };
 
     // 앞뒤 복제 슬라이드 추가
     const extendedBanners = [banners[totalBanners - 1], ...banners, banners[0]];
@@ -112,6 +127,12 @@ function ShoppingHome() {
                     setHasMore(false); // 추가로 불러올 데이터가 없음을 표시
                 } else {
                     setProducts((prevProducts) => [...prevProducts, ...newProducts]);
+
+                    // 리뷰 개수도 가져오기
+                    newProducts.forEach((product) => {
+                        fetchReviewStatistics(product.productNum);  // 각 상품에 대한 리뷰 개수 가져오기
+                    });
+
                 }
                 setLoading(false);
             }, 300); // 1초 딜레이
@@ -273,7 +294,7 @@ function ShoppingHome() {
                     </div>
                     <div className="shoppingHome-recommend-product-part">
                         {products.slice(0, 4).map((product, index) => (
-                            <div onClick={() => navigate("")} className="shoppingHome-recommend-product-content" key={index}>
+                            <div onClick={() => navigate(`/productDetail/${product.productNum}`)} className="shoppingHome-recommend-product-content" key={index}>
                             <div className="shoppingHome-image-container">
                                 <img className="shoppingHome-recommend-product-img" src={product.productMainImage} alt={product.productName}/>
                             </div>
@@ -281,7 +302,8 @@ function ShoppingHome() {
                                 <span className="shoppingHome-store-name">{product.storeName}</span>
                                 <span className="shoppingHome-product-name">{product.productName}</span>
                                 <span className="shoppingHome-product-price">{formatPrice(product.productPrice)}원</span>
-                                <span className="shoppingHome-product-review">리뷰 37,213</span>
+                                <span className="shoppingHome-product-review">리뷰 {reviewCounts[product.productNum] || 0}
+                                .</span>
                             </div>
                         </div>
                         ))}
@@ -312,7 +334,7 @@ function ShoppingHome() {
                 <div className="shoppingHome-product-section">
                     <div className="shoppingHome-product-part">
                         {products.map((product, index) => (
-                            <div onClick={() => navigate("")} className="shoppingHome-product-content" key={index}>
+                            <div onClick={() => navigate(`/productDetail/${product.productNum}`)} className="shoppingHome-product-content" key={index}>
                                 <div className="shoppingHome-image-container">
                                     <img className="shoppingHome-product-img" src={product.productMainImage}
                                          alt={product.productName}/>
@@ -321,7 +343,7 @@ function ShoppingHome() {
                                     <span className="shoppingHome-store-name">{product.storeName}</span>
                                     <span className="shoppingHome-product-name">{product.productName}</span>
                                     <span className="shoppingHome-product-price">{formatPrice(product.productPrice)}원</span>
-                                    <span className="shoppingHome-product-review">리뷰 37,213</span>
+                                    <span className="shoppingHome-product-review">리뷰 {reviewCounts[product.productNum] || 0}</span>
                                 </div>
                             </div>
                         ))}

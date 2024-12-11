@@ -130,4 +130,9 @@ public class ReviewController {
             return ResponseEntity.status(500).body("리뷰 저장 중 오류 발생");
         }
     }
+
+    @GetMapping("/count")
+    public long getReviewCount(@RequestParam Long productnum) {
+        return reviewService.getReviewCountByProductNum(productnum);
+    }
 }
