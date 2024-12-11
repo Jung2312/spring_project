@@ -9,11 +9,11 @@ import lombok.Data;
 public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long couponNum;
+    private Long couponnum;
 
-    private String couponName;
+    private String couponname;
 
-    private String couponPrice;
+    private String couponprice;
 
-    private String useMinPrice;
+    private String useminprice;
 }

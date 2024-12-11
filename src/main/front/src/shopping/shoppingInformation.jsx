@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import "../css/shoppingInformation.css";
 import Header from '../header.js';
+import ex from "../img/product_basic.png";
 
 const ShoppingInformation = () => {
     const { storename } = useParams(); // URL에서 storename 파라미터 추출
@@ -110,9 +111,16 @@ const ShoppingInformation = () => {
                                 index < 4 && (
                                     <div key={product.productnum} className="shoppingInform-product-card">
                                         <img
-                                            src={product.productmainimage}
+                                            src={
+                                                product.productmainimage.startsWith('https://')
+                                                    ? product.productmainimage
+                                                    : `${process.env.PUBLIC_URL}/productImg/${product.productmainimage}`
+                                            }
                                             alt={product.productname}
-                                            className="shoppingInform-product-image"
+                                            className="category-product-image"
+                                            onError={(e) => {
+                                                e.target.src = ex;
+                                            }} // 이미지 오류 처리
                                         />
                                         <h1 className="shoppingInform-product-storename">{storeInfo.storename}</h1>
                                         <p className="shoppingInform-product-name">{product.productname}</p>
