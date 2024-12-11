@@ -30,6 +30,10 @@ public class RecommendService {
         return recommendRepository.findPostimgByUserid(userid);
     }
 
+    // postnum을 기준으로 추천 글 찾기
+    public Recommend getPostByPostnum(Long postnum) {
+        return recommendRepository.findById(postnum).orElse(null);
+
     // postnum으로 게시글 조회
     public Recommend getPostByPostnum(Long postnum) {
         return recommendRepository.findByPostnum(postnum);  // 레포지토리에서 게시글을 가져옴
