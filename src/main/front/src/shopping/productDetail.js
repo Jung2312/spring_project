@@ -68,6 +68,11 @@ function ProductDetail() {
 
     const userid = sessionStorage.getItem('userid');
 
+    // 페이지 마운트 시 기본적으로 mainRef 위치로 이동
+    useEffect(() => {
+        mainRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, []);
+
     // 스크롤 이동 함수
     const scrollToSection = (ref) => {
         ref.current?.scrollIntoView({ behavior: 'smooth' });
@@ -625,38 +630,41 @@ function ProductDetail() {
                         />
                     </div>
                     <div>
-
-                        {currentReviews.map((review) => (
-                            <div key={review.reviewnum}>
-                                <div>
-                                    <img
-                                        src={`${process.env.PUBLIC_URL}/profileImg/defaultProfile.png`}
-                                        className="contestProfileImg"
-                                        alt="profileImg"
-                                    />
-                                    <span className="reviewDetailText">{review.name}</span>
-                                    <br />
-                                    {Array.from({ length: maxStars }).map((_, starIndex) => (
+                        {currentReviews.length > 0 ? (
+                            currentReviews.map((review) => (
+                                <div key={review.reviewnum}>
+                                    <div>
                                         <img
-                                            key={starIndex}
-                                            className="productDetailSectionSmallImg"
-                                            src={starIndex < review.reviewrating ? blueStar : whiteStar}
-                                            alt="starIcon"
+                                            src={`${process.env.PUBLIC_URL}/profileImg/defaultProfile.png`}
+                                            className="contestProfileImg"
+                                            alt="profileImg"
                                         />
-                                    ))}
-                                    <span className="reviewDetailText">{review.reviewdate}</span>
+                                        <span className="reviewDetailText">{review.name}</span>
+                                        <br />
+                                        {Array.from({ length: maxStars }).map((_, starIndex) => (
+                                            <img
+                                                key={starIndex}
+                                                className="productDetailSectionSmallImg"
+                                                src={starIndex < review.reviewrating ? blueStar : whiteStar}
+                                                alt="starIcon"
+                                            />
+                                        ))}
+                                        <span className="reviewDetailText">{review.reviewdate}</span>
+                                    </div>
+                                    <p className="reviewProductName">{productData.productname}</p>
+                                    {review.reviewimage && (
+                                        <img
+                                            className="reviewPhoto"
+                                            src={`${process.env.PUBLIC_URL}/postImg/${review.reviewimage}`}
+                                            alt="Review"
+                                        />
+                                    )}
+                                    <p className="reviewContent">{review.reviewcontent}</p>
                                 </div>
-                                <p className="reviewProductName">{productData.productname}</p>
-                                {review.reviewimage && (
-                                    <img
-                                        className="reviewPhoto"
-                                        src={`${process.env.PUBLIC_URL}/postImg/${review.reviewimage}`}
-                                        alt="Review"
-                                    />
-                                )}
-                                <p className="reviewContent">{review.reviewcontent}</p>
-                            </div>
-                        ))}
+                            ))
+                        ) : (
+                            <p>리뷰가 존재하지 않습니다.</p>
+                        )}
 
                         {/* 패이지네이션 */}
                         <div className="pagination">
