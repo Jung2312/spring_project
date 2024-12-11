@@ -115,7 +115,20 @@ public class RecommendController {
         }
     }
 
+    @PostMapping("/like")
+    public ResponseEntity<String> likePost(@RequestParam("postnum") Long postnum) {
+        // 추천 글을 찾아서
+        Recommend recommend = recommendService.getPostByPostnum(postnum);
+        if (recommend == null) {
+            return ResponseEntity.status(404).body("게시글을 찾을 수 없습니다.");
+        }
 
+        // 좋아요 수 증가
+        recommend.setPostlike(recommend.getPostlike() + 1);
+        recommendService.saveRecommend(recommend); // DB에 저장
+
+        return ResponseEntity.ok("좋아요가 증가했습니다.");
+    }
 
     @GetMapping("/count")
     public ResponseEntity<Integer> getPostCountByUser(@RequestParam("userid") String userid) {
