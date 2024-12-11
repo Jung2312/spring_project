@@ -16,10 +16,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,18 +47,49 @@ public class UserController {
     }
 
     // 사용자 정보 업데이트
-    @PatchMapping("/update")
-    public ResponseEntity<?> updateStoreInfo(@RequestBody User user) {
-        if (user.getUserid() == null || user.getUserid().isEmpty()) {
-            return ResponseEntity.badRequest().body("Invalid User ID");
+    @PostMapping("/update")
+    public ResponseEntity<String> updateUser(
+            @RequestParam("userid") String userid,
+            @RequestParam("name") String name,
+            @RequestParam("email") String email,
+            @RequestParam("phone") String phone,
+            @RequestParam("introduce") String introduce,
+            @RequestParam(value = "profileimage", required = false) MultipartFile profileImage) {
+        User user = userService.getUserById(userid);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
         }
-        try {
-            User updatedUser = userService.updateUser(user);
-            return ResponseEntity.ok(updatedUser);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating user: " + e.getMessage());
+
+        user.setName(name);
+        user.setEmail(email);
+        user.setPhone(phone);
+        user.setIntroduce(introduce);
+
+        if (profileImage != null && !profileImage.isEmpty()) {
+            String uploadDir = "C:\\spring_project\\src\\main\\front\\public\\profileImg\\";
+            File uploadPath = new File(uploadDir);
+            if (!uploadPath.exists()) {
+                uploadPath.mkdirs();
+            }
+
+            try {
+                String fileName = profileImage.getOriginalFilename();
+                String extension = fileName.substring(fileName.lastIndexOf("."));
+                String newFileName = UUID.randomUUID() + extension;
+                String filePath = uploadDir + newFileName;
+                profileImage.transferTo(new File(filePath));
+                user.setProfileimage(newFileName); // 새 이미지 파일 이름 업데이트
+            } catch (IOException e) {
+                e.printStackTrace();
+                return ResponseEntity.status(500).body("파일 업로드 중 오류 발생");
+            }
         }
+
+        userService.updateUser(user);
+        return ResponseEntity.ok("사용자 정보가 업데이트되었습니다.");
     }
+
 
     @PostMapping("/signup")
     public ResponseEntity<String> createUser(@RequestBody Map<String, Object> userData) {
