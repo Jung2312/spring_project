@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import css from '../css/payment.css';
-import product_img from '../img/furniture.png';
-import card_img from '../img/card_img.png';
-import kakaopay_img from '../img/payment_icon_yellow_small.png';
 import Header from "../header";
 import DaumPostCode from "react-daum-postcode";
 import Modal from "react-modal";
+import product_img from '../img/furniture.png';
+import card_img from '../img/card_img.png';
+import kakaopay_img from '../img/payment_icon_yellow_small.png';
 
 function Payment() {
     const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
@@ -14,6 +14,17 @@ function Payment() {
     const [zipcode, setZipcode] = useState("");
     const [mainAddress, setMainAddress] = useState("");
     const [detailAddress, setDetailAddress] = useState("");
+    const [paymentMethod, setPaymentMethod] = useState(null); // 결제 수단 선택 상태
+
+    // 결제 수단 선택 클릭 처리
+    const handlePaymentMethodClick = (method) => {
+        // 이미 선택된 결제 수단이 클릭되면 선택을 취소 (null로 설정)
+        if (paymentMethod === method) {
+            setPaymentMethod(null);
+        } else {
+            setPaymentMethod(method); // 새로운 결제 수단을 선택
+        }
+    };
 
     const customStyles = {
         overlay: {
@@ -52,6 +63,44 @@ function Payment() {
         e.preventDefault();
         setIsAddressModalOpen(true); // 모달 열기
     };
+
+    useEffect(() => {
+        const jquery = document.createElement("script");
+        jquery.src = "http://code.jquery.com/jquery-1.12.4.min.js";
+        const iamport = document.createElement("script");
+        iamport.src = "http://cdn.iamport.kr/js/iamport.payment-1.1.7.js";
+        document.head.appendChild(jquery);
+        document.head.appendChild(iamport);
+        return () => {
+            document.head.removeChild(jquery);
+            document.head.removeChild(iamport);
+        };
+    }, []);
+
+    const handleCardPayment = () => {
+        const IMP = window.IMP; // 아임포트 결제 객체
+        IMP.init("imp32370223"); // 아임포트에 발급받은 키 사용
+
+        IMP.request_pay({
+            pg: 'html5_inicis.INIpayTest',
+            pay_method: 'card',
+            merchant_uid: `merchant_${new Date().getTime()}`,
+            name: "상품명",
+            amount: 129000, // 결제 금액
+            buyer_email: "buyer@domain.com",
+            buyer_name: "홍길동",
+            buyer_tel: "01012345678",
+            buyer_addr: "서울시 강남구",
+            buyer_postcode: "123-456",
+        }, function(rsp) {
+            if (rsp.success) {
+                alert("결제가 완료되었습니다.");
+            } else {
+                alert("결제 실패: " + rsp.error_msg);
+            }
+        });
+    };
+
     return(
         <div className="payment-body">
             <Header/>
@@ -97,7 +146,8 @@ function Payment() {
                                                     </div>
                                                 </div>
                                                 <div className="payment-order-product-cost-box">
-                                                    <div className="payment-order-product-cost"><span>129,000원</span></div>
+                                                    <div className="payment-order-product-cost"><span>129,000원</span>
+                                                    </div>
                                                     <div className="payment-order-product-count"><span>1개</span></div>
                                                 </div>
                                             </div>
@@ -119,7 +169,8 @@ function Payment() {
                                 <div className="payment-order-user-form-content">
                                     <div className="payment-order-user-name-box">
                                         <div className="payment-order-user-name-text"><span>이름</span></div>
-                                        <div className="payment-order-user-name-input"><input name="user-name" type="text"/>
+                                        <div className="payment-order-user-name-input"><input name="user-name"
+                                                                                              type="text"/>
                                         </div>
                                     </div>
                                     <div className="payment-order-user-email-box">
@@ -187,7 +238,8 @@ function Payment() {
                                         <div className="payment-order-delivery-address-input-box">
                                             <div className="payment-order-delivery-address-zipcode-box">
                                                 <button className="payment-zipcode-search"
-                                                        onClick={handleAdressModalOpen}>주소 찾기</button>
+                                                        onClick={handleAdressModalOpen}>주소 찾기
+                                                </button>
                                                 <input name="zipcode"
                                                        type="text"
                                                        value={zipcode}
@@ -227,8 +279,10 @@ function Payment() {
                                 <div className="payment-order-coupon-box">
                                     <div className="payment-coupon-detail">
                                         <div className="payment-order-coupon-sale-cost"><span>3,000원</span></div>
-                                        <div className="payment-order-coupon-received-from"><span>[겨울 맞이 포근한 집 콘테스트]</span></div>
-                                        <div className="payment-order-coupon-use-condition"><span>최소 주문 금액 100,000원</span></div>
+                                        <div className="payment-order-coupon-received-from">
+                                            <span>[겨울 맞이 포근한 집 콘테스트]</span></div>
+                                        <div className="payment-order-coupon-use-condition">
+                                            <span>최소 주문 금액 100,000원</span></div>
                                     </div>
                                     <div className="payment-coupon-cancel-btn-box">
                                         <button className="payment-coupon-cancel-btn">X</button>
@@ -272,13 +326,10 @@ function Payment() {
                             <div className="payment-order-pay-content">
                                 <div className="payment-order-pay-box">
                                     <div className="payment-order-pay-card-box">
-                                        <button className="payment-order-pay-card">
+                                        <button className={`payment-order-pay-card ${paymentMethod === 'card' ? 'selected' : ''}`}
+                                                onClick={() => handlePaymentMethodClick('card')}>
                                             <span>카드</span>
                                             <img src={card_img}/>
-                                        </button>
-                                        <button className="payment-order-pay-kakaopay">
-                                            <span>카카오페이</span>
-                                            <img src={kakaopay_img}/>
                                         </button>
                                     </div>
                                 </div>
@@ -289,11 +340,12 @@ function Payment() {
                     {/*주소 찾기 모달*/}
                     <Modal isOpen={isAddressModalOpen} style={customStyles}
                            onRequestClose={() => setIsAddressModalOpen(false)}>
-                        <DaumPostCode onComplete={handleAddressComplete} height="100%" />
+                        <DaumPostCode onComplete={handleAddressComplete} height="100%"/>
                     </Modal>
 
                     {/*쿠폰 사용 모달*/}
-                    <Modal isOpen={isCouponModalOpen} style={couponModalStyle} onRequestClose={() => setIsCouponModalOpen(false)}>
+                    <Modal isOpen={isCouponModalOpen} style={couponModalStyle}
+                           onRequestClose={() => setIsCouponModalOpen(false)}>
                         <section className="payment-coupon-modal-section">
                             <div className="payment-coupon-modal-title"><span>사용 가능한 쿠폰</span></div>
                             <div className="payment-coupon-modal-content">
@@ -301,7 +353,8 @@ function Payment() {
                                     <div className="payment-coupon-modal-sale-cost"><span>3,000원</span></div>
                                     <div className="payment-coupon-modal-received-from"><span>[겨울 맞이 포근한 집 콘테스트]</span>
                                     </div>
-                                    <div className="payment-coupon-modal-use-condition"><span>최소 주문 금액 100,000원</span></div>
+                                    <div className="payment-coupon-modal-use-condition"><span>최소 주문 금액 100,000원</span>
+                                    </div>
                                 </div>
                                 <div className="payment-coupon-modal-use-btn-box">
                                     <button className="payment-coupon-modal-use-btn">사용하기</button>
@@ -312,7 +365,8 @@ function Payment() {
                                     <div className="payment-coupon-modal-sale-cost"><span>3,000원</span></div>
                                     <div className="payment-coupon-modal-received-from"><span>[겨울 맞이 포근한 집 콘테스트]</span>
                                     </div>
-                                    <div className="payment-coupon-modal-use-condition"><span>최소 주문 금액 100,000원</span></div>
+                                    <div className="payment-coupon-modal-use-condition"><span>최소 주문 금액 100,000원</span>
+                                    </div>
                                 </div>
                                 <div className="payment-coupon-modal-use-btn-box">
                                     <button className="payment-coupon-modal-use-btn">사용하기</button>
@@ -365,7 +419,10 @@ function Payment() {
                         </div>
                     </div>
                     <div className="payment-btn-section">
-                        <button className="payment-btn">1,129,000원 결제하기</button>
+                        <button className="payment-btn"
+                                onClick={paymentMethod === 'card' ? handleCardPayment : paymentMethod === 'kakao' ? null : null}>
+                            1,129,000원 결제하기
+                        </button>
                     </div>
                 </aside>
             </div>
