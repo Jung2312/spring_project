@@ -19,4 +19,7 @@ public interface RecommendRepository extends JpaRepository<Recommend, Long> {
 
     // postnum을 기준으로 추천 글 찾기
     Optional<Recommend> findById(Long postnum);
+  
+    Recommend findByPostnum(Long postnum);
+
 }
