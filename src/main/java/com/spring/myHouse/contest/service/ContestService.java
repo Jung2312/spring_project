@@ -26,7 +26,7 @@ public class ContestService {
     }
 
     // ContestService.java
-    public void updateContest(Long contestNum, String contestTitle, String contestStartDate, String contestEndDate, Long couponNum, String contestImg) {
+    public void updateContest(Long contestNum, String contestTitle, String contestStartDate, String contestEndDate, Long couponNum) {
         Contest contest = contestRepository.findById(contestNum)
                 .orElseThrow(() -> new IllegalArgumentException("해당 ID의 콘테스트를 찾을 수 없습니다."));
 
@@ -36,12 +36,7 @@ public class ContestService {
         contest.setContestenddate(LocalDate.parse(contestEndDate));
         contest.setCouponnum(couponNum);
 
-        if (contestImg != null) {
-            contest.setContestimg(contestImg); // 새로운 이미지 경로 저장
-        }
-
         // 저장
         contestRepository.save(contest);
     }
-
 }

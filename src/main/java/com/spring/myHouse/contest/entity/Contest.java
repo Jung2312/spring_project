@@ -23,6 +23,4 @@ public class Contest {
 
     private Long contestprogress;
 
-    private String contestimg; // 이미지 경로 컬럼
-
 }

@@ -135,7 +135,23 @@ public class UserController {
 
         if (loginResult != null && !loginResult.isEmpty()) {
             User user = loginResult.get(0);
-            return ResponseEntity.ok("로그인 성공");
+
+            // root 아이디일 경우 admin 값 확인
+            if ("root".equals(userid) && user.getAdmin() == 1) {
+                session.setAttribute("userid", userid); // 관리자 세션 저장
+                session.setAttribute("userType", "admin"); // 관리자로 로그인 처리
+                return ResponseEntity.ok("관리자로 로그인 성공");
+            }
+
+            // 일반 사용자나 판매자 처리
+            if (userType.equals("user")) {
+                session.setAttribute("userid", userid); // 사용자 세션 저장
+                return ResponseEntity.ok("사용자 로그인 성공");
+            } else if (userType.equals("store")) {
+                session.setAttribute("storeid", userid); // 판매자 세션 저장
+                return ResponseEntity.ok("판매자 로그인 성공");
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 또는 비밀번호가 잘못되었습니다.");
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 또는 비밀번호가 잘못되었습니다.");
         }
