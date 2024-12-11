@@ -19,7 +19,45 @@ function ProductDetail() {
     const [productDetailData, setProductDetailData] = useState([]);
     const [productReviewData, setProductReviewData] = useState([]);
     const [productAllReviewsData, setProductAllReviewsData] = useState([]);
+    const [initialReviews, setInitialReviews] = useState([]);
+    const [reviewCheck, setReviewCheck] = useState([]);
+
+    // 페이지
     const [count, setCount] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [mainImage, setMainImage] = useState("");
+    const [imageFile, setImageFile] = useState(null);
+    
+    // 리뷰 카테고리
+    const [isLowToHighActive, setIsLowToHighActive] = useState(false);  // 리뷰 카테고리 버튼 활성화 상태 관리
+    const [isHighToLowActive, setIsHighToLowActive] = useState(true);  // 리뷰 카테고리 버튼 활성화 상태 관리
+    const [isFirstDateActive, setIsFirstDateActive] = useState(false);  // 리뷰 카테고리 버튼 활성화 상태 관리
+    const [isLastDateActive, setIsLastDateActive] = useState(false);  // 리뷰 카테고리 버튼 활성화 상태 관리
+
+    const handleFileChange = (event) => {
+        setImageFile(event.target.files[0]);
+    };
+
+    const reviewsPerPage = 3;
+    const maxPageButtons = 5;
+
+    const totalPages = Math.ceil(productAllReviewsData.length / reviewsPerPage);
+
+
+    const indexOfLastReview = currentPage * reviewsPerPage;
+    const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
+    const currentReviews = productAllReviewsData.slice(indexOfFirstReview, indexOfLastReview);
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+    const firstPageButton = Math.max(1, currentPage - Math.floor(maxPageButtons / 2));
+    const lastPageButton = Math.min(totalPages, firstPageButton + maxPageButtons - 1);
+    const visiblePageNumbers = pageNumbers.slice(firstPageButton - 1, lastPageButton);
+
+
+    const handlePageChange = (page) => setCurrentPage(page);
+    const handleNext = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+    const handlePrev = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+
 
     const mainRef = useRef(null);
     const productInfoRef = useRef(null);
@@ -48,7 +86,6 @@ function ProductDetail() {
     };
 
     // 별점 데이터
-    const rating = 3; // 별점 데이터
     const maxStars = 5; // 최대 별 개수
 
 
@@ -57,6 +94,7 @@ function ProductDetail() {
         navigate(`/shoppingInformation/${storename}`);
     };
 
+    // 상품 정보
     useEffect(() => {
         fetch(`http://localhost:80/product/productDetail?productnum=${productnum}`)
             .then(res => {
@@ -74,7 +112,34 @@ function ProductDetail() {
             });
     }, []);
 
+    useEffect(() => {
+        // 초기 메인 이미지를 productData의 메인 이미지로 설정
+        if (productData.productmainimage) {
+            setMainImage(productData.productmainimage);
+        }
+    }, [productData]);
 
+
+    // 이미 리뷰를 작성한 상품인지 확인
+    useEffect(() => {
+        fetch(`http://localhost:80/payment/check?userid=${userid}&productnum=${productnum}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('response error');
+                }
+                return res.json();
+            })
+            .then(data => {
+                setReviewCheck(data);
+            })
+            .catch(err => {
+                console.error('Fetch error:', err);
+                setProductReviewData('Error fetching data');
+            });
+    }, []);
+
+
+    // 상품 리뷰 총점, 총 개수 계산
     useEffect(() => {
         fetch(`http://localhost:80/review/statistics?productnum=${productnum}`)
             .then(res => {
@@ -92,6 +157,7 @@ function ProductDetail() {
             });
     }, []);
 
+    // 상품 이미지
     useEffect(() => {
         fetch(`http://localhost:80/productimage?productnum=${productnum}`)
             .then(res => {
@@ -109,6 +175,7 @@ function ProductDetail() {
             });
     }, []);
 
+    // 상품 설명 이미지
     useEffect(() => {
         fetch(`http://localhost:80/productdetails?productnum=${productnum}`)
             .then(res => {
@@ -126,22 +193,83 @@ function ProductDetail() {
             });
     }, []);
 
+
     useEffect(() => {
         fetch(`http://localhost:80/review?productnum=${productnum}`)
             .then(res => {
                 if (!res.ok) {
-                    throw new Error('response error');
+                    throw new Error('Response error');
                 }
                 return res.json();
             })
             .then(data => {
                 setProductAllReviewsData(data);
+                setInitialReviews(data);  // 초기 리뷰 데이터를 저장
             })
             .catch(err => {
                 console.error('Fetch error:', err);
                 setProductAllReviewsData('Error fetching data');
             });
-    }, []);
+    }, [productnum]);
+
+
+    // 클릭 핸들러: 클릭한 이미지로 메인 이미지 변경
+    const handleThumbnailClick = (imageUrl) => {
+        const formatImageUrl = imageUrl.replace(/\&.*$/, '&w=480&h=480&c=c&webp=1');
+        setMainImage(formatImageUrl);
+    };
+
+    // 별점 낮은 순 정렬
+    const handleSortLowToHigh = () => {
+        const sortedReviews = currentReviews.slice().sort((a, b) => a.reviewrating - b.reviewrating);
+        setProductAllReviewsData(sortedReviews);
+        setIsLowToHighActive(true);
+        setIsHighToLowActive(false);
+        setIsFirstDateActive(false);
+        setIsLastDateActive(false)
+    };
+
+    // 별점 높은 순 정렬
+    const handleSortHighLow = () => {
+        const sortedReviews = currentReviews.slice().sort((b, a) => a.reviewrating - b.reviewrating);
+        setProductAllReviewsData(sortedReviews);
+        setIsHighToLowActive(true);
+        setIsLowToHighActive(false);
+        setIsFirstDateActive(false);
+        setIsLastDateActive(false)
+    };
+
+
+    // 최신순 정렬
+    const handleSortNewestFirst = () => {
+        const sortedReviews = currentReviews.slice().sort((a, b) => new Date(b.reviewdate) - new Date(a.reviewdate));
+        setProductAllReviewsData(sortedReviews);
+        setIsHighToLowActive(false);
+        setIsLowToHighActive(false);
+        setIsFirstDateActive(true);
+        setIsLastDateActive(false)
+    };
+
+    // 과거순 정렬
+    const handleSortNewestLast = () => {
+        const sortedReviews = currentReviews.slice().sort((b, a) => new Date(b.reviewdate) - new Date(a.reviewdate));
+        setProductAllReviewsData(sortedReviews);
+        setIsHighToLowActive(false);
+        setIsLowToHighActive(false);
+        setIsFirstDateActive(false);
+        setIsLastDateActive(true)
+    };
+
+    // 사진만 보기
+    const handlePhotoReviewClick = () => {
+        const photoReviews = currentReviews.filter(review => review.reviewimage);
+        setProductAllReviewsData(photoReviews);
+    };
+
+    // 전체 보기 버튼 클릭 시 초기 데이터 출력
+    const handleAllReviewClick = () => {
+        setProductAllReviewsData(initialReviews);
+    };
 
     // 숫자를 콤마 형식으로 변환하는 함수
     const formatNumberWithCommas = (number) => {
@@ -197,30 +325,64 @@ function ProductDetail() {
 
     }
 
+    const submitReview = async () => {
+        const formData = new FormData();
+        formData.append('userid', userid);
+        formData.append('productnum', productData.productnum);
+        formData.append('reviewcontent', document.querySelector('.reviewTextarea').value);
+        formData.append('reviewrating', clicked.filter((star) => star).length); // 별점 계산
+        if (imageFile) {
+            formData.append('reviewimage', imageFile); // 선택한 파일 첨부
+        }
+
+        try {
+            const response = await fetch("http://localhost:80/review/save", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (response.ok) {
+                alert("작성이 완료되었습니다."); // 서버 응답 메시지 표시
+            } else {
+                alert('리뷰를 이미 작성한 상품입니다.');
+            }
+            closeModal(); // 모달 닫기
+
+        } catch (error) {
+            throw new Error("리뷰 작성 중 오류가 발생하였습니다.");
+        }
+    };
+
     return (
-        <div>
+        <div ref={mainRef}>
             <Header/>
             <div className="productDetailcontainer">
-
                 <div className="productDetailsection">
                     <div className="productDetailInfo">
                         <div className="productDetailImgSection productDetailInfo-item">
                             <div>
-                                {productImgData.map((productImgData) => (
-                                    <div className="productDetailsectionImg" key={productImgData.productimagenum}>
+                                {productImgData.map((imgData) => (
+                                    <div
+                                        className="productDetailsectionImg"
+                                        key={imgData.productimagenum}
+                                    >
                                         <img
-                                            src={productImgData.productimage}
-                                            alt="제품 이미지"/>
+                                            src={imgData.productimage}
+                                            alt="제품 이미지"
+                                            onClick={() => handleThumbnailClick(imgData.productimage)} // 클릭 이벤트 추가
+                                        />
                                     </div>
                                 ))}
                             </div>
 
                             {productData && (
-                            <div className="productDetailMainImg">
-                                <img className="productPageImg"
-                                     src={productData.productmainimage}
-                                     alt="제품 이미지"/>
-                            </div>
+                                <div className="productDetailMainImg">
+                                    <img
+                                        className="productPageImg"
+                                        src={mainImage} // 상태에서 메인 이미지 URL 사용
+                                        alt="제품 메인 이미지"
+                                    />
+                                </div>
                             )}
 
                         </div>
@@ -321,7 +483,7 @@ function ProductDetail() {
                             리뷰
                         </button>
                     </div>
-                    <div  ref={productInfoRef} className="productDetailInfoImgSection">
+                    <div ref={productInfoRef} className="productDetailInfoImgSection">
                         {productDetailData.map((productDetailData) => (
                         <img className="productDetailInfoImg"
                              src={productDetailData.productdetailsimage}
@@ -332,12 +494,14 @@ function ProductDetail() {
                         <br/>
                     </div>
                     <div ref={reviewRef} ><span id="reviewText">리뷰</span><span id="reviewCount">{formatNumberWithCommas(productReviewData.reviewcount)}</span>
-                        <input
-                            type="button"
-                            value="리뷰쓰기"
-                            id="reviewBtn"
-                            onClick={openModal}
-                        />
+                        {!reviewCheck &&
+                            <input
+                                type="button"
+                                value="리뷰쓰기"
+                                id="reviewBtn"
+                                onClick={openModal}
+                            />
+                        }
                     </div>
                     <Modal
                         isOpen={isModalOpen}
@@ -351,9 +515,9 @@ function ProductDetail() {
                         </div>
                         <div className="reviewModalCol2">
                             <img className="reviewModalImg"
-                                 src="https://image.ohou.se/i/bucketplace-v2-development/uploads/productions/descriptions/url/167866935762774317.jpg"
+                                 src={mainImage}
                                  alt="제품 설명 이미지"/>
-                            <span className="reviewModalProductName">상품명</span>
+                            <span className="reviewModalProductName">{productData.productname}</span>
                         </div>
                         <div className="reviewModalCol2">
                             <p>별점 입력</p>
@@ -371,9 +535,18 @@ function ProductDetail() {
                         </div>
 
                         <div className="reviewModalCol2">
-                        <p>사진 첨부</p>
-                        <button className="modalPhotoButton">
-                            <img id="photoIcon" src={photoIcon} alt="사진"/>사진 첨부하기</button>
+                            <p>사진 첨부(선택)</p>
+                            <input
+                                id="fileInput"
+                                className="modalPhotoButton"
+                                type="file"
+                                onChange={handleFileChange}
+                                accept="image/*"
+                            />
+                            <label htmlFor="fileInput" className="customFileButton">
+                                <img src={photoIcon} id="modalPhotoIcon"/>
+                                사진 첨부하기
+                            </label>
                         </div>
 
                         <div className="reviewModalCol2">
@@ -383,64 +556,124 @@ function ProductDetail() {
                             className="reviewTextarea"
                         />
                         </div>
-                        <button className="modalSubmitButton">제출</button>
+                        <button className="modalSubmitButton" onClick={submitReview}>제출</button>
                     </Modal>
                     <div id="reviewGreyDiv">
                         <div className="productTotalScopeDiv">
-                            {Array.from({ length: maxStars }).map((_, starIndex) => (
-                                <img
-                                    key={starIndex}
-                                    className="productTotalScope"
-                                    src={starIndex < productReviewData.averagerating ? blueStar : whiteStar}
-                                    alt="starIcon"
-                                />
-                            ))}
-                            <span className="productTotalScopeText">{productReviewData.averagerating}</span>
+                            <div className="productTotalScopeStarDiv">
+                                {Array.from({ length: maxStars }).map((_, starIndex) => (
+                                    <img
+                                        key={starIndex}
+                                        className="productTotalScope"
+                                        src={starIndex < productReviewData.averagerating ? blueStar : whiteStar}
+                                        alt="starIcon"
+                                    />
+                                ))}
+                            </div>
+                            <div className="productTotalScopeStarNumDiv" >
+                                <span className="productTotalScopeText">{productReviewData.averagerating}</span>
+                            </div>
                         </div>
 
                     </div>
                     <div className="productDetailBottomBarSection">
-                        <a href="" className="productDetailBottomBarText">베스트순</a>
-                        <a href="" className="productDetailBottomBarText">최신순</a>
+                        <input
+                            type="button"
+                            className="productDetailBottomBarText"
+                            onClick={handleSortHighLow}
+                            style={{ color: isHighToLowActive ? '#35C5F0' : '#5c5c5c' }}  // 색상 변경
+                            value="별점높은순"/>
+                        <input
+                            type="button"
+                            className="productDetailBottomBarText"
+                            value="별점낮은순"
+                            onClick={handleSortLowToHigh}
+                            style={{ color: isLowToHighActive ? '#35C5F0' : '#5c5c5c' }}  // 색상 변경
+                        />
+                        <input
+                            type="button"
+                            className="productDetailBottomBarText"
+                            value="최신순"
+                            onClick={handleSortNewestFirst}
+                            style={{ color: isFirstDateActive ? '#35C5F0' : '#5c5c5c' }}  // 색상 변경
+                        />                        
+                        
+                        <input
+                            type="button"
+                            className="productDetailBottomBarText"
+                            value="과거순"
+                            onClick={handleSortNewestLast}
+                            style={{ color: isLastDateActive ? '#35C5F0' : '#5c5c5c' }}  // 색상 변경
+                        />
                         <span className="productDetailBottomBarText">|</span>
                         <img id="photoIcon" src={photoIcon} alt="사진"/>
-                        <a href="" className="productDetailBottomBarText">사진리뷰</a>
+                        <input
+                            type="button"
+                            className="productDetailBottomBarText"
+                            value="사진리뷰"
+                            id="photoReviewSelectBtn"
+                            onClick={handlePhotoReviewClick}
+                        />
+
                         <span className="productDetailBottomBarText">|</span>
-                        <input type="button" id="scopeBtn" value="별점▼"/>
+                        <input
+                            type="button"
+                            className="productDetailBottomBarText"
+                            value="전체보기"
+                            id="photoReviewAllSelectBtn"
+                            onClick={handleAllReviewClick}
+                        />
                     </div>
                     <div>
 
-                    {productAllReviewsData.map((review) => (
-                    <div key={review.reviewnum}>
+                        {currentReviews.map((review) => (
+                            <div key={review.reviewnum}>
+                                <div>
+                                    <img
+                                        src={`${process.env.PUBLIC_URL}/profileImg/defaultProfile.png`}
+                                        className="contestProfileImg"
+                                        alt="profileImg"
+                                    />
+                                    <span className="reviewDetailText">{review.name}</span>
+                                    <br />
+                                    {Array.from({ length: maxStars }).map((_, starIndex) => (
+                                        <img
+                                            key={starIndex}
+                                            className="productDetailSectionSmallImg"
+                                            src={starIndex < review.reviewrating ? blueStar : whiteStar}
+                                            alt="starIcon"
+                                        />
+                                    ))}
+                                    <span className="reviewDetailText">{review.reviewdate}</span>
+                                </div>
+                                <p className="reviewProductName">{productData.productname}</p>
+                                {review.reviewimage && (
+                                    <img
+                                        className="reviewPhoto"
+                                        src={`${process.env.PUBLIC_URL}/postImg/${review.reviewimage}`}
+                                        alt="Review"
+                                    />
+                                )}
+                                <p className="reviewContent">{review.reviewcontent}</p>
+                            </div>
+                        ))}
 
-                        <div>
-                            <img
-                                src={`${process.env.PUBLIC_URL}/profileImg/defaultProfile.png` || ''}
-                                className="contestProfileImg"
-                                alt="profileImg"
-                            />
-                            <span className="reviewDetailText">{review.name}</span>
-                            <br/>
-                            {Array.from({ length: maxStars }).map((_, starIndex) => (
-                                <img
-                                    key={starIndex}
-                                    className="productDetailSectionSmallImg"
-                                    src={starIndex < `${review.reviewrating}` ? blueStar : whiteStar}
-                                    alt="starIcon"
-                                />
+                        {/* 패이지네이션 */}
+                        <div className="pagination">
+                            {currentPage > 1 && <button onClick={handlePrev}>&laquo;</button>}
+                            {visiblePageNumbers.map((page) => (
+                                <button
+                                    key={page}
+                                    className={page === currentPage ? 'active' : ''}
+                                    onClick={() => handlePageChange(page)}
+                                >
+                                    {page}
+                                </button>
                             ))}
-                            <span className="reviewDetailText">{review.reviewdate}</span>
+                            {currentPage < totalPages && <button onClick={handleNext}>&raquo;</button>}
                         </div>
-
-                        <p className="reviewProductName">{productData.productname}</p>
-                        <img className="reviewPhoto"
-                            src={review.reviewimage || ""}
-                        />
-                        <p className="reviewContent">{review.reviewcontent}</p>
-                    </div>
-                    ))}
-
-                    {/*리뷰 페이지 네이션 추가*/}
+                        
+                        <input type="button" id="pageTopBtn" value="맨 위로" onClick={() => scrollToSection(mainRef)}/>
 
                 </div>
 

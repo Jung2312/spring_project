@@ -86,4 +86,10 @@ public class PaymentController {
         }
     }
 
+    @GetMapping("/check")
+    public boolean paymentExist(@RequestParam String userid, @RequestParam long productnum){
+        return paymentService.isExistUseridAndProductnum(userid, productnum);
+    }
+
+
 }
