@@ -1,9 +1,12 @@
 import React from 'react';
 import product from '../img/exProfile.png'
 import '../css/shopping.css';
+import Header from "../header";
 
 function Cart() {
     return (
+        <div className="payment-body">
+            <Header/>
         <div className="purchase-container">
             <div className="product-section">
                 <div className="product-info">
@@ -33,11 +36,7 @@ function Cart() {
                 </div>
                 <div className="summary-item">
                     <span>총 배송비</span>
-                    <span>+ 1,000,000원</span>
-                </div>
-                <div className="summary-item">
-                    <span>총 할인금액</span>
-                    <span>- 100,000원</span>
+                    <span>+ 10,000원</span>
                 </div>
                 <div className="total-payment">
                     <span>결제금액</span>
@@ -47,6 +46,7 @@ function Cart() {
                     상품 구매하기
                 </button>
             </div>
+        </div>
         </div>
     );
 }

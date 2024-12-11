@@ -27,6 +27,18 @@ public class PaymentController {
     private final ProductService productService;
     private final StoreService storeService;
 
+    // 오늘 베스트 상품 조회
+    @GetMapping("/best/today")
+    public List<Map<String, Object>> getTodayBest() {
+        return paymentService.getTodayBest();
+    }
+
+    // 역대 베스트 상품 조회
+    @GetMapping("/best/all")
+    public List<Map<String, Object>> getAllTimeBest() {
+        return paymentService.getAllTimeBest();
+    }
+
     @GetMapping("/orders")
     public Map<String, Object> getOrders(@RequestParam String userid) {
         // 사용자 ID에 해당하는 결제 내역 가져오기

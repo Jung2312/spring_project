@@ -71,7 +71,7 @@ function AppRouter() {
             <Route path="/storeSignup" element={<StoreSignup />} />
             <Route path="/community/recommend" element={<Recommend />} />
             <Route path="/recommend/post" element={<RecommendPostPage />} />
-            <Route path="/cart" element={<Cart />} />
+            <Route path="/shopping/cart" element={<Cart />} />
             <Route path="/myPage/setting" element={<MyPageSet />} />
             <Route path="/shopping/shoppingHome" element={<ShoppingHome />} />
             <Route path="/main" element={<MainPage />} />
