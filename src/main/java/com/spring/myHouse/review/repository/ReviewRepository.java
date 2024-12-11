@@ -8,5 +8,8 @@ import java.util.List;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    List<Review> findByProductnum(long productnum);
+    List<Review> findByProductnumOrderByReviewratingDesc(long productnum);
+
+    boolean existsByUseridAndProductnum(String userid, long productnum);
+
 }

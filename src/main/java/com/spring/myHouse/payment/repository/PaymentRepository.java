@@ -10,5 +10,5 @@ import java.util.List;
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
     List<Payment> findByUserid(String userid);
 
-
+    boolean existsByUseridAndProductnum(String userid, long productnum);
 }

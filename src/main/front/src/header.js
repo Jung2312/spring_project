@@ -50,7 +50,7 @@ function Header() {
                 <div className="logo-name-box"><a href="/" className="logo-name">나만의집</a></div>
                 <div className="top-category-box">
                     <a href="/main" id="community" className={isActive("/main") || isActive("/community/recommend") ? "active" : ""}>커뮤니티</a>
-                    <a href="/shopping/shoppinghome" id="shopping" className={isActive("/shopping/shoppinghome") || isActive("/shopping/shoppingCategory") || isActive("/shopping/shoppingBest") ? "active" : ""}>쇼핑</a>
+                    <a href="/shopping/shoppingHome" id="shopping" className={isActive("/shopping/shoppingHome") || isActive("/shopping/shoppingCategory") || isActive("/shopping/shoppingBest") ? "active" : ""}>쇼핑</a>
                     <a href="/contest" id="contest" className={isActive("/contest") ? "active" : ""}>콘테스트</a>
                 </div>
                 <div className="search-box">
@@ -81,11 +81,11 @@ function Header() {
                 </div>
             </header>
 
-            {/* 현재 경로가 /myPage로 시작할 때만 sub-header 표시 */}
+            {/* 현재 경로가 /shopping 시작할 때만 sub-header 표시 */}
             {location.pathname.startsWith("/shopping") && (
                 <div className="sub-header">
                     <div className="sub-header-category-box">
-                        <a href="/shopping/shoppinghome" id="sub-header-shopping" className={isActive("/shopping/shoppinghome") ? "active" : ""}>쇼핑홈</a>
+                        <a href="/shopping/shoppingHome" id="sub-header-shopping" className={isActive("/shopping/shoppingHome") ? "active" : ""}>쇼핑홈</a>
                         <a href="/shopping/shoppingCategory" id="sub-header-category" className={isActive("/shopping/shoppingCategory") ? "active" : ""}>카테고리</a>
                         <a href="/shopping/shoppingBest" id="sub-header-best" className={isActive("/shopping/shoppingBest") ? "active" : ""}>베스트</a>
                     </div>
@@ -105,13 +105,15 @@ function Header() {
             )}
 
             {/* 현재 경로가 /community/recommend와 메인페이지에서만 sub-header 표시 */}
-            {(location.pathname === "/community/recommend" || location.pathname === "/main") &&(
+            {(location.pathname === "/community/recommend" ||
+                location.pathname === "/main" ||
+                location.pathname.startsWith("/community/recommendDetail/")) &&(
                 <div className="community-sub-header">
                     <div className="community-sub-header-category-box">
                         <a href="/main" id="community-sub-header-shopping"
                            className={isActive("/main") ? "active" : ""}>홈</a>
                         <a href="/community/recommend" id="community-sub-header-category"
-                           className={isActive("/community/recommend") ? "active" : ""}>추천</a>
+                           className={isActive("/community/recommend") || location.pathname.startsWith("/community/recommendDetail") ? "active" : ""}>추천</a>
                     </div>
                     <div className="sub-header-realtime-search-box">
                         <div className="sub-header-realtime-search">

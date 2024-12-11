@@ -55,7 +55,7 @@ a{
     flex-direction: column;
     align-items: center;
 
-    .insert-btn, .delete-btn {
+    .insert-btn, .delete-btn, .edit-btn {
         width: 80px;
         height: 40px;
         background-color: #35C5F0;
@@ -77,6 +77,14 @@ a{
 
     .delete-btn:hover {
         background-color: #dd1414
+    }
+
+    .edit-btn {
+        background-color: #5cb85c;
+    }
+
+    .edit-btn:hover {
+        background-color: #4cae4c;
     }
 
     .product-main-box, .inventory-main-box {

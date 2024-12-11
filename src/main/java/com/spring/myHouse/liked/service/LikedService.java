@@ -29,4 +29,21 @@ public class LikedService {
     public int countLikesByUserid(String userid) {
         return likeRepository.countByUserid(userid);
     }
+
+    public Liked getByUseridAndPostnum(String userid, Long postnum) {
+        return likeRepository.findByUseridAndPostnum(userid, postnum).orElse(null);
+    }
+
+    public void deleteLiked(Liked liked) {
+        likeRepository.delete(liked);
+    }
+
+    // 좋아요 수 카운트
+    public int countLikesByPostnum(Long postnum) {
+        return likeRepository.countByPostnum(postnum);
+    }
+
+    public List<Long> getLikedPostIdsByUserid(String userid) {
+        return likeRepository.findLikedPostIdsByUserid(userid);
+    }
 }

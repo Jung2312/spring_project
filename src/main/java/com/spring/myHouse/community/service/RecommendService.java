@@ -30,4 +30,32 @@ public class RecommendService {
         return recommendRepository.findPostimgByUserid(userid);
     }
 
+    public void incrementRecommendLike(Long postnum) {
+        recommendRepository.incrementRecommendLike(postnum);
+    }
+
+    public void decrementRecommendLike(Long postnum) {
+        recommendRepository.decrementRecommendLike(postnum);
+    }
+
+    // postnum을 기준으로 추천 글 찾기
+    public Recommend getPostByPostnumber(Long postnum) {
+        return recommendRepository.findById(postnum).orElse(null);
+    }
+
+    // postnum으로 게시글 조회
+    public Recommend getPostByPostnum(Long postnum) {
+        return recommendRepository.findByPostnum(postnum);  // 레포지토리에서 게시글을 가져옴
+    }
+
+    public void updateRecommend(Recommend recommend) {
+        recommendRepository.save(recommend);
+    }
+
+    public void deletePost(Long postnum) {
+        if (!recommendRepository.existsById(postnum)) {
+            throw new IllegalArgumentException("Post with ID " + postnum + " does not exist.");
+        }
+        recommendRepository.deleteById(postnum);
+    }
 }

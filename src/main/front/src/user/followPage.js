@@ -11,13 +11,10 @@ import Header from "../header";
 import ex from "../img/exProfile.png";
 
 function FollowPage() {
-    const [likeCount, setLikeCount] = useState(0); // 좋아요 초기값
     const [postList, setPostList] = useState([]); // 게시글 데이터
+    const [likedPosts, setLikedPosts] = useState([]); // 좋아요를 누른 게시글 리스트 (postnum)
 
-    // 좋아요 클릭 시 숫자 증가
-    const handleLikeClick = () => {
-        setLikeCount(likeCount + 1);
-    };
+
 
     // 서버에서 게시글 데이터 가져옴
     useEffect(() => {
@@ -29,7 +26,47 @@ function FollowPage() {
             .catch((error) => {
                 console.error("데이터를 가져오는 중 오류가 발생했습니다.", error);
             });
+
+        // 로컬 스토리지에서 좋아요 상태 복원
+        const storedLikedPosts = JSON.parse(localStorage.getItem('likedPosts') || '[]');
+        setLikedPosts(storedLikedPosts);
     }, []);
+
+    // 좋아요 클릭 시 처리
+    const handleLikeClick = (postNum) => {
+        // 이미 좋아요를 눌렀다면 아무 동작도 하지 않음
+        if (likedPosts.includes(postNum)) {
+            // 이미 좋아요를 누른 경우 알림을 띄운다
+            alert('좋아요는 한 번만 누를 수 있습니다.');
+            return; // 함수 종료
+        }
+
+        // 좋아요를 클릭한 게시글에 대해 서버로 좋아요 증가 요청
+        axios
+            .post('http://localhost:80/recommend/user/like', null, {
+                params: { postnum: postNum } // URL 파라미터로 postnum 전달
+            })
+            .then((response) => {
+                // 서버에서 좋아요 업데이트가 성공하면
+                setPostList((prevPosts) =>
+                    prevPosts.map((post) =>
+                        post.postnum === postNum ? { ...post, postlike: post.postlike + 1 } : post
+                    )
+                );
+
+                // 로컬 상태에 해당 게시글의 좋아요 정보를 추가
+                const newLikedPosts = [...likedPosts, postNum];
+                setLikedPosts(newLikedPosts);
+
+                // 로컬 스토리지에 저장하여 페이지 새로고침 시 유지
+                localStorage.setItem('likedPosts', JSON.stringify(newLikedPosts));
+            })
+            .catch((error) => {
+                console.error('좋아요 증가 중 오류가 발생했습니다.', error);
+            });
+    };
+
+
     return (
         <div className="followPage">
             <Header/>
@@ -87,10 +124,18 @@ function FollowPage() {
                                 </div>
                             </div>
                             {/* 좋아요와 댓글 */}
-                            <div className="followPage_like_comment" style={{cursor: 'pointer'}}>
-                                <div className="like" onClick={handleLikeClick} >
-                                    <img className="like-img" src={like} alt="마음"/>
-                                    <span>{post.postlike + likeCount}</span>
+                            <div className="followPage_like_comment" onClick={() => handleLikeClick(post.postnum)}
+                                 style={{cursor: 'pointer'}}>
+                                <div className="like">
+                                    <img
+                                        className="like-img"
+                                        src={like}
+                                        alt="좋아요"
+                                        style={{
+                                            filter: likedPosts.includes(post.postnum) ? 'invert(35%) sepia(100%) saturate(750%) hue-rotate(0deg)' : 'none', // 좋아요를 누른 상태
+                                        }}
+                                    />
+                                    <span>{post.postlike}</span> {/* 좋아요 수 */}
                                 </div>
                                 <div className="comment">
                                     <img className="comment-img" src={comment} alt="댓글"/>
