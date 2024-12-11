@@ -58,7 +58,7 @@ function MainPage() {
 
         // 좋아요를 클릭한 게시글에 대해 서버로 좋아요 증가 요청
         axios
-            .post('http://localhost:80/recommend/like', null, {
+            .post('http://localhost:80/recommend/user/like', null, {
                 params: { postnum: postNum } // URL 파라미터로 postnum 전달
             })
             .then((response) => {
