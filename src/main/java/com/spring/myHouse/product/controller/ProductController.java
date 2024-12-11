@@ -102,8 +102,6 @@ public class ProductController {
         return productWithStore;
     }
 
-}
-
     @PostMapping(value = "/add", consumes = {"multipart/form-data"})
     public String addProduct(
             @RequestPart("product") String productJson,
