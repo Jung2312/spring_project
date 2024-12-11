@@ -13,9 +13,7 @@ const ContestRegistration = () => {
 
     const [coupons, setCoupons] = useState([]); // 쿠폰 목록 상태
     const [selectedCouponName, setSelectedCouponName] = useState(""); // 선택된 쿠폰 이름
-    const [imagePreviewUrl, setImagePreviewUrl] = useState(""); // 이미지 미리보기 URL
     const navigate = useNavigate();
-    const [isAdmin, setIsAdmin] = useState(false); // 관리자인지 확인하는 상태
 
     // 시작 날짜를 동적으로 설정 (현재 날짜 이후로 설정)
     useEffect(() => {
@@ -72,18 +70,6 @@ const ContestRegistration = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    // 사진 첨부 핸들러
-    const handleImageUpload = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                setImagePreviewUrl(reader.result); // 이미지 미리보기 URL 설정
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -110,13 +96,9 @@ const ContestRegistration = () => {
         }
     };
 
-    const handleButtonClick = () => {
-        document.getElementById("hiddenFileInput").click();
-    };
-
     const logoutButtonClick = () => {
         sessionStorage.clear();
-        window.location.reload();
+        navigate("/login"); // 로그인 페이지로 이동
     }
 
     return (
