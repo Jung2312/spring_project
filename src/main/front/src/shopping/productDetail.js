@@ -35,6 +35,15 @@ function ProductDetail() {
         ref.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
+    // 바로구매 버튼
+    const handleBuyNow = () => {
+        sessionStorage.setItem('buyNowProductNum', JSON.stringify({
+            productnum: productnum,
+            count: count,
+        }));
+        navigate(`/payment`);  // 상품번호를 URL 파라미터로 전달
+    };
+
     // 별점 기본값 설정
     const [clicked, setClicked] = useState([false, false, false, false, false]);
 
@@ -301,7 +310,7 @@ function ProductDetail() {
                             </div>
                             <div className="productDetailShoppingBtnSection">
                                 <input type="button" onClick={appendCart} value="장바구니" id="productDetailCartBtn"/>
-                                <input type="button" value="바로구매" id="productDetailSellBtn"/>
+                                <input type="button" value="바로구매" id="productDetailSellBtn" onClick={handleBuyNow}/>
                             </div>
                         </div>
                         )}

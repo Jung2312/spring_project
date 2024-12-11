@@ -1,0 +1,64 @@
+.purchaseH-main-box, .purchaseH-main{
+    width: 90%;
+    margin: auto;
+    .purchaseH-history-box{
+        margin: 50px 0;
+        border: 1px #b3b3b3 solid;
+        border-radius: 5px;
+        padding: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        .purchaseH-history-title{
+            margin-bottom: 30px;
+            span{
+                font-size: 24px;
+                font-weight: bold;
+            }
+        }
+        .purchaseH-history-table{
+            width: 1000px;
+            border-top: 5px #000000 solid;
+            margin-bottom: 30px;
+        }
+        .purchaseH-history-ordernum-box,
+        .purchaseH-history-purchase-state-box,
+        .purchaseH-history-payment-box,
+        .purchaseH-history-order-date-box,
+        .purchaseH-history-product-name-box,
+        .purchaseH-history-delivery-price-box,
+        .purchaseH-history-sale-price-box,
+        .purchaseH-history-total-price-box{
+            display: flex;
+            width: 100%;
+        }
+        .purchaseH-table-item:nth-child(odd){
+            width: 200px;
+            background-color: #F9F9F9;
+            padding: 20px;
+            text-align: center;
+        }
+        .purchaseH-table-item:nth-child(even){
+            padding: 20px;
+            flex-grow: 2;
+        }
+        .purchaseH-history-total-price-box{
+            display: flex;
+            justify-content: end;
+            align-items: center;
+            .purchaseH-history-total-price-title {
+                margin-right: 30px;
+                span{
+                    font-size: 22px;
+                }
+            }
+            .purchaseH-history-total-price{
+                span{
+                    font-size: 26px;
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+}

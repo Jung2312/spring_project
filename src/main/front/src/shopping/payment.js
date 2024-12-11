@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import css from '../css/payment.css';
 import Header from "../header";
@@ -6,15 +7,19 @@ import DaumPostCode from "react-daum-postcode";
 import Modal from "react-modal";
 import product_img from '../img/furniture.png';
 import card_img from '../img/card_img.png';
-import kakaopay_img from '../img/payment_icon_yellow_small.png';
 
 function Payment() {
+    const navigate = useNavigate();
     const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
     const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
     const [zipcode, setZipcode] = useState("");
     const [mainAddress, setMainAddress] = useState("");
     const [detailAddress, setDetailAddress] = useState("");
     const [paymentMethod, setPaymentMethod] = useState(null); // 결제 수단 선택 상태
+    const [productData, setProductData] = useState(null);
+    const [count, setCount] = useState(1); // 수량
+    const [isAllAgreeChecked, setIsAllAgreeChecked] = useState(false);
+    const [isAgreeChecked, setIsAgreeChecked] = useState(false);
 
     // 결제 수단 선택 클릭 처리
     const handlePaymentMethodClick = (method) => {
@@ -26,6 +31,34 @@ function Payment() {
         }
     };
 
+    // 총 결제 금액
+    const calculateTotalPayment = () => {
+        const deliveryCost = 10000; // 배송비
+        const couponDiscount = 0; // 쿠폰 할인
+        const mileageDiscount = 0; // 마일리지 할인
+        return productData.productprice * count + deliveryCost - couponDiscount - mileageDiscount;
+    };
+
+    // 체크박스 변경 핸들러
+    const handleAllAgreeChange = () => {
+        const newState = !isAllAgreeChecked;
+        setIsAllAgreeChecked(newState);
+        setIsAgreeChecked(newState); // 모든 체크박스를 동일하게 설정
+    };
+
+    const handleAgreeChange = () => {
+        const newState = !isAgreeChecked;
+        setIsAgreeChecked(newState);
+
+        // 두 번째 체크박스가 변경되면 '모두 동의' 체크박스도 동기화
+        if (!newState) {
+            setIsAllAgreeChecked(false); // 하나라도 체크 해제되면 '모두 동의' 체크 해제
+        } else {
+            setIsAllAgreeChecked(true); // 모두 체크된 경우 '모두 동의'도 체크
+        }
+    };
+
+    // 주소 찾기 css
     const customStyles = {
         overlay: {
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -53,17 +86,20 @@ function Payment() {
         },
     };
 
+    // input에 주소 넣기
     const handleAddressComplete = (data) => {
         setZipcode(data.zonecode); // 우편번호 설정
         setMainAddress(data.roadAddress || data.jibunAddress); // 주소 설정
         setIsAddressModalOpen(false); // 모달 닫기
     };
 
+    // modal open handler
     const handleAdressModalOpen = (e) => {
         e.preventDefault();
         setIsAddressModalOpen(true); // 모달 열기
     };
 
+    // 아임포트 결제 창 열기
     useEffect(() => {
         const jquery = document.createElement("script");
         jquery.src = "http://code.jquery.com/jquery-1.12.4.min.js";
@@ -77,6 +113,7 @@ function Payment() {
         };
     }, []);
 
+    // 아임포트 결제 내용
     const handleCardPayment = () => {
         const IMP = window.IMP; // 아임포트 결제 객체
         IMP.init("imp32370223"); // 아임포트에 발급받은 키 사용
@@ -85,8 +122,8 @@ function Payment() {
             pg: 'html5_inicis.INIpayTest',
             pay_method: 'card',
             merchant_uid: `merchant_${new Date().getTime()}`,
-            name: "상품명",
-            amount: 129000, // 결제 금액
+            name: productData.productname,
+            amount: formatPrice(calculateTotalPayment()), // 결제 금액
             buyer_email: "buyer@domain.com",
             buyer_name: "홍길동",
             buyer_tel: "01012345678",
@@ -95,12 +132,44 @@ function Payment() {
         }, function(rsp) {
             if (rsp.success) {
                 alert("결제가 완료되었습니다.");
+                navigate(`/payment`);
             } else {
                 alert("결제 실패: " + rsp.error_msg);
             }
         });
     };
 
+    // 상품번호로 상품 내용 가져오기
+    // 저장된 상품번호로 상품 정보 가져오기
+    useEffect(() => {
+        const savedProductNum = sessionStorage.getItem('buyNowProductNum');
+        if (savedProductNum) {
+            const { productnum, count } = JSON.parse(savedProductNum);
+            // 수량 저장
+            setCount(count);
+            // 서버에서 상품 정보 가져오기
+            fetch(`http://localhost:80/product/productDetail?productnum=${productnum}`)
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error('response error');
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    setProductData(data);
+                })
+                .catch(err => {
+                    console.error('Fetch error:', err);
+                });
+        } else {
+            console.error('No product data found in sessionStorage');
+        }
+    }, []);
+
+    // 3자리마다 , 넣기
+    const formatPrice = (price) => {
+        return price.toLocaleString('ko-KR');
+    };
     return(
         <div className="payment-body">
             <Header/>
@@ -123,32 +192,32 @@ function Payment() {
                                     <div className="payment-order-product-detail-box">
                                         <div className="payment-order-product-store-box">
                                             <div className="payment-order-product-store-name">
-                                                <span>어그리어블리</span>
+                                                <span>{productData.storename}</span>
                                             </div>
                                             <div className="payment-order-product-delivery-pay">
                                                 <span className="payment-delivery-pay-title">배송비</span>
-                                                <span className="payment-delivery-pay">100,000,000원</span>
+                                                <span className="payment-delivery-pay">10,000원</span>
                                             </div>
                                         </div>
                                         <div className="payment-order-product-box">
                                             <div className="payment-order-product-img-box">
-                                                <img className="payment-product-img" src={product_img} alt=""/>
+                                                <img className="payment-product-img" src={productData.productmainimage} alt=""/>
                                             </div>
                                             <div className="payment-order-product-detail">
                                                 <div className="payment-order-product-name-box">
                                                     <div className="payment-order-product-name">
-                                                        <span>[당일출고] 노프레임 비정형 웨이브 전신거울 A-4 + 원목/실버 받침대 선택</span>
+                                                        <span>{productData.productname}</span>
                                                     </div>
                                                 </div>
                                                 <div className="payment-order-product-option-box">
                                                     <div className="payment-order-product-option">
-                                                        <span>Size: 2. 700*1700 (10시 이전 주문 시 당일 출고) / 받침대: 자작나무 원목 받침대</span>
+                                                        <span></span>
                                                     </div>
                                                 </div>
                                                 <div className="payment-order-product-cost-box">
-                                                    <div className="payment-order-product-cost"><span>129,000원</span>
+                                                    <div className="payment-order-product-cost"><span>{formatPrice(productData.productprice * count)}원</span>
                                                     </div>
-                                                    <div className="payment-order-product-count"><span>1개</span></div>
+                                                    <div className="payment-order-product-count"><span>{count}개</span></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -381,33 +450,39 @@ function Payment() {
                         <div className="payment-total-cost-bill-box">
                             <div className="payment-total-product-cost-box">
                                 <div className="payment-total-product-cost-text"><span>총 상품금액</span></div>
-                                <div className="payment-total-product-cost">129,000원</div>
+                                <div className="payment-total-product-cost">{formatPrice(productData.productprice * count)}원</div>
                             </div>
                             <div className="payment-total-delivery-cost-box">
                                 <div className="payment-total-delivery-cost-text"><span>총 배송비</span></div>
-                                <div className="payment-total-delivery-cost">1.000,000원</div>
+                                <div className="payment-total-delivery-cost">{formatPrice(10000)}</div>
                             </div>
                             <div className="payment-total-coupon-cost-box">
                                 <div className="payment-total-coupon-cost-text"><span>쿠폰 적용</span></div>
-                                <div className="payment-total-coupon-cost">3,000원</div>
+                                <div className="payment-total-coupon-cost">{formatPrice(3000)}원</div>
                             </div>
                             <div className="payment-total-miliage-cost-box">
                                 <div className="payment-total-miliage-cost-text"><span>마일리지 적용</span></div>
-                                <div className="payment-total-miliage-cost">0원</div>
+                                <div className="payment-total-miliage-cost">{formatPrice(0)}원</div>
                             </div>
                         </div>
                         <div className="payment-total-cost-box">
                             <div className="payment-total-cost-text"><span>최종 결제 금액</span></div>
-                            <div className="payment-total-cost"><span>1,129,000원</span></div>
+                            <div className="payment-total-cost"><span>{formatPrice(calculateTotalPayment())}원</span></div>
                         </div>
                         <div className="payment-personal-info-box">
                             <div className="payment-personal-info-all-agree-box">
-                                <input name="payment-all-agree-chk" type="checkbox"/>
+                                <input name="payment-all-agree-chk"
+                                       type="checkbox"
+                                       checked={isAllAgreeChecked}
+                                       onChange={handleAllAgreeChange} />
                                 <span>아래 내용에 모두 동의합니다.(필수)</span>
                             </div>
                             <div className="payment-personal-info-agree-box">
                                 <div className="payment-personal-info-agree">
-                                    <input name="payment-agree-chk" type="checkbox"/>
+                                    <input name="payment-agree-chk"
+                                           type="checkbox"
+                                           checked={isAllAgreeChecked}
+                                           onChange={handleAllAgreeChange} />
                                     <span>개인 정보 수집 이용 및 제 3자 제공 동의(필수)</span>
                                 </div>
                                 <div className="payment-personal-info-content">
@@ -420,8 +495,8 @@ function Payment() {
                     </div>
                     <div className="payment-btn-section">
                         <button className="payment-btn"
-                                onClick={paymentMethod === 'card' ? handleCardPayment : paymentMethod === 'kakao' ? null : null}>
-                            1,129,000원 결제하기
+                                onClick={paymentMethod === 'card' ? handleCardPayment : null}>
+                            {formatPrice(calculateTotalPayment())}원 결제하기
                         </button>
                     </div>
                 </aside>

@@ -168,6 +168,7 @@
             .payment-order-product-img-box{
                 img{
                     width: 120px;
+                    border-radius: 5px;
                 }
             }
             .payment-order-product-detail{

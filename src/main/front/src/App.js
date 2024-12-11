@@ -28,6 +28,7 @@ import ShoppingBest from "./shopping/shoppingBest";
 import Payment from "./shopping/payment";
 import ContestRegistration from "./admin/addContest";
 import ContestEdit from "./admin/editContest";
+import PurchaseHistory from "./shopping/purchaseHistory";
 
 function AppRouter() {
     const navigate = useNavigate();
@@ -85,6 +86,7 @@ function AppRouter() {
             <Route path="/shoppingInformation/:storename" element={<ShoppingInformation />} />
             <Route path="/shopping/shoppingBest" element={<ShoppingBest />} />
             <Route path="/payment" element={<Payment />} />
+            <Route path="/purchaseHistory" element={<PurchaseHistory />} />
             <Route path="/ContestRegistration" element={<ContestRegistration />} />
             <Route path="/ContestEdit/:contestnum" element={<ContestEdit />} />
         </Routes>
