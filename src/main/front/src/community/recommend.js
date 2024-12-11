@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 import ex from '../img/exProfile.png';
 import like from '../img/like.png';
 import comment from '../img/comment.png';
@@ -8,6 +9,7 @@ import Header from "../header";
 
 function Recommend() {
     const [postList, setPostList] = useState([]);
+    const navigate = useNavigate();
 
     // 서버에서 게시글 데이터 가져옴
     useEffect(() => {
@@ -21,12 +23,17 @@ function Recommend() {
             });
     }, []);
 
+    // 게시글 클릭 이벤트
+    const handlePostClick = (postnum) => {
+        navigate(`/community/recommendDetail/${postnum}`); // 상세 게시글 화면으로 이동
+    };
+
     return (
         <div>
             <Header/>
             <div className="recommend-container">
                 {postList.map((post) => (
-                    <div className="recommend-section" key={post.postnum}>
+                    <div className="recommend-section" key={post.postnum} onClick={() => handlePostClick(post.postnum)}>
                         {/* 프로필 섹션 */}
                         <div className="profile-section">
                             <div className="profile-img">

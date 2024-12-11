@@ -105,13 +105,15 @@ function Header() {
             )}
 
             {/* 현재 경로가 /community/recommend와 메인페이지에서만 sub-header 표시 */}
-            {(location.pathname === "/community/recommend" || location.pathname === "/main") &&(
+            {(location.pathname === "/community/recommend" ||
+                location.pathname === "/main" ||
+                location.pathname.startsWith("/community/recommendDetail/")) &&(
                 <div className="community-sub-header">
                     <div className="community-sub-header-category-box">
                         <a href="/main" id="community-sub-header-shopping"
                            className={isActive("/main") ? "active" : ""}>홈</a>
                         <a href="/community/recommend" id="community-sub-header-category"
-                           className={isActive("/community/recommend") ? "active" : ""}>추천</a>
+                           className={isActive("/community/recommend") || location.pathname.startsWith("/community/recommendDetail") ? "active" : ""}>추천</a>
                     </div>
                     <div className="sub-header-realtime-search-box">
                         <div className="sub-header-realtime-search">

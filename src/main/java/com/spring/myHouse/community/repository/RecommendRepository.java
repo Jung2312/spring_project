@@ -15,4 +15,6 @@ public interface RecommendRepository extends JpaRepository<Recommend, Long> {
 
     @Query("SELECT r.postimg FROM Recommend r WHERE r.userid = :userid")
     List<String> findPostimgByUserid(@Param("userid") String userid);
+
+    Recommend findByPostnum(Long postnum);
 }
