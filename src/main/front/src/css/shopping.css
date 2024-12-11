@@ -181,6 +181,7 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
+    flex-wrap: wrap;
     align-content: center;
     margin-right: 20px;
 }
@@ -278,6 +279,8 @@
 
 .productDetailInfoImg{
     margin-top: 20px;
+    width: 50%;
+    height: auto;
 }
 
 .productPageImg{
@@ -570,6 +573,9 @@
 .productDetailBottomBarText{
     margin-right: 12px;
     color: #5c5c5c;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
 }
 
 .reviewDetailText, .reviewProductName{
@@ -581,8 +587,14 @@
 }
 
 .reviewPhoto{
-    width: 150px;
-    height: 100px;
+    width: 100px;
+    height: 80px;
+}
+
+.reviewPhoto:hover {
+    transform: scale(1.5);
+    width: 200px;
+    height: auto;
 }
 
 .reviewContent{
@@ -591,9 +603,18 @@
 
 .productTotalScopeDiv{
     width: 100%;
-    height: 100px;
-    margin-top: 54px;
+    height: 80px;
+    margin-top: 40px;
     margin-left: 40px;
+    display: flex;
+}
+
+.productTotalScopeStarDiv{
+    display: flex;
+}
+
+.productTotalScopeStarNumDiv{
+    margin-top: 24px;
 }
 
 .productTotalScope{
@@ -669,16 +690,57 @@
     border-radius: 4px;
 }
 
+/* 숨기기 */
+.modalPhotoButton {
+    display: none;
+}
+
+/* 커스텀 버튼 스타일 */
+.customFileButton {
+    display: inline-block;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    color: #35C5F0;
+    background-color: white;
+    border: 1px solid #35C5F0;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+/* 호버 효과 */
+.customFileButton:hover {
+    background-color: #35C5F0;
+    color: white;
+}
+
+
 .modalSubmitButton{
     background-color: #35C5F0;
     color: white;
     border: none;
+    cursor: pointer;
+}
+
+.modalSubmitButton:hover{
+    background-color: white;
+    color: #35C5F0;
+    border: 1px solid #35C5F0;
 }
 
 .modalPhotoButton{
     background-color: white;
     color: #35C5F0;
     border: 1px solid #35C5F0;
+}
+
+#modalPhotoIcon{
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
 }
 
 .reviewModalProductName{
@@ -690,4 +752,53 @@
     border: none;
     background: transparent;
     color: #cccccc;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 5px 10px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    border: 1px solid #35C5F0;
+    background-color: transparent;
+    color: #35C5F0;
+    border-radius: 4px;
+    margin-bottom: 40px;
+}
+
+.pagination button.active {
+    font-weight: bold;
+    color: white;
+    background-color: #35C5F0;
+}
+
+.pagination button:hover {
+    background-color: #35C5F0;
+    color: white;
+}
+
+#pageTopBtn{
+    width: 100%;
+    height: 50px;
+    margin-bottom: 20px;
+    border: none;
+    background-color: #F7F8FA;
+    color: #888888;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#photoReviewSelectBtn:hover{
+    color: #35C5F0;
+}
+
+#photoReviewAllSelectBtn:hover{
+    color: #35C5F0;
 }

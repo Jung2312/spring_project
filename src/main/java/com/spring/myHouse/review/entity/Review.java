@@ -1,5 +1,6 @@
 package com.spring.myHouse.review.entity;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class Review {
 
     private String reviewcontent;
 
+    @Nullable
     private String reviewimage;
 
     @CreationTimestamp

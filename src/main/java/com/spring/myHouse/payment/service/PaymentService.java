@@ -27,4 +27,9 @@ public class PaymentService {
     public void delPayment(Long paymentnum){
         paymentRepository.deleteById(paymentnum);
     }
+
+    // 주문 조회(리뷰용)
+    public boolean isExistUseridAndProductnum(String userid, long productnum){
+        return paymentRepository.existsByUseridAndProductnum(userid, productnum);
+    }
 }

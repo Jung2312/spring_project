@@ -13,6 +13,15 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
 
     public List<Review> getAllReview(long productnum){
-        return reviewRepository.findByProductnum(productnum);
+        return reviewRepository.findByProductnumOrderByReviewratingDesc(productnum);
     }
+
+    public void saveReview(Review review){
+        reviewRepository.save(review);
+    }
+
+    public boolean existsByUseridAndProductnum(String userid, long productnum) {
+        return reviewRepository.existsByUseridAndProductnum(userid, productnum);
+    }
+
 }
