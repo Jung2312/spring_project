@@ -29,4 +29,9 @@ public class InventoryService {
         int updateCount = inventoryRepository.updateInventoryCount(productnum, inventorycount);
         return updateCount > 0;
     }
+
+    public int getInventoryCount(Long productnum){
+        int inventoryCount = inventoryRepository.getProductInventoryCount(productnum);
+        return inventoryCount;
+    }
 }

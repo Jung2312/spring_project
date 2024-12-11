@@ -79,7 +79,7 @@ function ContestApply() {
 
 
     const goContestPost = () => {
-        navigate('/contest/post');
+        navigate(`/contest/post/${contestData[0]?.contestnum}`);
     };
 
     // 4칸
