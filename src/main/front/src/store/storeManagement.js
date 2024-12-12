@@ -33,7 +33,8 @@ function StoreManagement() {
     }, []);
 
     useEffect(() => {
-        const storenum = sessionStorage.getItem("storenum");
+        const storenum = storeInfo.storenum;
+        sessionStorage.setItem("storenum", storenum );
         fetchProductInfo(storenum);
         fetchProductCount(storenum);
         fetchInventoryInfo(storenum); // 인벤토리 정보도 가져오기
