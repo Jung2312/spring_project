@@ -185,7 +185,7 @@ function Header() {
                     )}
                 </div>
                 <div className="cart-box">
-                    <a href=""><img src={CartImg} alt="Cart" /></a>
+                    <a href="/shopping/cart" id="cart"><img src={CartImg}/></a>
                 </div>
                 {isLogin ? (
                     <div className="header-user-box">
