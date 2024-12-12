@@ -15,7 +15,6 @@ public class Mileage {
     @JoinColumn(name="userid")
     private String userid;
 
-    @JoinColumn(name="cartnum")
     private Long balance;
 
 }

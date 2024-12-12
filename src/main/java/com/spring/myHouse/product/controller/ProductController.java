@@ -227,4 +227,9 @@ public class ProductController {
         return "Product updated successfully";
     }
 
+
+    @GetMapping("/search")
+    public List<Product> getProductsByQuery(@RequestParam String productname) {
+        return productService.searchProducts(productname);
+    }
 }

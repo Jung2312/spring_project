@@ -14,6 +14,8 @@ const PostDetail = () => {
     const [hashtags, setHashtags] = useState([]); // 해시태그 상태 추가
     const [newTag, setNewTag] = useState(''); // 새 해시태그 입력 상태
     const [newImage, setNewImage] = useState(null); // 새로운 이미지 파일 상태
+    const [replies, setReplies] = useState([]);
+    const [newComment, setNewComment] = useState("");
 
     // sessionStorage에서 로그인한 사용자 ID 가져오기
     const loggedInUserId = sessionStorage.getItem('userid'); // 로그인한 사용자 아이디
@@ -38,6 +40,56 @@ const PostDetail = () => {
 
         fetchPost();
     }, [postnum]);
+
+    useEffect(() => {
+        // 댓글 데이터 가져오기
+        fetch(`http://localhost:80/reply/${postnum}`)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("댓글 조회 실패");
+                }
+                return response.json();
+            })
+            .then((data) => setReplies(data))
+            .catch((error) => console.error(error));
+    }, [postnum]);
+
+    const handleCommentSubmit = () => {
+        if (newComment.trim() === "") {
+            alert("댓글을 입력하세요.");
+            return;
+        }
+
+        if (!loggedInUserId) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
+
+        // 댓글 작성 요청
+        fetch(`http://localhost:80/reply/create`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                postnum,
+                replycontent: newComment,
+                userid: loggedInUserId, // 로그인된 사용자 ID (수정 필요)
+            }),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("댓글 작성 실패");
+                }
+                return response.json();
+            })
+            .then((newReply) => {
+                console.log("작성된 댓글:", newReply);
+                setReplies([...replies, newReply]); // 새 댓글 추가
+                setNewComment(""); // 입력 필드 초기화
+            })
+            .catch((error) => console.error("댓글 작성 중 오류:",error));
+    };
 
     const handleLike = () => {
         setLikes((prevLikes) => prevLikes + 1);
@@ -287,14 +339,39 @@ const PostDetail = () => {
                         </div>
                     )}
 
+                    {replies.length > 0 ? (
+                        replies.map((reply) => (
+                            <div className="post-detail-reply" key={reply.replynum}>
+                                <img className="post-detail-reply-profile"
+                                     src={`${process.env.PUBLIC_URL}/profileImg/${reply.profileimage}`}
+                                     alt="프로필 사진"
+                                     onError={(e) => {
+                                         e.target.src = `${process.env.PUBLIC_URL}/profileImg/defaultProfile.png`;
+                                     }}/>
+                                <strong className="post-detail-reply-userid">{reply.userid}</strong>
+                                <p className="post-detail-reply-content">{reply.replycontent}</p>
+                                <small className="post-detail-reply-date">{reply.replydate}</small>
+                            </div>
+                        ))
+                    ) : (
+                        <p className="post-detail-no-replies">댓글이 없습니다.</p>
+                    )}
+
                     {!isEditing && (
                         <div className="post-detail-comment-section">
                             <input
                                 type="text"
                                 className="post-detail-comment-input"
+                                value={newComment}
+                                onChange={(e) => setNewComment(e.target.value)}
                                 placeholder="댓글을 입력하세요"
                             />
-                            <button className="post-detail-comment-submit-btn">댓글 작성</button>
+                            <button
+                                className="post-detail-comment-submit-btn"
+                                onClick={handleCommentSubmit}
+                            >
+                                댓글 작성
+                            </button>
                         </div>
                     )}
                 </div>

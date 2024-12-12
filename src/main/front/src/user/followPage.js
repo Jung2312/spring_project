@@ -10,26 +10,67 @@ import comment from "../img/comment.png";
 import Header from "../header";
 import ex from "../img/exProfile.png";
 import redlike from "../img/redLike.png";
-import {useNavigate} from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function FollowPage() {
     const [postList, setPostList] = useState([]); // 게시글 데이터
     const [likedPosts, setLikedPosts] = useState([]); // 좋아요를 누른 게시글 리스트 (postnum)
     const [replies, setReplies] = useState({});
+    const [userName, setUserName] = useState("");  // 사용자 이름
+    const [userIntro, setUserIntro] = useState("");  // 사용자 소개글
+    const [followerCount, setFollowerCount] = useState(0);  // 팔로워 수
+    const [followingCount, setFollowingCount] = useState(0);  // 팔로잉 수
     const userid = sessionStorage.getItem("userid");
     const navigate = useNavigate();
+
+    const location = useLocation();  // useLocation 훅을 사용하여 state에서 userId를 받음
+    const userIdFromState = location.state?.userId;  // 전달된 userId
+    const userId = userIdFromState || sessionStorage.getItem("userid");  // state에서 받아오지 못하면 sessionStorage에서 가져옴
+
+    // 사용자 정보 가져오기
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                const response = await axios.get(`http://localhost:80/user/info?userid=${userId}`);
+                setUserName(response.data.name);  // 사용자 이름
+                setUserIntro(response.data.introduce);  // 사용자 소개글
+            } catch (error) {
+                console.error("사용자 정보를 가져오는 중 오류가 발생했습니다.", error);
+            }
+        };
+
+        if (userId) fetchUserInfo();
+    }, [userId]);
+
+
+    useEffect(() => {
+        const fetchFollowerAndFollowingCounts = async () => {
+            try {
+                const followerResponse = await axios.get(`http://localhost:80/follow/followers/count?userid=${userId}`);
+                setFollowerCount(followerResponse.data);  // 팔로워 수 업데이트
+
+                const followingResponse = await axios.get(`http://localhost:80/follow/following/count?userid=${userId}`);
+                setFollowingCount(followingResponse.data);  // 팔로잉 수 업데이트
+            } catch (error) {
+                console.error("팔로워와 팔로잉 수를 가져오는 중 오류가 발생했습니다.", error);
+            }
+        };
+
+        if (userId) fetchFollowerAndFollowingCounts();
+    }, [userId]);
 
     // 서버에서 게시글 데이터 가져옴
     useEffect(() => {
         axios
             .get('http://localhost:80/recommend') // Spring Boot API URL
             .then((response) => {
-                setPostList(response.data);
+                const filteredPosts = response.data.filter(post => post.userid === userId); // userId와 일치하는 게시글만 필터링
+                setPostList(filteredPosts);
             })
             .catch((error) => {
                 console.error("데이터를 가져오는 중 오류가 발생했습니다.", error);
             });
-    }, []);
+    }, [userId]);
 
     useEffect(() => {
         const fetchLikedPosts = async () => {
@@ -119,14 +160,14 @@ function FollowPage() {
                             <img className="followPage-profile-img" src={nongdamgom} alt="프로필 사진"/>
                         </div>
                         <div className="followPage_profile_content">
-                            <span className="followPage_profile_content_name">회원명</span>
+                            <span className="followPage_profile_content_name">{userName}</span>
                             <div className="followPage_profile_content_follower_following">
-                                <span>팔로워</span><span className="followPage_profile_follower_number">0</span>
+                                <span>팔로워</span><span className="followPage_profile_follower_number">{followerCount}</span>
                                 <span style={{margin: '0 10px'}}> | </span>
-                                <span>팔로잉</span><span className="followPage_profile_following_number">0</span>
+                                <span>팔로잉</span><span className="followPage_profile_following_number">{followingCount}</span>
                             </div>
                             <button className="followPage_profile_content_follow_button">팔로우</button>
-                            <span className="followPage_profile_content_intro">나의 자취생활</span>
+                            <span className="followPage_profile_content_intro">{userIntro}</span>
                         </div>
                     </div>
                 </div>

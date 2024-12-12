@@ -26,4 +26,5 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE p.category.categorynum = :categorynum AND p.productprice BETWEEN :minPrice AND :maxPrice")
     List<Product> findByCategoryAndPriceRange(@Param("categorynum") Long categorynum, @Param("minPrice") String minPrice, @Param("maxPrice") String maxPrice);
 
+    List<Product> findByProductnameContainingIgnoreCase(String productname);
 }

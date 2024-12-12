@@ -44,5 +44,7 @@ public class ProductService {
 
     }
 
-
+    public List<Product> searchProducts(String query) {
+        return productRepository.findByProductnameContainingIgnoreCase(query);
+    }
 }
