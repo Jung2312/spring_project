@@ -19,6 +19,34 @@ function MyPage() {
     const [likeCount, setLikeCount] = useState(0);
     const [postCount, setPostCount] = useState(0);
     const [totalCount, setTotalCount] = useState(0); // 합산된 값을 저장할 상태 변수
+    const [couponCount, setCouponCount] = useState(0); // 쿠폰 개수 상태 추가
+
+    useEffect(() => {
+        const userid = sessionStorage.getItem("userid");
+        if (userid) {
+            setIsLogin(true);
+            fetchUserInfo(userid);
+            fetchContestImages(userid);
+            fetchContestCount(userid);
+            fetchPostImages(userid);
+            fetchLikeCount(userid);
+            fetchPostCount(userid);
+            fetchCouponCount(userid); // 쿠폰 개수 가져오기
+        }
+    }, [contestCount]);
+
+// 유효한 쿠폰 개수를 서버에서 가져오는 함수
+    const fetchCouponCount = async (userid) => {
+        try {
+            const response = await axios.get('http://localhost:80/coupon/valid/count', {
+                params: { userid },
+            });
+            setCouponCount(response.data); // 쿠폰 개수 설정
+        } catch (error) {
+            console.error('Error fetching coupon count:', error);
+        }
+    };
+
 
     useEffect(() => {
         const userid = sessionStorage.getItem("userid");
@@ -159,7 +187,7 @@ function MyPage() {
                         <div className="myPage_profile_activity_coupons">
                             <img className="myPage_profile_activity_img" src={myCounpons}/>
                             <span className="myPage_profile_activity_text">내 쿠폰</span>
-                            <span className="myPage_profile_activity_pnumber">0</span>
+                            <span className="myPage_profile_activity_pnumber">{couponCount}</span>
                         </div>
                     </div>
                 </div>
@@ -170,7 +198,7 @@ function MyPage() {
                     <div className="myPage_community_content">
                         {/* 게시글 사진 */}
                         {postImages.map((image, index) => (
-                            <img onClick={() => navigate("")} key={index} className="myPage_community_img" src={`/postImg/${image}`} alt="게시글 사진"
+                            <img onClick={() => navigate(`/community/recommendDetail/${image.postnum}`)} key={index} className="myPage_community_img" src={`/postImg/${image.postimg}`} alt="게시글 사진"
                                  onError={(e) => {
                                      e.target.src = ex;
                                  }}/>

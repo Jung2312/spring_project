@@ -1,6 +1,7 @@
 package com.spring.myHouse.community.repository;
 
 import com.spring.myHouse.community.entity.Recommend;
+import com.spring.myHouse.contest.entity.Contestjoin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,8 +17,9 @@ public interface RecommendRepository extends JpaRepository<Recommend, Long> {
     @Query("SELECT COUNT(r) FROM Recommend r WHERE r.userid = :userid")
     int countPostsByUserid(@Param("userid") String userid);
 
-    @Query("SELECT r.postimg FROM Recommend r WHERE r.userid = :userid")
-    List<String> findPostimgByUserid(@Param("userid") String userid);
+    // 수정된 부분: Contestjoin 객체를 반환
+    @Query("SELECT r FROM Recommend r WHERE r.userid = :userid")
+    List<Recommend> findRecommendByUserid(@Param("userid") String userid);
 
     @Modifying
     @Transactional

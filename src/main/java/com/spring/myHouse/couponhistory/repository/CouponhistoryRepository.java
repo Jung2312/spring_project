@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CouponhistoryRepository extends JpaRepository<Couponhistory, Long> {
-    @Query("select count(c) from Couponhistory c where c.userid = :userid")
+    @Query("SELECT COUNT(c) FROM Couponhistory c WHERE c.userid = :userid AND c.couponexpirationdate >= CURRENT_DATE")
     int countCouponhistoriesUserid(@Param("userid") String userid);
 }
+

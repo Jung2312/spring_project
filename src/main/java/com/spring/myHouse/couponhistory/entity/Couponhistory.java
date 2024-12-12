@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
+
 @Data
 @Entity
 @Table(name = "couponhistory")
@@ -18,6 +20,6 @@ public class Couponhistory {
 
     private Long couponusecheck;
 
-    private String couponexpirationdate;
+    private LocalDate couponexpirationdate;
 
 }

@@ -2,6 +2,7 @@ package com.spring.myHouse.community.service;
 
 import com.spring.myHouse.community.entity.Recommend;
 import com.spring.myHouse.community.repository.RecommendRepository;
+import com.spring.myHouse.contest.entity.Contestjoin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +27,9 @@ public class RecommendService {
         return recommendRepository.countPostsByUserid(userid);
     }
 
-    public List<String> getPostImagesByUserid(String userid) {
-        return recommendRepository.findPostimgByUserid(userid);
+    // 수정된 부분: List<Recommend> 반환
+    public List<Recommend> getRecommendByUserid(String userid) {
+        return recommendRepository.findRecommendByUserid(userid);  // Recommend 객체 반환
     }
 
     public void incrementRecommendLike(Long postnum) {

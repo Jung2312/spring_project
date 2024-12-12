@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.myHouse.community.entity.Recommend;
 import com.spring.myHouse.community.service.RecommendService;
+import com.spring.myHouse.contest.entity.Contestjoin;
 import com.spring.myHouse.liked.entity.Liked;
 import com.spring.myHouse.liked.service.LikedService;
 import com.spring.myHouse.user.entity.User;
@@ -134,9 +135,9 @@ public class RecommendController {
     }
 
     @GetMapping("/post/images")
-    public ResponseEntity<List<String>> getPostImages(@RequestParam String userid) {
-        List<String> joinImages = recommendService.getPostImagesByUserid(userid);
-        return ResponseEntity.ok(joinImages);
+    public ResponseEntity<List<Recommend>> getContestImages(@RequestParam String userid) {
+        List<Recommend> recommends = recommendService.getRecommendByUserid(userid);
+        return ResponseEntity.ok(recommends);
     }
 
     @PostMapping("/like")
