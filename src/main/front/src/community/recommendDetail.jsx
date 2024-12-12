@@ -190,9 +190,7 @@ const PostDetail = () => {
             return;
         }
 
-        // 버튼 상태 즉시 변경
-        setFollows((prevFollows) => !prevFollows);
-        
+
         try {
             const response = await fetch("http://localhost:80/follow/toggle", {
                 method: "POST",
@@ -336,12 +334,14 @@ const PostDetail = () => {
                         />
                         <span className="post-detail-author-id">{post.userid}</span>
 
-                        <button
-                            onClick={handleFollow}
-                            className={`post-detail-follow-btn ${follows ? 'following' : 'follow'}`}
-                        >
-                            {follows ? '팔로잉' : '팔로우'}
-                        </button>
+                        {post.userid !== loggedInUserId && (
+                            <button
+                                className={`post-detail-follow-btn ${follows ? 'following' : 'follow'}`}
+                                onClick={handleFollow}
+                            >
+                                {follows ? '팔로잉' : '팔로우'}
+                            </button>
+                        )}
                     </div>
 
                     {/* 수정, 삭제 버튼 */}
