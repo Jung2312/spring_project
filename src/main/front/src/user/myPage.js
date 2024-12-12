@@ -272,60 +272,44 @@ function MyPage() {
                     isOpen={modalIsOpen}
                     closeModal={() => setModalIsOpen(false)}
                     content={modalContent}
+                    userId={sessionStorage.getItem("userid")} // 여기서 userId 전달
                 />
             </div>
-
-
         </div>
     )
 }
 
 function MyModal({ isOpen, closeModal, content }) {
-    const [loading, setLoading] = useState(false); // 로딩 상태
-    const [userInfoList, setUserInfoList] = useState([]); // 모든 사용자 정보 리스트
+    const [userInfoList, setUserInfoList] = useState([]); // 팔로잉/팔로워 사용자 정보 리스트
+    const [loading, setLoading] = useState(true); // 로딩 상태
     const navigate = useNavigate();
 
-    const fetchUserInfo = async (userid) => {
-        setLoading(true); // 로딩 시작
-        try {
-            const response = await fetch(`http://localhost:80/user/info?userid=${userid}`, {
-                method: 'GET',
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                return data; // 유저 정보를 반환
-            } else {
-                console.error('Failed to fetch user info');
-                return null;
-            }
-        } catch (error) {
-            console.error('Error fetching user info:', error);
-            return null;
-        } finally {
-            setLoading(false); // 로딩 종료
-        }
-    };
-
-    // 모달이 열릴 때마다 유저 정보 초기화 (모든 팔로우/팔로잉 목록에 대해 정보 가져오기)
     useEffect(() => {
-        const fetchAllUserInfo = async () => {
-            setLoading(true); // 로딩 시작
-            const infoList = [];
-            for (let user of content) {
-                const userInfo = await fetchUserInfo(user.userid);
-                if (userInfo) {
-                    infoList.push(userInfo); // 사용자 정보를 리스트에 추가
-                }
+        const fetchUserInfos = async () => {
+            try {
+                setLoading(true);
+                const userInfos = await Promise.all(
+                    content.map(async (userId) => {
+                        const response = await fetch(`http://localhost:80/user/info?userid=${userId}`);
+                        if (!response.ok) {
+                            throw new Error("서버 오류: 데이터를 가져올 수 없습니다.");
+                        }
+                        const data = await response.json();
+                        return data;
+                    })
+                );
+                setUserInfoList(userInfos); // 팔로잉/팔로워 정보 설정
+            } catch (error) {
+                console.error("팔로우 사용자 정보 가져오기 오류:", error);
+            } finally {
+                setLoading(false);
             }
-            setUserInfoList(infoList); // 상태에 저장
-            setLoading(false); // 로딩 종료
         };
 
-        if (isOpen && content && content.length > 0) {
-            fetchAllUserInfo(); // 팔로우/팔로잉 리스트에 대해 정보 가져오기
+        if (content.length > 0) {
+            fetchUserInfos();
         }
-    }, [isOpen, content]);
+    }, [content]);
 
     return (
         <Modal
@@ -341,32 +325,28 @@ function MyModal({ isOpen, closeModal, content }) {
                     &times;
                 </button>
             </div>
-            <ul className="modal-list">
-                {loading ? (
-                    <div>로딩 중...</div> // 로딩 중일 때 표시
-                ) : (
-                    content.map((user, index) => {
-                        const userInfo = userInfoList.find(info => info.userid === user.userid);
-                        return (
+
+            {loading ? (
+                <div>로딩 중...</div>
+            ) : (
+                <ul className="modal-list">
+                    {userInfoList.length > 0 ? (
+                        userInfoList.map((user, index) => (
                             <li
                                 key={index}
                                 className="modal-list-item"
                                 onClick={() => {
-                                    navigate("/profile", { state: { userId: user.userid } }); // userId를 프로필 페이지로 전달
+                                    navigate("/followPage", { state: { userId: user.userid } });
                                 }}
                             >
-                                {/* 로딩 상태에 따른 이미지 및 이름 표시 */}
-                                <img
-                                    src={userInfo?.profileimage || "default_profile.png"} // profileimage 데이터로 이미지 출력
-                                    alt="프로필 이미지"
-                                    onError={(e) => (e.target.src = "default_profile.png")}
-                                />
-                                <span>{userInfo?.name || user.username}</span> {/* name을 출력 */}
+                                <span>{user.name}</span> {/* 이름 출력 */}
                             </li>
-                        );
-                    })
-                )}
-            </ul>
+                        ))
+                    ) : (
+                        <div>유저 정보가 없습니다.</div>
+                    )}
+                </ul>
+            )}
         </Modal>
     );
 }
