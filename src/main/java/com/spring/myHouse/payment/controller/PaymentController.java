@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,5 +105,58 @@ public class PaymentController {
         return paymentService.isExistUseridAndProductnum(userid, productnum);
     }
 
+    @PostMapping("/create")
+    public ResponseEntity<String> createPayment(@RequestBody Map<String, Object> paymentData) {
+        try {
+            // paymentData에서 필요한 정보 추출
+            Long payOrderNum = Long.valueOf(paymentData.get("payordernum").toString());
+            String userId = paymentData.get("userid").toString();
+            Long productNum = Long.valueOf(paymentData.get("productnum").toString());
+            Long payRepair = Long.valueOf(paymentData.get("payrepair").toString());
+            Long payPrice = Long.valueOf(paymentData.get("payprice").toString());
 
+            // Payment 객체 생성
+            Payment payment = new Payment();
+            payment.setPayordernum(payOrderNum);
+            payment.setUserid(userId);
+            payment.setProductnum(productNum);
+            payment.setPayrepair(payRepair);
+            payment.setPayprice(payPrice);
+            payment.setPaydate(LocalDate.now());  // 현재 날짜 저장
+
+            // 결제 저장
+            paymentService.savePayments(payment);
+
+            return ResponseEntity.ok("Payments saved successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving payments: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/getPaymentDetails")
+    public List<Map<String, Object>> getPaymentDetails(@RequestParam Long payordernum) {
+        List<Payment> paymentList = paymentService.getPaymentByPayOrderNum(payordernum);
+
+        List<Map<String, Object>> paymentWithProducts = new ArrayList<>();
+
+        for (Payment payment : paymentList) {
+            Map<String, Object> paymentWithDetails = new HashMap<>();
+
+            paymentWithDetails.put("payordernum", payment.getPayordernum());
+            paymentWithDetails.put("payprice", payment.getPayprice());
+            paymentWithDetails.put("payrepair", payment.getPayrepair());
+            paymentWithDetails.put("paydate", payment.getPaydate());
+            paymentWithDetails.put("userid", payment.getUserid());
+
+            Product product = productService.getProductByProductnum(payment.getProductnum());
+            paymentWithDetails.put("productnum", product.getProductnum());
+            paymentWithDetails.put("productname", product.getProductname());
+            paymentWithDetails.put("productprice", Integer.parseInt(product.getProductprice()));
+
+            paymentWithProducts.add(paymentWithDetails);
+        }
+
+
+        return paymentWithProducts;
+    }
 }

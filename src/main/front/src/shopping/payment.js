@@ -160,17 +160,18 @@ function Payment() {
         };
     }, []);
 
-    // 아임포트 결제 내용
+    // 아임포트 결제, 데이터 삽입
     const handleCardPayment = () => {
         const IMP = window.IMP; // 아임포트 결제 객체
         IMP.init("imp32370223"); // 아임포트에 발급받은 키 사용
+        const userid = sessionStorage.getItem("userid");
 
         IMP.request_pay({
             pg: 'html5_inicis.INIpayTest',
             pay_method: 'card',
-            merchant_uid: `merchant_${new Date().getTime()}`,
+            merchant_uid: `${new Date().getTime()}`.slice(0, 10),
             name: productData.productname,
-            amount: formatPrice(calculateTotalPayment()), // 결제 금액
+            amount: 100, // 결제 금액
             buyer_email: userData.email,
             buyer_name: userData.name,
             buyer_tel: userData.phone,
@@ -179,7 +180,29 @@ function Payment() {
         }, function(rsp) {
             if (rsp.success) {
                 alert("결제가 완료되었습니다.");
-                navigate(`/purchaseHistory`);
+
+                // 결제 정보를 서버로 전달
+                const paymentData = {
+                    payordernum: rsp.merchant_uid, // 주문 번호 
+                    userid: userid, // 사용자 ID
+                    productnum: productData.productnum, // 상품 번호
+                    payprice: rsp.paid_amount, // 결제 금액
+                    payrepair: Count, // 구매한 개수
+                    paydate: new Date().toISOString().slice(0, 10) // 결제 날짜 (현재 시간)
+                };
+
+                // 서버로 결제 정보 전송 (axios 사용 예시)
+                axios.post('http://localhost:80/payment/create', paymentData)
+                    .then(response => {
+                        console.log("결제 정보 저장 성공:", response);
+                        navigate(`/purchaseHistory/${paymentData.payordernum}`);
+                    })
+                    .catch(error => {
+                        alert(paymentData);
+                        console.error("결제 정보 저장 실패:", error);
+                        alert("결제 정보를 저장하는 데 실패했습니다.");
+                    });
+
             } else {
                 alert("결제 실패: " + rsp.error_msg);
             }
@@ -204,8 +227,8 @@ function Payment() {
     // 총 결제 금액
     const calculateTotalPayment = () => {
         const deliveryCost = 10000; // 배송비
-        const couponDiscount = 0; // 쿠폰 할인
-        const mileageDiscount = 0; // 마일리지 할인
+        const couponDiscount = selectedCoupon.couponprice; // 쿠폰 할인
+        const mileageDiscount = inputMileage; // 마일리지 할인
         return productData.productprice * Count + deliveryCost - couponDiscount - mileageDiscount;
     };
 
