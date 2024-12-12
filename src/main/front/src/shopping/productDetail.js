@@ -108,6 +108,8 @@ function ProductDetail() {
 
     // 상품 정보
     useEffect(() => {
+        // productnum이 제대로 전달되었는지 확인
+        console.log('Product number:', productnum);
         fetch(`http://localhost:80/product/productDetail?productnum=${productnum}`)
             .then(res => {
                 if (!res.ok) {
