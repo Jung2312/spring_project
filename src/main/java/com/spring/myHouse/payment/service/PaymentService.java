@@ -57,6 +57,7 @@ public class PaymentService {
             Product product = productService.getProductByProductnum(entry.getKey());
             if (product != null) {
                 Map<String, Object> productData = new HashMap<>();
+                productData.put("productNum", product.getProductnum());
                 productData.put("productName", product.getProductname());
                 productData.put("productPrice", product.getProductprice());
                 productData.put("productMainImage", product.getProductmainimage());

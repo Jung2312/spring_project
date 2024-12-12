@@ -1,9 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
+import {useNavigate} from "react-router-dom";
 import '../css/shopping.css';
 import Header from "../header";
 import axios from "axios";
 
 function ShoppingBest() {
+    const navigate = useNavigate();
     const today = new Date(); // 현재 날짜
     const setToday = `${today.getFullYear()}.${today.getMonth() + 1}.${today.getDate()} 기준`;
     const formatPrice = (price) => {
@@ -122,7 +124,7 @@ function ShoppingBest() {
                 <span className="shoppingBest_date">{setToday}</span>
                 <div className="shoppingBest_product_section">
                     {products.map((product, index) => (
-                        <div className="shoppingBest_product" key={index}>
+                        <div onClick={() => navigate(`/productDetail/${product.productNum}`)} className="shoppingBest_product" key={index}>
                             <div className="shoppingBest_img_container">
                                 <div className="shoppingBest_flag">{index + 1}</div>
                                 <img className="shoppingBest_img" src={product.productMainImage}

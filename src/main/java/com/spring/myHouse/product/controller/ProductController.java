@@ -73,10 +73,12 @@ public class ProductController {
                 "JOIN store s ON p.storenum = s.storenum " +
                 "LIMIT ? OFFSET ?"; // LIMIT과 OFFSET 사용;
 
+
+
         // 쿼리 파라미터로 limit과 offset을 넘겨서 처리
         return jdbcTemplate.query(query, new Object[]{limit, offset}, (rs, rowNum) -> {
             Map<String, Object> result = new HashMap<>();
-            result.put("productNum", rs.getString("productnum"));
+            result.put("productNum", Integer.parseInt(rs.getString("productnum")));
             result.put("productMainImage", rs.getString("productmainimage"));
             result.put("productName", rs.getString("productname"));
             result.put("productPrice", rs.getInt("productprice"));
