@@ -87,4 +87,14 @@ public class PaymentService {
     public boolean isExistUseridAndProductnum(String userid, long productnum){
         return paymentRepository.existsByUseridAndProductnum(userid, productnum);
     }
+
+    // 결제 저장
+    public void savePayments(Payment payments) {
+        paymentRepository.save(payments);
+    }
+
+    // 주문번호로 주문 조회
+    public List<Payment> getPaymentByPayOrderNum(Long payordernum) {
+        return paymentRepository.findByPayordernum(payordernum);  // payordernum으로 데이터 조회
+    }
 }

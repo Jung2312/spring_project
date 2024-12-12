@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -27,7 +27,7 @@ public class Payment {
     private Long payrepair;
 
     @CreationTimestamp
-    private LocalDateTime paydate;
+    private LocalDate paydate;
 
     private Long payprice;
 }

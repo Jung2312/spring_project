@@ -12,4 +12,6 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     List<Payment> findByUserid(String userid);
 
     boolean existsByUseridAndProductnum(String userid, long productnum);
+
+    List<Payment> findByPayordernum(Long payordernum);
 }
