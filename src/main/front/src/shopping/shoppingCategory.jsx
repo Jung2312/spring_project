@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from "react";
 import "../css/shoppingCategory.css";
 import ex from '../img/product_basic.png';
-import Header from '../header.js'
+import Header from '../header.js';
 
 function ShoppingCategory() {
     const [majorCategories, setMajorCategories] = useState([]);
     const [subCategories, setSubCategories] = useState({});
     const [expandedMajor, setExpandedMajor] = useState(null);
-    const [products, setProducts] = useState([]); // 상품 데이터를 저장할 상태
+    const [products, setProducts] = useState([]);
+
+    const selectCateogory = sessionStorage.getItem("selectedCategory");
 
     useEffect(() => {
+        if (selectCateogory) {
+            handleMajorClick(selectCateogory);
+        }
+
         fetch("http://localhost:80/api/categories/major")
             .then(response => response.json())
             .then(data => setMajorCategories(data))
@@ -26,27 +32,32 @@ function ShoppingCategory() {
                     const filteredData = data.filter(sub => sub.subcategory !== null);
                     setSubCategories(prev => ({ ...prev, [major]: filteredData }));
                     setExpandedMajor(major);
+
+                    // 세션 카테고리가 존재하는 경우 첫 번째 서브카테고리로 자동 선택
+                    if (selectCateogory && filteredData.length > 0) {
+                        const firstSubCategory = filteredData[0].categorynum;
+                        handleSubCategoryClick(firstSubCategory);
+                    }
+                    sessionStorage.removeItem("selectedCategory");
                 })
                 .catch(err => console.error("Error fetching subcategories:", err));
         }
     };
 
-    // 서브 카테고리 클릭 시 상품 데이터 불러오기
     const handleSubCategoryClick = (categorynum) => {
+        console.log("Fetching products for subcategory:", categorynum);
+
         fetch(`http://localhost:80/product/category/${categorynum}`)
             .then(response => response.json())
-            .then(data => setProducts(data)) // 상품 데이터를 상태에 저장
+            .then(data => setProducts(data))
             .catch(err => console.error("Error fetching products:", err));
     };
 
     return (
         <div className="shopping-page-container">
-            {/* 헤더 */}
             <Header />
 
-            {/* 메인 콘텐츠 */}
             <div className="shopping-category-main-content">
-                {/* 카테고리 */}
                 <aside className="category-sidebar">
                     {majorCategories.length > 0 ? (
                         majorCategories.map((major, index) => (
@@ -64,7 +75,7 @@ function ShoppingCategory() {
                                             <li
                                                 key={sub.categorynum}
                                                 className="subcategory-item"
-                                                onClick={() => handleSubCategoryClick(sub.categorynum)} // 이벤트 핸들러 추가
+                                                onClick={() => handleSubCategoryClick(sub.categorynum)}
                                             >
                                                 {sub.subcategory}
                                             </li>
@@ -78,7 +89,6 @@ function ShoppingCategory() {
                     )}
                 </aside>
 
-                {/* 상품 정보 */}
                 <section className="category-product-info">
                     {products.length > 0 && (
                         <div className="category-product-list">
@@ -94,7 +104,7 @@ function ShoppingCategory() {
                                         className="category-product-image"
                                         onError={(e) => {
                                             e.target.src = ex;
-                                        }} // 이미지 오류 처리
+                                        }}
                                     />
                                     <h2 className="category-product-name">{product.productname}</h2>
                                     <p className="category-product-store">{product.storeName}</p>

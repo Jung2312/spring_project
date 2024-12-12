@@ -400,10 +400,17 @@ function MainPage() {
                                 disabled={scrollPosition === 0}>&#10094;</button>
                         <div className="mainPage-category-part" ref={categoryContainerRef}>
                             {categories.map((item) => (
-                                <a href="/shopping/shoppingCategory" key={item.categorynum}>
+                                <a
+                                    href="/shopping/shoppingCategory"
+                                    key={item.categorynum}
+                                    onClick={() => sessionStorage.setItem("selectedCategory", item.majorcategory)}
+                                >
                                     <div className="mainPage-category-content">
-                                        <img className="mainPage-categoty-img" src={item.categoryimage}
-                                             alt={item.majorcategory}/>
+                                        <img
+                                            className="mainPage-categoty-img"
+                                            src={item.categoryimage}
+                                            alt={item.majorcategory}
+                                        />
                                         <span className="mainPage-category-name">{item.majorcategory}</span>
                                     </div>
                                 </a>

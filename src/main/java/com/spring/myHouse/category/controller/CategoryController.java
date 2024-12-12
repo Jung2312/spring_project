@@ -45,4 +45,5 @@ public class CategoryController {
             @PathVariable String subCategory) {
         return categoryService.getCategoriesByMajorAndSubCategory(majorCategory, subCategory);
     }
+
 }
