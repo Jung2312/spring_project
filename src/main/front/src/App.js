@@ -26,10 +26,10 @@ import Profile from "./user/profile";
 import ShoppingInformation from "./shopping/shoppingInformation";
 import ShoppingBest from "./shopping/shoppingBest";
 import Payment from "./shopping/payment";
-import RecommendDetail from "./community/recommendDetail";
 import ContestRegistration from "./admin/addContest";
 import ContestEdit from "./admin/editContest";
 import PurchaseHistory from "./shopping/purchaseHistory";
+import PostDetail from "./community/recommendDetail";
 
 function AppRouter() {
     const navigate = useNavigate();
@@ -69,9 +69,10 @@ function AppRouter() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/storeSignup" element={<StoreSignup />} />
+            <Route path="/community/recommendDetail/:postnum" element={<PostDetail />} />
             <Route path="/community/recommend" element={<Recommend />} />
             <Route path="/recommend/post" element={<RecommendPostPage />} />
-            <Route path="/cart" element={<Cart />} />
+            <Route path="/shopping/cart" element={<Cart />} />
             <Route path="/myPage/setting" element={<MyPageSet />} />
             <Route path="/shopping/shoppingHome" element={<ShoppingHome />} />
             <Route path="/main" element={<MainPage />} />

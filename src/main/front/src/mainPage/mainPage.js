@@ -12,6 +12,7 @@ import ex from "../img/exProfile.png";
 import '../css/community.css';
 import '../css/mainPage.css';
 import {useNavigate} from "react-router-dom";
+import redlike from "../img/redLike.png";
 
 function MainPage() {
     const navigate = useNavigate();
@@ -27,60 +28,25 @@ function MainPage() {
     const [currentIndex, setCurrentIndex] = useState(1); // 초기 위치는 첫 번째 슬라이드
     const containerRef = useRef(null);
     const isTransitioning = useRef(false);
-    const [likeCount, setLikeCount] = useState(0); // 좋아요 초기값
     const [postList, setPostList] = useState([]); // 게시글 데이터
     const [likedPosts, setLikedPosts] = useState([]); // 좋아요를 누른 게시글 리스트 (postnum)
+    const [reviewCounts, setReviewCounts] = useState({}); // 리뷰 개수 저장
+    const [replies, setReplies] = useState({});
+    const userid = sessionStorage.getItem("userid");
 
-    // 서버에서 게시글 데이터 가져옴
-    useEffect(() => {
-        axios
-            .get('http://localhost:80/recommend') // Spring Boot API URL
-            .then((response) => {
-                setPostList(response.data);
-            })
-            .catch((error) => {
-                console.error("데이터를 가져오는 중 오류가 발생했습니다.", error);
-            });
-
-        // 로컬 스토리지에서 좋아요 상태 복원
-        const storedLikedPosts = JSON.parse(localStorage.getItem('likedPosts') || '[]');
-        setLikedPosts(storedLikedPosts);
-    }, []);
-
-// 좋아요 클릭 시 처리
-    const handleLikeClick = (postNum) => {
-        // 이미 좋아요를 눌렀다면 아무 동작도 하지 않음
-        if (likedPosts.includes(postNum)) {
-            // 이미 좋아요를 누른 경우 알림을 띄운다
-            alert('좋아요는 한 번만 누를 수 있습니다.');
-            return; // 함수 종료
+    // 리뷰 개수를 가져오는 함수
+    const fetchReviewStatistics = async (productNum) => {
+        try {
+            const response = await axios.get(`http://localhost:80/review/statistics?productnum=${productNum}`);
+            console.log('Review statistics response:', response.data);  // API 응답 로그 추가
+            setReviewCounts((prevCounts) => ({
+                ...prevCounts,
+                [productNum]: response.data.reviewcount, // 리뷰 개수 저장
+            }));
+        } catch (error) {
+            console.error(`Error fetching review statistics for productnum ${productNum}:`, error);
         }
-
-        // 좋아요를 클릭한 게시글에 대해 서버로 좋아요 증가 요청
-        axios
-            .post('http://localhost:80/recommend/user/like', null, {
-                params: { postnum: postNum } // URL 파라미터로 postnum 전달
-            })
-            .then((response) => {
-                // 서버에서 좋아요 업데이트가 성공하면
-                setPostList((prevPosts) =>
-                    prevPosts.map((post) =>
-                        post.postnum === postNum ? { ...post, postlike: post.postlike + 1 } : post
-                    )
-                );
-
-                // 로컬 상태에 해당 게시글의 좋아요 정보를 추가
-                const newLikedPosts = [...likedPosts, postNum];
-                setLikedPosts(newLikedPosts);
-
-                // 로컬 스토리지에 저장하여 페이지 새로고침 시 유지
-                localStorage.setItem('likedPosts', JSON.stringify(newLikedPosts));
-            })
-            .catch((error) => {
-                console.error('좋아요 증가 중 오류가 발생했습니다.', error);
-            });
     };
-
 
     // 앞뒤 복제 슬라이드 추가
     const extendedBanners = [banners[totalBanners - 1], ...banners, banners[0]];
@@ -176,60 +142,19 @@ function MainPage() {
             });
     }, []);
 
-    // 모든 제품 데이터를 가져옴
+// 모든 제품 데이터를 가져옴
     useEffect(() => {
         axios.get('http://localhost:80/product/productslist')
-            .then(response => {
+            .then((response) => {
                 setProducts(response.data); // 모든 제품 저장
+                response.data.forEach((product) => {
+                    fetchReviewStatistics(product.productNum);  // 각 제품에 대해 리뷰 개수를 가져옴
+                });
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error('Error fetching products:', error);
             });
     }, []);
-
-    // 서버에서 게시글 데이터 가져옴
-    useEffect(() => {
-        axios
-            .get('http://localhost:80/recommend') // Spring Boot API URL
-            .then((response) => {
-                setPostList(response.data);
-            })
-            .catch((error) => {
-                console.error("데이터를 가져오는 중 오류가 발생했습니다.", error);
-            });
-    }, []);
-
-    // 특정 Major 카테고리 탭 클릭 시 데이터 필터링
-    const showTab = (tabName) => {
-        setActiveTab(tabName); // 활성화된 탭 설정
-
-        if (tabName === "전체") {
-            axios.get('http://localhost:80/product/productslist')
-                .then(response => {
-                    setProducts(response.data); // 모든 제품 업데이트
-                })
-                .catch(error => {
-                    console.error('Error fetching all products:', error);
-                });
-        } else {
-            axios.get(`http://localhost:80/api/categories/${tabName}/sub`)
-                .then(response => {
-                    const subCategoryNums = response.data.map(category => category.categorynum);
-                    axios.get('http://localhost:80/product/productslist', {
-                        params: { categoryNums: subCategoryNums } // 필터 조건 전달
-                    })
-                        .then(response => {
-                            setProducts(response.data); // 필터링된 제품 저장
-                        })
-                        .catch(error => {
-                            console.error(`Error fetching products for ${tabName}:`, error);
-                        });
-                })
-                .catch(error => {
-                    console.error(`Error fetching subcategories for ${tabName}:`, error);
-                });
-        }
-    };
 
     // 초기 스크롤 상태 업데이트 (수정됨)
     useEffect(() => {
@@ -271,6 +196,96 @@ function MainPage() {
         }
     };
 
+    // 서버에서 게시글 데이터 가져옴
+    useEffect(() => {
+        axios
+            .get('http://localhost:80/recommend') // Spring Boot API URL
+            .then((response) => {
+                setPostList(response.data);
+            })
+            .catch((error) => {
+                console.error("데이터를 가져오는 중 오류가 발생했습니다.", error);
+            });
+    }, []);
+
+    useEffect(() => {
+        const fetchLikedPosts = async () => {
+            try {
+                const response = await axios.get('http://localhost:80/liked/user', {
+                    params: { userid },
+                });
+                setLikedPosts(response.data); // 사용자가 좋아요한 게시글 ID 목록
+            } catch (error) {
+                console.error("좋아요 데이터 가져오기 실패:", error);
+            }
+        };
+
+        if (userid) fetchLikedPosts();
+    }, [userid]);
+
+    const handleLikeToggle = async (postnum) => {
+        if (!userid) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
+
+        try {
+            const response = await axios.post(
+                `http://localhost:80/recommend/like`,
+                null, // Request body 필요 없음
+                {
+                    params: { postnum },
+                    headers: { userid },
+                }
+            );
+
+            if (response.status === 200) {
+                const isLiked = !likedPosts.includes(postnum);
+                setLikedPosts((prevLikedPosts) =>
+                    isLiked
+                        ? [...prevLikedPosts, postnum]
+                        : prevLikedPosts.filter((id) => id !== postnum)
+                );
+
+                // postList에서 해당 게시글의 좋아요 수 업데이트
+                setPostList((prevPostList) =>
+                    prevPostList.map((post) =>
+                        post.postnum === postnum
+                            ? { ...post, postlike: post.postlike + (isLiked ? 1 : -1) }
+                            : post
+                    )
+                );
+            }
+        } catch (error) {
+            console.error("좋아요 처리 중 오류:", error);
+        }
+    };
+
+    useEffect(() => {
+        const fetchReplies = async () => {
+            try {
+                const response = await axios.get('http://localhost:80/reply/all');
+                const replyGroups = response.data.reduce((acc, reply) => {
+                    if (!acc[reply.postnum]) {
+                        acc[reply.postnum] = [];
+                    }
+                    acc[reply.postnum].push(reply);
+                    return acc;
+                }, {});
+                setReplies(replyGroups);
+            } catch (error) {
+                console.error("댓글 데이터 가져오기 실패:", error);
+            }
+        };
+
+        fetchReplies();
+    }, [postList]);
+
+    // 게시글 클릭 이벤트
+    const handlePostClick = (postnum) => {
+        navigate(`/community/recommendDetail/${postnum}`); // 상세 게시글 화면으로 이동
+    };
+
     return (
         <div>
             <Header/>
@@ -291,51 +306,44 @@ function MainPage() {
                     <button className="banner-button left" onClick={handlePrev}>&#10094;</button>
                     <button className="banner-button right" onClick={handleNext}>&#10095;</button>
                 </div>
-                <div className="mainPage-recommend-section">
+                <div className="recommend-container">
                     {postList.map((post) => (
-                        <div className="mainPage_recommend_section" key={post.postnum}>
+                        <div className="recommend-section" key={post.postnum}
+                             onClick={() => handlePostClick(post.postnum)}>
                             {/* 프로필 섹션 */}
-                            <div className="mainPage_profile_section">
-                                <div className="mainPage_profile_img">
-                                    <img className="mainPage_profile_img"
+                            <div className="profile-section">
+                                <div className="profile-img">
+                                    <img className="profile-img"
                                          src={`${process.env.PUBLIC_URL}/profileImg/${post.profileimage}`} alt="프로필 사진"
                                          onError={(e) => {
                                              e.target.src = ex;
                                          }}/>
                                 </div>
-                                <div className="mainPage_profile_content">
-                                    <div className="mainPage_profile_name">
+                                <div className="profile-content">
+                                    <div className="profile-name">
                                         <span className="nick-name">{post.userid}</span> {/* 닉네임 */}
-                                        <span>·</span>
-                                        <button className="follow">팔로우</button>
                                     </div>
                                     <div>
-                                        <span className="mainPage_profile_text">{post.introduce}</span> {/* 자기소개 */}
+                                        <span className="profile-text">{post.introduce}</span> {/* 자기소개 */}
                                     </div>
                                 </div>
                             </div>
                             {/* 게시글 사진 */}
-                            <img className="mainPage_post_img" src={`${process.env.PUBLIC_URL}/postImg/${post.postimg}`}
+                            <img className="post-img" src={`${process.env.PUBLIC_URL}/postImg/${post.postimg}`}
                                  alt="게시글 사진"
                                  onError={(e) => {
                                      e.target.src = ex;
                                  }}/>
                             {/* 좋아요와 댓글 */}
-                            <div
-                                className="mainPage_like_comment"
-                                onClick={() => handleLikeClick(post.postnum)} // 좋아요 클릭 시 처리
-                                style={{ cursor: 'pointer' }}
-                            >
+                            <div className="like-comment">
                                 <div className="like">
                                     <img
                                         className="like-img"
-                                        src={like}
+                                        src={likedPosts.includes(post.postnum) ? redlike : like}
                                         alt="좋아요"
-                                        style={{
-                                            filter: likedPosts.includes(post.postnum) ? 'invert(35%) sepia(100%) saturate(750%) hue-rotate(0deg)' : 'none', // 좋아요를 누른 상태
-                                        }}
+                                        onClick={() => handleLikeToggle(post.postnum)}
                                     />
-                                    <span>{post.postlike}</span> {/* 좋아요 수 */}
+                                    <span>{post.postlike}</span>
                                 </div>
                                 <div className="comment">
                                     <img className="comment-img" src={comment} alt="댓글"/>
@@ -343,20 +351,42 @@ function MainPage() {
                                 </div>
                             </div>
                             {/* 게시글 내용 */}
-                            <div className="mainPage_cotent_section">
+                            <div className="cotent-section">
                                 <div>
                                     <span className="cotent-text">{post.postcontent}</span>
                                 </div>
                             </div>
                             {/* 댓글 내용 */}
                             <div className="comment-section">
-                                <div className="mainPage_comment">
-                                    <img className="comment-profile" src={ex} alt="프로필사진"/>
-                                    <div className="comment-content">
-                                        <div><span className="name">{post.userid}</span></div>
-                                        <span className="comment-text">{post.userid}</span>
+                                {replies[post.postnum] && replies[post.postnum].length > 0 ? (
+                                    replies[post.postnum].map((reply) => (
+                                        <div className="comment" key={reply.replynum}>
+                                            <img className="comment-profile"
+                                                 src={`${process.env.PUBLIC_URL}/profileImg/${post.profileimage}`}
+                                                 alt="프로필 사진"
+                                                 onError={(e) => {
+                                                     e.target.src = `${process.env.PUBLIC_URL}/profileImg/defaultProfile.png`;
+                                                 }}/>
+                                            <div className="comment-content">
+                                                <div><span className="name">{reply.userid}</span></div>
+                                                <span className="comment-text">{reply.replycontent}</span>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="comment">
+                                        <img className="comment-profile"
+                                             src={`${process.env.PUBLIC_URL}/profileImg/${post.profileimage}`}
+                                             alt="프로필 사진"
+                                             onError={(e) => {
+                                                 e.target.src = `${process.env.PUBLIC_URL}/profileImg/defaultProfile.png`;
+                                             }}/>
+                                        <div className="comment-content">
+                                            <div><span className="profile-name nick-name">{userid || "익명"}</span></div>
+                                            <span className="comment-text">댓글을 작성해보세요...</span>
+                                        </div>
                                     </div>
-                                </div>
+                                )}
                             </div>
                         </div>
                     ))}
@@ -370,16 +400,24 @@ function MainPage() {
                                 disabled={scrollPosition === 0}>&#10094;</button>
                         <div className="mainPage-category-part" ref={categoryContainerRef}>
                             {categories.map((item) => (
-                                <a href="/shopping/shoppingCategory" key={item.categorynum}>
+                                <a
+                                    href="/shopping/shoppingCategory"
+                                    key={item.categorynum}
+                                    onClick={() => sessionStorage.setItem("selectedCategory", item.majorcategory)}
+                                >
                                     <div className="mainPage-category-content">
-                                        <img className="mainPage-categoty-img" src={item.categoryimage}
-                                             alt={item.majorcategory}/>
+                                        <img
+                                            className="mainPage-categoty-img"
+                                            src={item.categoryimage}
+                                            alt={item.majorcategory}
+                                        />
                                         <span className="mainPage-category-name">{item.majorcategory}</span>
                                     </div>
                                 </a>
                             ))}
                         </div>
-                        <button className="mainPage-slide-button right" onClick={() => slideCategories('right')} disabled={isAtEnd}>&#10095;</button>
+                        <button className="mainPage-slide-button right" onClick={() => slideCategories('right')}
+                                disabled={isAtEnd}>&#10095;</button>
                     </div>
                 </div>
                 <div className="mainPage-mostView-section">
@@ -391,7 +429,8 @@ function MainPage() {
                     </div>
                     <div className="mainPage-mostView-part">
                         {products.slice(0, 4).map((product, index) => (
-                            <div onClick={() => navigate(`/productDetail/${product.productNum}`)} className="mainPage-mostView-content" key={index}>
+                            <div onClick={() => navigate(`/productDetail/${product.productNum}`)}
+                                 className="mainPage-mostView-content" key={index}>
                                 <div className="mainPage-image-container">
                                     <img className="mainPage-mostView-img" src={product.productMainImage}
                                          alt={product.productName}/>
@@ -400,7 +439,8 @@ function MainPage() {
                                     <span className="mainPage-store-name">{product.storeName}</span>
                                     <span className="mainPage-product-name">{product.productName}</span>
                                     <span className="mainPage-product-price">{formatPrice(product.productPrice)}원</span>
-                                    <span className="mainPage-product-review">리뷰 37,213</span>
+                                    <span
+                                        className="mainPage-product-review">리뷰 {reviewCounts[product.productNum] || 0}</span>
                                 </div>
                             </div>
                         ))}
@@ -413,19 +453,10 @@ function MainPage() {
                             <span className="mainPage-title-more">더보기</span>
                         </a>
                     </div>
-                    {/* 탭 버튼 */}
-                    <div className="mainPage-tab-buttons-wrapper">
-                        <div className="mainPage-tab-buttons">
-                            {majorCategories.map((category, index) => (
-                                <button key={index}
-                                        className={`mainPage-tab-button ${activeTab === category ? 'active' : ''}`}
-                                        onClick={() => showTab(category)}>{category}</button>
-                            ))}
-                        </div>
-                    </div>
                     <div className="mainPage-best-part">
                         {products.slice(0, 3).map((product, index) => (
-                            <div onClick={() => navigate(`/productDetail/${product.productNum}`)} className="mainPage-best-content" key={index}>
+                            <div onClick={() => navigate(`/productDetail/${product.productNum}`)}
+                                 className="mainPage-best-content" key={index}>
                                 <div className="mainPage-image-container">
                                     <img className="mainPage-best-img"
                                          src={product.productMainImage}
@@ -436,7 +467,8 @@ function MainPage() {
                                     <span className="mainPage-store-name">{product.storeName}</span>
                                     <span className="mainPage-product-name">{product.productName}</span>
                                     <span className="mainPage-product-price">{formatPrice(product.productPrice)}원</span>
-                                    <span className="mainPage-product-review">리뷰 37,213</span>
+                                    <span
+                                        className="mainPage-product-review">리뷰 {reviewCounts[product.productNum] || 0}</span>
                                 </div>
                             </div>
                         ))}

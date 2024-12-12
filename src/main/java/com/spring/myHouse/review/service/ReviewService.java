@@ -24,4 +24,8 @@ public class ReviewService {
         return reviewRepository.existsByUseridAndProductnum(userid, productnum);
     }
 
+    public long getReviewCountByProductNum(Long productnum) {
+        return reviewRepository.countByProductNum(productnum);
+    }
+
 }

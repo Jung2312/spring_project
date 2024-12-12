@@ -14,6 +14,8 @@ const PostDetail = () => {
     const [hashtags, setHashtags] = useState([]); // 해시태그 상태 추가
     const [newTag, setNewTag] = useState(''); // 새 해시태그 입력 상태
     const [newImage, setNewImage] = useState(null); // 새로운 이미지 파일 상태
+    const [replies, setReplies] = useState([]);
+    const [newComment, setNewComment] = useState("");
 
     // sessionStorage에서 로그인한 사용자 ID 가져오기
     const loggedInUserId = sessionStorage.getItem('userid'); // 로그인한 사용자 아이디
@@ -39,13 +41,121 @@ const PostDetail = () => {
         fetchPost();
     }, [postnum]);
 
+    useEffect(() => {
+        // 댓글 데이터 가져오기
+        fetch(`http://localhost:80/reply/${postnum}`)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("댓글 조회 실패");
+                }
+                return response.json();
+            })
+            .then((data) => setReplies(data))
+            .catch((error) => console.error(error));
+    }, [postnum]);
+
+    const handleCommentSubmit = () => {
+        if (newComment.trim() === "") {
+            alert("댓글을 입력하세요.");
+            return;
+        }
+
+        if (!loggedInUserId) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
+
+        // 댓글 작성 요청
+        fetch(`http://localhost:80/reply/create`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                postnum,
+                replycontent: newComment,
+                userid: loggedInUserId, // 로그인된 사용자 ID (수정 필요)
+            }),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("댓글 작성 실패");
+                }
+                return response.json();
+            })
+            .then((newReply) => {
+                console.log("작성된 댓글:", newReply);
+                setReplies([...replies, newReply]); // 새 댓글 추가
+                setNewComment(""); // 입력 필드 초기화
+            })
+            .catch((error) => console.error("댓글 작성 중 오류:",error));
+    };
+
     const handleLike = () => {
         setLikes((prevLikes) => prevLikes + 1);
     };
 
-    const handleFollow = () => {
-        setFollows((prevFollows) => !prevFollows);
+    // 컴포넌트 마운트 시 팔로우 상태를 가져옴
+    useEffect(() => {
+        if (!loggedInUserId) {
+            console.warn("로그인된 사용자가 없습니다.");
+            return; // loggedInUserId가 없으면 실행하지 않음
+        }
+
+        const fetchFollowStatus = async () => {
+            try {
+                const response = await fetch(`http://localhost:80/follow/status?userid=${loggedInUserId}&target=${post.userid}`);
+                if (response.ok) {
+                    const result = await response.json();
+                    setFollows(result.following); // 서버에서 받은 상태로 설정
+                } else {
+                    console.error("팔로우 상태 가져오기 실패");
+                }
+            } catch (error) {
+                console.error("팔로우 상태 요청 중 오류 발생", error);
+            }
+        };
+
+        if (post && post.userid) {
+            fetchFollowStatus(); // 상태 가져오기
+        }
+    }, [loggedInUserId, post]); // 의존성 배열에 ID 추가
+
+    const handleFollow = async () => {
+        const targetUserId = post.userid; // 팔로우할 대상 사용자 ID
+
+        if (!loggedInUserId) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
+
+        try {
+            const response = await fetch("http://localhost:80/follow/toggle", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    userid: loggedInUserId, // 로그인한 사용자
+                    following: targetUserId, // 팔로우 대상
+                }),
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log("서버 응답:", result);
+                setFollows(result.following); // 팔로우 상태 업데이트
+            } else {
+                console.error("팔로우 상태 변경 실패");
+            }
+        } catch (error) {
+            console.error("팔로우 요청 중 오류 발생", error);
+        }
     };
+
+    useEffect(() => {
+        console.log("팔로우 상태 변경됨:", follows);
+    }, [follows]);
 
     const handleEdit = () => {
         setIsEditing(true); // 수정 버튼 클릭 시 수정 모드 활성화
@@ -162,14 +272,12 @@ const PostDetail = () => {
                         />
                         <span className="post-detail-author-id">{post.userid}</span>
 
-                        {post.userid !== loggedInUserId && (
-                            <button
-                                className={`post-detail-follow-btn ${follows ? 'following' : ''}`}
-                                onClick={handleFollow}
-                            >
-                                {follows ? '팔로우 중' : '팔로우'}
-                            </button>
-                        )}
+                        <button
+                            onClick={handleFollow}
+                            className={`post-detail-follow-btn ${follows ? 'following' : 'follow'}`}
+                        >
+                            {follows ? '팔로잉' : '팔로우'}
+                        </button>
                     </div>
 
                     {/* 수정, 삭제 버튼 */}
@@ -287,14 +395,39 @@ const PostDetail = () => {
                         </div>
                     )}
 
+                    {replies.length > 0 ? (
+                        replies.map((reply) => (
+                            <div className="post-detail-reply" key={reply.replynum}>
+                                <img className="post-detail-reply-profile"
+                                     src={`${process.env.PUBLIC_URL}/profileImg/${reply.profileimage}`}
+                                     alt="프로필 사진"
+                                     onError={(e) => {
+                                         e.target.src = `${process.env.PUBLIC_URL}/profileImg/defaultProfile.png`;
+                                     }}/>
+                                <strong className="post-detail-reply-userid">{reply.userid}</strong>
+                                <p className="post-detail-reply-content">{reply.replycontent}</p>
+                                <small className="post-detail-reply-date">{reply.replydate}</small>
+                            </div>
+                        ))
+                    ) : (
+                        <p className="post-detail-no-replies">댓글이 없습니다.</p>
+                    )}
+
                     {!isEditing && (
                         <div className="post-detail-comment-section">
                             <input
                                 type="text"
                                 className="post-detail-comment-input"
+                                value={newComment}
+                                onChange={(e) => setNewComment(e.target.value)}
                                 placeholder="댓글을 입력하세요"
                             />
-                            <button className="post-detail-comment-submit-btn">댓글 작성</button>
+                            <button
+                                className="post-detail-comment-submit-btn"
+                                onClick={handleCommentSubmit}
+                            >
+                                댓글 작성
+                            </button>
                         </div>
                     )}
                 </div>

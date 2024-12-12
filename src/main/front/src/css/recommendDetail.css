@@ -48,8 +48,16 @@
 }
 
 .post-detail-follow-btn.following {
-    background-color: #35C5F0;
-    color: white;
+    background-color: #00c7fb; /* 팔로우 중일 때 파란색 */
+    color: white; /* 텍스트 색상 */
+}
+
+.post-detail-follow-btn:focus {
+    outline: none;
+}
+
+.post-detail-follow-btn:hover {
+    opacity: 0.8;
 }
 
 .post-detail-stats {
@@ -177,4 +185,47 @@
 .post-detail-delete-btn,
 .post-detail-cancel-btn {
     background-color: red; /* 삭제 버튼 빨간색 */
+}
+
+/* 댓글 섹션 스타일 */
+.post-detail-reply {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+}
+
+.post-detail-reply-userid {
+    font-weight: bold;
+    color: #333;
+    font-size: 17px;
+}
+
+.post-detail-reply-profile {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.post-detail-reply-content {
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #555;
+}
+
+.post-detail-reply-date {
+    font-size: 12px;
+    color: #999;
+}
+
+/* 댓글이 없을 때 */
+.post-detail-no-replies {
+    color: #888;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 20px;
 }

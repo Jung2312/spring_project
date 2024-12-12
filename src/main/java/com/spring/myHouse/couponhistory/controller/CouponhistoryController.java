@@ -19,14 +19,18 @@ import java.util.Map;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/couponhistory")
 public class CouponhistoryController {
     @Autowired
     private CouponhistoryService couponhistoryService;
     @Autowired
     private CouponService couponService;
+    
+    @GetMapping("/coupon/valid/count")
+    public int getValidCouponCount(@RequestParam String userid) {
+        return couponhistoryService.getCountCouponHistory(userid);
+    }
 
-    @GetMapping("/couponlist")
+    @GetMapping("/couponhistory/couponlist")
     public List<Map<String, Object>> getCouponList(@RequestParam String userid) {
         // userid로 사용자 쿠폰 정보 조회
         List<Couponhistory> couponhistoryList = couponhistoryService.getUserCouponHistory(userid);
@@ -54,4 +58,5 @@ public class CouponhistoryController {
         }
         return couponhistoryWithCoupons;
     }
+
 }

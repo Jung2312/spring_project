@@ -13,6 +13,8 @@ import java.util.List;
 public interface CouponhistoryRepository extends JpaRepository<Couponhistory, Long> {
     List<Couponhistory> findAllByUserid(String userid);
 
-    @Query("select count(c) from Couponhistory c where c.userid = :userid")
+    @Query("SELECT COUNT(c) FROM Couponhistory c WHERE c.userid = :userid AND c.couponexpirationdate >= CURRENT_DATE")
+
     int countCouponhistoriesUserid(@Param("userid") String userid);
 }
+
