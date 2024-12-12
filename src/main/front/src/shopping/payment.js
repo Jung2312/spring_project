@@ -226,10 +226,16 @@ function Payment() {
 
     // 총 결제 금액
     const calculateTotalPayment = () => {
-        const deliveryCost = 10000; // 배송비
-        const couponDiscount = selectedCoupon.couponprice; // 쿠폰 할인
+        const deliveryCost = 2500; // 배송비
+
         const mileageDiscount = inputMileage; // 마일리지 할인
-        return productData.productprice * Count + deliveryCost - couponDiscount - mileageDiscount;
+        let price = productData.productprice * Count + deliveryCost - mileageDiscount;
+
+        if(selectedCoupon != null){
+            price = price - selectedCoupon.couponprice; // 쿠폰 할인
+        }
+
+        return price;
     };
 
     // 소지한 쿠폰 가져오기
@@ -302,7 +308,7 @@ function Payment() {
                                             </div>
                                             <div className="payment-order-product-delivery-pay">
                                                 <span className="payment-delivery-pay-title">배송비</span>
-                                                <span className="payment-delivery-pay">10,000원</span>
+                                                <span className="payment-delivery-pay">2,500원</span>
                                             </div>
                                         </div>
                                         <div className="payment-order-product-box">
@@ -599,7 +605,7 @@ function Payment() {
                             </div>
                             <div className="payment-total-delivery-cost-box">
                                 <div className="payment-total-delivery-cost-text"><span>총 배송비</span></div>
-                                <div className="payment-total-delivery-cost">{formatPrice(10000)}원</div>
+                                <div className="payment-total-delivery-cost">{formatPrice(2500)}원</div>
                             </div>
                             <div className="payment-total-coupon-cost-box">
                                 <div className="payment-total-coupon-cost-text"><span>쿠폰 적용</span></div>
