@@ -104,10 +104,7 @@ img{
         margin: auto;
         span{
             color:#ffffff;
-        }
-        span::after{
-            content: "▼";
-            margin-left: 5px;
+            margin-right: 4px;
         }
     }
 }
@@ -161,6 +158,7 @@ img{
         margin-right: 5%;
         .sub-header-realtime-search-rank{
             margin-right: 10px;
+            font-weight: bold;
         }
         .sub-header-realtime-search-img{
             font-size: 14px;
@@ -168,7 +166,16 @@ img{
             margin-right: 10px;
         }
         .sub-header-realtime-search-product-name{
-            width: 105px;
+            width: 150px; /* 고정 너비 설정 */
+            height: 20px;
+            font-size: 16px;
+            white-space: nowrap; /* 텍스트를 한 줄로 유지 */
+            overflow: hidden; /* 넘치는 부분 숨김 처리 */
+            text-overflow: ellipsis; /* 넘치는 텍스트 끝에 '...' 추가 */
+            display: inline-block;
+            vertical-align: top;
+            line-height: 1.2;
+            text-align: left;
         }
     }
     .sub-header-more-btn{
@@ -269,4 +276,74 @@ img{
             margin: 0;
         }
     }
+}
+
+.products-box {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #D5D5D5;
+    border-radius: 5px;
+    z-index: 1000;
+    margin-top: 14px;
+}
+
+.products-item {
+    padding: 10px;
+    cursor: pointer;
+
+}
+.products-item:hover {
+    background-color: #F5F5F5;
+}
+
+#products-item-main-image{
+    width: 40px;
+    height: 40px;
+    margin-right: 20px;
+}
+
+#products-item-main-image:hover{
+    transform: scale(1.5);
+    width: 80px;
+    height: auto;
+}
+
+
+
+.products-search-box {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #D5D5D5;
+    border-radius: 5px;
+    z-index: 1000;
+    margin-top: 30px;
+    font-size: 14px;
+}
+
+.products-search-item {
+    padding: 20px;
+    cursor: pointer;
+}
+.products-search-item:hover {
+    background-color: #F5F5F5;
+}
+
+.products-item-font-size, .products-item-text{
+    font-size: 14px;
+    display: block; /* a 태그를 블록 요소로 변경 */
+    width: 100%; /* 부모 div 크기만큼 확장 */
+    height: 100%; /* 부모 div 크기만큼 확장 */
+    text-decoration: none; /* 기본 밑줄 제거 */
+    color: inherit; /* 텍스트 색상 상속 */
+}
+
+.header-post-btn-icon{
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.header-post-btn-text{
+    font-weight: bold;
+    font-size: 16px;
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import '../css/community.css';
 import { useNavigate } from 'react-router-dom';
+import Header from "../header";
 
 function RecommendPostPage() {
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태
@@ -139,126 +140,130 @@ function RecommendPostPage() {
 
 
     return (
-        <div className="recommendPostPageContainer">
-            <div className="recommendPostPageBox">
-                <p className="recommendPostText">사진</p>
+        <div>
+            <Header/>
+            <div className="recommendPostPageContainer">
+                <div className="recommendPostPageBox">
+                    <p className="recommendPostTitleText">인테리어 추천</p>
+                    <p className="recommendPostTitleText">사진</p>
 
-                <div className="recommendPostImgContainer">
-                    <div
-                        className="recommendPostImgPreview"
-                        style={{
-                            backgroundImage: previewImage ? `url(${previewImage})` : "none",
-                        }}
-                    />
-                    <label htmlFor="fileInput" className="customFileUpload">
-                        파일 선택
-                    </label>
+                    <div className="recommendPostImgContainer">
+                        <div
+                            className="recommendPostImgPreview"
+                            style={{
+                                backgroundImage: previewImage ? `url(${previewImage})` : "none",
+                            }}
+                        />
+                        <label htmlFor="fileInput" className="customFileUpload">
+                            파일 선택
+                        </label>
+                        <input
+                            type="file"
+                            id="fileInput"
+                            className="recommendPostImgBtn"
+                            onChange={handleFileChange}
+                        />
+                    </div>
+
+
+                    <p className="recommendPostText">제목</p>
                     <input
-                        type="file"
-                        id="fileInput"
-                        className="recommendPostImgBtn"
-                        onChange={handleFileChange}
+                        type="text"
+                        name="posttitle"
+                        className="hashtagInputWrapper"
+                        value={postData.posttitle}
+                        onChange={handlePostDataChange}
                     />
-                </div>
 
+                    <p className="recommendPostText">내용</p>
+                    <textarea
+                        name="postcontent"
+                        className="recommendPostContentContainer"
+                        value={postData.postcontent}
+                        onChange={handlePostDataChange}
+                    />
 
-                <p className="recommendPostText">제목</p>
-                <input
-                    type="text"
-                    name="posttitle"
-                    className="hashtagInputWrapper"
-                    value={postData.posttitle}
-                    onChange={handlePostDataChange}
-                />
-
-                <p className="recommendPostText">내용</p>
-                <textarea
-                    name="postcontent"
-                    className="recommendPostContentContainer"
-                    value={postData.postcontent}
-                    onChange={handlePostDataChange}
-                />
-
-                <p className="recommendPostText">해시태그</p>
-                <p>최대 5개까지 등록 가능합니다.</p>
-                <div className="hashtagInputContainer">
-                    <div className="hashtagInputWrapper">
-                        {hashtags.map((tag, index) => (
-                            <span key={index} className="hashtagInInput">
+                    <p className="recommendPostText">해시태그</p>
+                    <p>최대 5개까지 등록 가능합니다.</p>
+                    <div className="hashtagInputContainer">
+                        <div className="hashtagInputWrapper">
+                            {hashtags.map((tag, index) => (
+                                <span key={index} className="hashtagInInput">
                                 #{tag}
-                                <button
-                                    onClick={() => setHashtags(hashtags.filter((_, i) => i !== index))}
-                                    className="deleteHashtagBtn"
-                                >
+                                    <button
+                                        onClick={() => setHashtags(hashtags.filter((_, i) => i !== index))}
+                                        className="deleteHashtagBtn"
+                                    >
                                     x
                                 </button>
                             </span>
-                        ))}
-                        <input
-                            type="text"
-                            className="hashtagInput"
-                            value={newTag}
-                            onChange={handleInputChange}
-                            onKeyDown={handleKeyDown}
-                            placeholder={hashtags.length < 5 ? "해시태그 입력" : ""}
-                            disabled={hashtags.length >= 5}
-                        />
-                    </div>
-                </div>
-
-                <p className="recommendPostText">상품 추가</p>
-                <button
-                    className="recommendPostInsertProduct"
-                    onClick={() => setProductBoxVisible(!isProductBoxVisible)}
-                >
-                    +
-                </button>
-                <input
-                    type="button"
-                    value="작성하기"
-                    className="recommendPostBtn"
-                    onClick={recommendPostSubmit}
-                />
-
-                {isProductBoxVisible && (
-                    <div className="recommendPostSelectProduct">
-                        <span className="recommendPostText">상품 선택</span>
-                        <div>
-                            {currentProducts.map((product, index) => (
-                                <div key={index} className="productItem">
-                                    <input
-                                        type="radio"
-                                        name="product"
-                                        value={product.payNum} // 실제 데이터 필드 이름 사용
-                                        onChange={() => setSelectedProduct(product.payNum)}
-                                        checked={selectedProduct === product.payNum}
-                                    />
-                                    <img src={product.productMainImage} className="recommendPostSelectImg"/>
-                                    <span className="recommendPostSelectImgText">{product.productName}</span>
-                                    <span className="recommendPostSelectImgText">|</span>
-                                    <span className="recommendPostSelectImgText">주문일: {product.payDate}</span>
-                                </div>
                             ))}
-                            <div className="pagination">
-                                <button
-                                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                                    disabled={currentPage === 1}
-                                    className="recommendPostPrevBtn"
-                                >
-                                    이전
-                                </button>
-                                <button className="recommendPostCurrentPage">{currentPage}</button>
-                                <button
-                                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                                    disabled={currentPage === totalPages}
-                                    className="recommendPostNextBtn"
-                                >
-                                    다음
-                                </button>
-                            </div>
+                            <input
+                                type="text"
+                                className="hashtagInput"
+                                value={newTag}
+                                onChange={handleInputChange}
+                                onKeyDown={handleKeyDown}
+                                placeholder={hashtags.length < 5 ? "해시태그 입력" : ""}
+                                disabled={hashtags.length >= 5}
+                            />
                         </div>
                     </div>
-                )}
+
+                    <p className="recommendPostText">상품 추가</p>
+                    <button
+                        className="recommendPostInsertProduct"
+                        onClick={() => setProductBoxVisible(!isProductBoxVisible)}
+                    >
+                        +
+                    </button>
+                    <input
+                        type="button"
+                        value="작성하기"
+                        className="recommendPostBtn"
+                        onClick={recommendPostSubmit}
+                    />
+
+                    {isProductBoxVisible && (
+                        <div className="recommendPostSelectProduct">
+                            <span className="recommendPostText">상품 선택</span>
+                            <div>
+                                {currentProducts.map((product, index) => (
+                                    <div key={index} className="productItem">
+                                        <input
+                                            type="radio"
+                                            name="product"
+                                            value={product.payNum} // 실제 데이터 필드 이름 사용
+                                            onChange={() => setSelectedProduct(product.payNum)}
+                                            checked={selectedProduct === product.payNum}
+                                        />
+                                        <img src={product.productMainImage} className="recommendPostSelectImg"/>
+                                        <span className="recommendPostSelectImgText">{product.productName}</span>
+                                        <span className="recommendPostSelectImgText">|</span>
+                                        <span className="recommendPostSelectImgText">주문일: {product.payDate}</span>
+                                    </div>
+                                ))}
+                                <div className="pagination">
+                                    <button
+                                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                                        disabled={currentPage === 1}
+                                        className="recommendPostPrevBtn"
+                                    >
+                                        이전
+                                    </button>
+                                    <button className="recommendPostCurrentPage">{currentPage}</button>
+                                    <button
+                                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                                        disabled={currentPage === totalPages}
+                                        className="recommendPostNextBtn"
+                                    >
+                                        다음
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

@@ -2,23 +2,31 @@ import React, { useState, useEffect } from 'react';
 import css from './css/header.css';
 import SearchImg from './img/search_img.png';
 import CartImg from './img/cart_img.png';
-import { useNavigate, useLocation } from "react-router-dom"; // useLocation 추가
+import postIcon from './img/headerPostIcon.png';
+import contestIcon from './img/headerContestIcon.png';
+import { useNavigate, useLocation } from "react-router-dom";
 
 function Header() {
     const [isLogin, setIsLogin] = useState(false);
     const [userInfo, setUserInfo] = useState(null);
-    const location = useLocation(); // 현재 경로를 가져옴
+    const [searchProduct, setSearchProduct] = useState("");
+    const [products, setProducts] = useState([]);
+    const [showProducts, setShowProducts] = useState(false);
+    const [topProducts, setTopProducts] = useState([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [showMoreContent, setShowMoreContent] = useState(false); // 검색 더보기 상태
+    const [showPostContent, setShowPostContent] = useState(false); // 글쓰기 버튼 더보기 상태
+    const location = useLocation();
 
-    // 컴포넌트가 렌더링될 때 로그인 여부를 확인하고, 로그인된 경우 사용자 정보 가져오기
     useEffect(() => {
         const userid = sessionStorage.getItem("userid");
         if (userid) {
             setIsLogin(true);
-            fetchUserInfo(userid);  // userid를 서버로 전송하여 사용자 정보 가져오기
+            fetchUserInfo(userid);
         }
+
     }, []);
 
-    // 서버에서 사용자 정보를 가져오는 함수
     const fetchUserInfo = async (userid) => {
         try {
             const response = await fetch(`http://localhost:80/user/info?userid=${userid}`, {
@@ -35,13 +43,108 @@ function Header() {
             console.error('Error fetching user info:', error);
         }
     };
+    // 컴포넌트 마운트될 때만 제품 목록 가져오기
+    useEffect(() => {
+        const fetchTopProducts = async () => {
+            try {
+                const response = await fetch("http://localhost:80/search/top", { method: 'GET' });
+                if (response.ok) {
+                    const data = await response.json();
+                    setTopProducts(data);
+                } else {
+                    console.error('Failed to fetch top products');
+                }
+            } catch (error) {
+                console.error('Error fetching top products:', error);
+            }
+        };
+
+        fetchTopProducts();
+    }, []);
+
+    // 2초마다 인덱스 변경하여 제품 이름 업데이트
+    useEffect(() => {
+        if (topProducts.length > 0) {
+            const interval = setInterval(() => {
+                setCurrentIndex((prevIndex) => (prevIndex + 1) % topProducts.length);
+            }, 1500);
+
+            return () => clearInterval(interval); // Cleanup
+        }
+    }, [topProducts]);
+
+    const fetchProducts = async (productname) => {
+        try {
+            const encodeProductName = encodeURIComponent(productname);
+            const response = await fetch(`http://localhost:80/product/search?productname=${encodeProductName}`, {
+                method: 'GET',
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setProducts(data.slice(0, 10)); // 최대 10개의 상품만 설정
+            } else {
+                console.error('Failed to fetch products');
+            }
+        } catch (error) {
+            console.error('Error fetching products:', error);
+        }
+    };
+
+    const handleSearchChange = (event) => {
+        const productname = event.target.value;
+        setSearchProduct(productname);
+
+        if (productname.trim() !== "") {
+            fetchProducts(productname);
+            setShowProducts(true);
+        } else {
+            setShowProducts(false);
+        }
+    };
+
+
+    const handleProductClick = async (product) => {
+        try {
+            await fetch("http://localhost:80/search", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    productname: product.productname,
+                    productnum: product.productnum
+                })
+            });
+        } catch (error) {
+            console.error('Error saving search data:', error);
+        }
+    };
+
+    const handleBlur = (event) => {
+        setTimeout(() => {
+            const dropdown = document.querySelector(".products-box");
+            if (!dropdown || !dropdown.contains(document.activeElement)) {
+                setShowProducts(false);
+            }
+        }, 100); // 약간의 지연을 추가해 클릭 이벤트가 처리되도록 함
+    };
 
     const logoutButtonClick = () => {
         sessionStorage.clear();
         window.location.reload();
-    }
+    };
 
-    // 활성화된 경로와 일치하는지 확인하는 함수
+    // "더 보기" 버튼 이벤트 처리
+    const toggleMoreContent = () => {
+        setShowMoreContent((prev) => !prev);
+    };
+
+    // "더 보기" 버튼 이벤트 처리
+    const togglePostContent = () => {
+        setShowPostContent((prev) => !prev);
+    };
+
     const isActive = (path) => location.pathname === path;
 
     return (
@@ -54,30 +157,73 @@ function Header() {
                     <a href="/contest" id="contest" className={isActive("/contest") ? "active" : ""}>콘테스트</a>
                 </div>
                 <div className="search-box">
-                    <img className="search-img" src={SearchImg}/>
-                    <input className="search-field" type="text" placeholder="통합검색"/>
+                    <img className="search-img" src={SearchImg} alt="Search" />
+                    <input
+                        className="search-field"
+                        type="text"
+                        placeholder="통합검색"
+                        value={searchProduct}
+                        onChange={handleSearchChange}
+                        onBlur={handleBlur}
+                        onFocus={() => searchProduct && setShowProducts(true)}
+                    />
+                    {showProducts && (
+                        <div className="products-box">
+                            {products.map((product) => (
+                                <div className="products-item" key={product.productnum}>
+                                    <a
+                                        href={`/productDetail/${product.productnum}`}
+                                        onClick={() => handleProductClick(product)}
+                                        className="products-item-text"
+                                    >
+                                        <img id="products-item-main-image" src={product.productmainimage}/>
+                                        {product.productname}
+                                    </a>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
                 <div className="cart-box">
-                    <a href=""><img src={CartImg}/></a>
+                    <a href=""><img src={CartImg} alt="Cart" /></a>
                 </div>
                 {isLogin ? (
-                    // Display user information if logged in
                     <div className="header-user-box">
                         <a href="/myPage/profile"><span
                             className="header-user-name">{userInfo ? `${userInfo.name}님` : "로딩중..."}</span></a>
                         <button id="mainpage-logout" onClick={() => logoutButtonClick()}>로그아웃</button>
-                        <a href="" id="service">고객센터</a>
                     </div>
                 ) : (
-                    // If not logged in, show login and register links
                     <div className="header-user-box">
                         <a href="/login" id="login">로그인</a>
                         <a href="/signup" id="register">회원가입</a>
-                        <a href="" id="service">고객센터</a>
                     </div>
                 )}
                 <div className="post-btn-box">
-                    <button className="post-btn"><span>글쓰기</span></button>
+                    <button
+                        className="post-btn"
+                        onClick={togglePostContent} // 버튼 이벤트 추가
+                    >
+                        <span>글쓰기 {showPostContent ? "▲" : "▼"}</span>
+                    </button>
+                    {/* "글쓰기 더 보기" 콘텐츠 */}
+                    {showPostContent && (
+                        <div className="products-search-box">
+                            <div className="products-search-item">
+                                <a className="products-item-font-size" href={"/recommend/post"}>
+                                    <img src={postIcon} className="header-post-btn-icon"/>
+                                    <span className="header-post-btn-text">인테리어 추천 작성하기</span>
+                                </a>
+                            </div>
+
+                            <div className="products-search-item">
+                                <a className="products-item-font-size" href={"/contest"}>
+                                    <img src={contestIcon} className="header-post-btn-icon"/>
+                                    <span className="header-post-btn-text">인테리어 콘테스트 참여하기</span>
+                                </a>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </header>
 
@@ -90,17 +236,39 @@ function Header() {
                         <a href="/shopping/shoppingBest" id="sub-header-best" className={isActive("/shopping/shoppingBest") ? "active" : ""}>베스트</a>
                     </div>
                     <div className="sub-header-realtime-search-box">
-                        <div className="sub-header-realtime-search">
-                            <a href="" className="sub-header-realtime-search-href">
-                                <span className="sub-header-realtime-search-rank">1</span>
-                                <span className="sub-header-realtime-search-img">new</span>
-                                <span className="sub-header-realtime-search-product-name">리바트 소파</span>
+                        {topProducts.length > 0 && (
+                            <a href={`productDetail/${topProducts[currentIndex]?.[0]}`} className="sub-header-realtime-search-href">
+                            <span className="sub-header-realtime-search-rank">
+                                {currentIndex + 1}
+                            </span>
+                            <span className="sub-header-realtime-search-product-name">
+                                {topProducts[currentIndex]?.[2]}
+                            </span>
                             </a>
-                        </div>
+                        )}
                         <div className="sub-header-realtime-search-more-btn">
-                            <button className="sub-header-more-btn">▼</button>
+                            <button
+                                className="sub-header-more-btn"
+                                onClick={toggleMoreContent} // 버튼 이벤트 추가
+                            >
+                                {showMoreContent ? "▲" : "▼"}
+                            </button>
                         </div>
+
+                        {/* "더 보기" 콘텐츠 */}
+                        {showMoreContent && (
+                            <div className="products-search-box">
+                                {topProducts.map((product, index) => (
+                                    <div className="products-search-item" key={index}>
+                                        <a className="products-item-font-size" href={`productDetail/${topProducts[index]?.[0]}`}>
+                                            {index + 1}. {topProducts[index]?.[2]}
+                                        </a>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
+
                 </div>
             )}
 
@@ -116,16 +284,36 @@ function Header() {
                            className={isActive("/community/recommend") || location.pathname.startsWith("/community/recommendDetail") ? "active" : ""}>추천</a>
                     </div>
                     <div className="sub-header-realtime-search-box">
-                        <div className="sub-header-realtime-search">
-                            <a href="" className="sub-header-realtime-search-href">
-                                <span className="sub-header-realtime-search-rank">1</span>
-                                <span className="sub-header-realtime-search-img">new</span>
-                                <span className="sub-header-realtime-search-product-name">리바트 소파</span>
+                        {topProducts.length > 0 && (
+                            <a href={`productDetail/${topProducts[currentIndex]?.[0]}`} className="sub-header-realtime-search-href">
+                            <span className="sub-header-realtime-search-rank">
+                                {currentIndex + 1}
+                            </span>
+                                <span className="sub-header-realtime-search-product-name">
+                                {topProducts[currentIndex]?.[2]}
+                            </span>
                             </a>
-                        </div>
+                        )}
                         <div className="sub-header-realtime-search-more-btn">
-                            <button className="sub-header-more-btn">▼</button>
+                            <button
+                                className="sub-header-more-btn"
+                                onClick={toggleMoreContent} // 버튼 이벤트 추가
+                            >
+                                {showMoreContent ? "▲" : "▼"}
+                            </button>
                         </div>
+                        {/* "더 보기" 콘텐츠 */}
+                        {showMoreContent && (
+                            <div className="products-search-box">
+                                {topProducts.map((product, index) => (
+                                    <div className="products-search-item" key={index}>
+                                        <a className="products-item-font-size" href={`productDetail/${topProducts[index]?.[0]}`}>
+                                            {index + 1}. {topProducts[index]?.[2]}
+                                        </a>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
@@ -142,17 +330,39 @@ function Header() {
                            className={isActive("/contest/notice") ? "active" : ""}>콘테스트 공지</a>
                     </div>
                     <div className="sub-header-realtime-search-box">
-                        <div className="sub-header-realtime-search">
-                            <a href="" className="sub-header-realtime-search-href">
-                                <span className="sub-header-realtime-search-rank">1</span>
-                                <span className="sub-header-realtime-search-img">new</span>
-                                <span className="sub-header-realtime-search-product-name">리바트 소파</span>
+                        {topProducts.length > 0 && (
+                            <a href={`productDetail/${topProducts[currentIndex]?.[0]}`} className="sub-header-realtime-search-href">
+                            <span className="sub-header-realtime-search-rank">
+                                {currentIndex + 1}
+                            </span>
+                            <span className="sub-header-realtime-search-product-name">
+                                {topProducts[currentIndex]?.[2]}
+                            </span>
                             </a>
-                        </div>
+                        )}
                         <div className="sub-header-realtime-search-more-btn">
-                            <button className="sub-header-more-btn">▼</button>
+                            <button
+                                className="sub-header-more-btn"
+                                onClick={toggleMoreContent} // 버튼 이벤트 추가
+                            >
+                                {showMoreContent ? "▲" : "▼"}
+                            </button>
                         </div>
+                        {/* "더 보기" 콘텐츠 */}
+                        {showMoreContent && (
+                            <div className="products-search-box">
+                                {topProducts.map((product, index) => (
+                                    <div className="products-search-item" key={index}>
+                                        <a className="products-item-font-size" href={`productDetail/${topProducts[index]?.[0]}`}>
+                                            {index + 1}. {topProducts[index]?.[2]}
+                                        </a>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
+
+
                 </div>
             )}
 
@@ -194,5 +404,4 @@ function Header() {
         </div>
     );
 }
-
 export default Header;
