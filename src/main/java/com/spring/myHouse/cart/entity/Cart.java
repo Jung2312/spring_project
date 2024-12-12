@@ -13,8 +13,10 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long cartnum;
 
+    @JoinColumn(name="userid")
     private String userid;
 
+    @JoinColumn(name="productnum")
     private long productnum;
 
     private long cartrepair;

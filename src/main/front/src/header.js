@@ -58,7 +58,7 @@ function Header() {
                     <input className="search-field" type="text" placeholder="통합검색"/>
                 </div>
                 <div className="cart-box">
-                    <a href=""><img src={CartImg}/></a>
+                    <a href="/shopping/cart" id="cart"><img src={CartImg}/></a>
                 </div>
                 {isLogin ? (
                     // Display user information if logged in
