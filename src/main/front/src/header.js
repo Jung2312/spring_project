@@ -208,7 +208,7 @@ function Header() {
                     </button>
                     {/* "글쓰기 더 보기" 콘텐츠 */}
                     {showPostContent && (
-                        <div className="products-search-box">
+                        <div className="products-post-box">
                             <div className="products-search-item">
                                 <a className="products-item-font-size" href={"/recommend/post"}>
                                     <img src={postIcon} className="header-post-btn-icon"/>
