@@ -6,11 +6,9 @@ import com.spring.myHouse.product.entity.Product;
 import com.spring.myHouse.product.service.ProductService;
 import com.spring.myHouse.store.entity.Store;
 import com.spring.myHouse.store.service.StoreService;
-import com.spring.myHouse.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -26,6 +24,38 @@ public class PaymentController {
     private final PaymentService paymentService;
     private final ProductService productService;
     private final StoreService storeService;
+
+    @GetMapping("/list")
+    public ResponseEntity<Map<String, Object>> getLists(@RequestParam String storeid) {
+        Store store = storeService.getStoreById(storeid);
+        if (store == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new HashMap<>());
+        }
+        Long storenum = store.getStorenum();
+        List<Payment> payments = paymentService.getPaymentListByStorenum(storenum);
+
+        List<Map<String, Object>> orders = payments.stream().map(payment -> {
+            Map<String, Object> orderData = new HashMap<>();
+            orderData.put("payNum", payment.getPaynum());
+            orderData.put("payDate", payment.getPaydate());
+            orderData.put("payPrice", payment.getPayprice());
+            orderData.put("payRepair", payment.getPayrepair());
+
+            Product product = productService.getProductByProductnum(payment.getProductnum());
+            if (product != null) {
+                orderData.put("productName", product.getProductname());
+                orderData.put("productPrice", Integer.parseInt(product.getProductprice()));
+                orderData.put("productMainImage", product.getProductmainimage());
+            }
+
+            orderData.put("storeName", store.getStorename());
+            return orderData;
+        }).collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("orders", orders);
+        return ResponseEntity.ok(response);
+    }
 
     // 오늘 베스트 상품 조회
     @GetMapping("/best/today")

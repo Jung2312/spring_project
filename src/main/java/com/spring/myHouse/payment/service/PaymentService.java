@@ -19,6 +19,11 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final ProductService productService;
 
+    // PaymentService 클래스에 추가
+    public List<Payment> getPaymentListByStorenum(Long storenum) {
+        return paymentRepository.findByStorenum(storenum); // storenum을 기준으로 결제 내역을 조회
+    }
+
     // 오늘 베스트 (오늘 날짜 기준)
     public List<Map<String, Object>> getTodayBest() {
         // 오늘 날짜 가져오기
