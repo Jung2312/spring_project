@@ -26,7 +26,6 @@ import Profile from "./user/profile";
 import ShoppingInformation from "./shopping/shoppingInformation";
 import ShoppingBest from "./shopping/shoppingBest";
 import Payment from "./shopping/payment";
-import PostDetail from "./community/recommendDetail";
 import ContestRegistration from "./admin/addContest";
 import ContestEdit from "./admin/editContest";
 import PurchaseHistory from "./shopping/purchaseHistory";
@@ -93,7 +92,6 @@ function AppRouter() {
             <Route path="/purchaseHistory" element={<PurchaseHistory />} />
             <Route path="/ContestRegistration" element={<ContestRegistration />} />
             <Route path="/ContestEdit/:contestnum" element={<ContestEdit />} />
-            <Route path="/community/recommendDetail/:postnum" element={<PostDetail />} />
         </Routes>
     );
 }
