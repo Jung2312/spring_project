@@ -234,4 +234,10 @@ public class ProductController {
     public List<Product> getProductsByQuery(@RequestParam String productname) {
         return productService.searchProducts(productname);
     }
+
+    // 모든 제품을 반환하는 엔드포인트
+    @GetMapping("/all")
+    public List<Product> getAllProducts() {
+        return productService.getAllProducts();
+    }
 }
