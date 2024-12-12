@@ -18,4 +18,12 @@ public class ReplyService {
         System.out.println("서비스에서 가져온 댓글 데이터: " + replies); // 디버깅 로그
         return new ArrayList<>(replies);
     }
+
+    public List<Reply> getRepliesByPostNum(Long postNum) {
+        return replyRepository.findReplyByPostNum(postNum);
+    }
+
+    public Reply saveReply(Reply newReply) {
+        return replyRepository.save(newReply);
+    }
 }

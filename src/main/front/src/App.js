@@ -26,7 +26,7 @@ import Profile from "./user/profile";
 import ShoppingInformation from "./shopping/shoppingInformation";
 import ShoppingBest from "./shopping/shoppingBest";
 import Payment from "./shopping/payment";
-import RecommendDetail from "./community/recommendDetail";
+import PostDetail from "./community/recommendDetail";
 import ContestRegistration from "./admin/addContest";
 import ContestEdit from "./admin/editContest";
 import PurchaseHistory from "./shopping/purchaseHistory";
@@ -70,6 +70,7 @@ function AppRouter() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/storeSignup" element={<StoreSignup />} />
+            <Route path="/community/recommendDetail/:postnum" element={<PostDetail />} />
             <Route path="/community/recommend" element={<Recommend />} />
             <Route path="/recommend/post" element={<RecommendPostPage />} />
             <Route path="/shopping/cart" element={<Cart />} />
