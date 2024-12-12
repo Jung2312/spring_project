@@ -48,8 +48,16 @@
 }
 
 .post-detail-follow-btn.following {
-    background-color: #35C5F0;
-    color: white;
+    background-color: #00c7fb; /* 팔로우 중일 때 파란색 */
+    color: white; /* 텍스트 색상 */
+}
+
+.post-detail-follow-btn:focus {
+    outline: none;
+}
+
+.post-detail-follow-btn:hover {
+    opacity: 0.8;
 }
 
 .post-detail-stats {

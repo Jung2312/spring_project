@@ -21,5 +21,14 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 
     @Query("SELECT f.userid FROM Follow f WHERE f.following = :userid")
     List<String> findFollowersByUserid(String userid);
+
+    // 사용자와 팔로우 대상을 기준으로 팔로우 관계를 찾기
+    Follow findByUseridAndFollowing(String userid, String following);
+
+    // 팔로우 관계 삭제
+    void delete(Follow follow);
+
+    boolean existsByUseridAndFollowing(String userId, String targetId);
+
 }
 
