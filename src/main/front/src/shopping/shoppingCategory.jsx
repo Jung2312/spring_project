@@ -53,6 +53,14 @@ function ShoppingCategory() {
             .catch(err => console.error("Error fetching products:", err));
     };
 
+    // 숫자를 콤마 형식으로 변환하는 함수
+    const formatNumberWithCommas = (number) => {
+        if (typeof number !== "number") {
+            return "0"; // 기본값 설정
+        }
+        return number.toLocaleString("ko-KR");
+    };
+
     return (
         <div className="shopping-page-container">
             <Header />
@@ -108,7 +116,7 @@ function ShoppingCategory() {
                                     />
                                     <h2 className="category-product-name">{product.productname}</h2>
                                     <p className="category-product-store">{product.storeName}</p>
-                                    <p className="category-product-price">{product.productprice}</p>
+                                    <p className="category-product-price">{formatNumberWithCommas(parseInt(product.productprice, 10))}</p>
                                 </div>
                             ))}
                         </div>

@@ -149,6 +149,8 @@ public class UserController {
         user.setPostcode(postcode);
         user.setAddress(address);
         user.setAdmin(0L);
+        user.setIntroduce("소개를 입력하세요.");
+        user.setProfileimage("defaultProfile.png");
         user.setGradenum(1L);
 
         // 사용자 저장

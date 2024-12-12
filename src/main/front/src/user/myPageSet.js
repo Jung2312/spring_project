@@ -65,6 +65,7 @@ function MyPageSet() {
             .then((response) => {
                 console.log('저장 성공:', response.data);
                 alert('저장되었습니다.');
+                navigate("/myPage/profile");
             })
             .catch((error) => {
                 console.error('저장 중 오류 발생:', error);

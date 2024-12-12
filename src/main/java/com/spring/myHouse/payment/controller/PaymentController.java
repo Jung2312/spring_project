@@ -4,6 +4,8 @@ import com.spring.myHouse.payment.entity.Payment;
 import com.spring.myHouse.payment.service.PaymentService;
 import com.spring.myHouse.product.entity.Product;
 import com.spring.myHouse.product.service.ProductService;
+import com.spring.myHouse.review.entity.Review;
+import com.spring.myHouse.review.service.ReviewService;
 import com.spring.myHouse.store.entity.Store;
 import com.spring.myHouse.store.service.StoreService;
 import com.spring.myHouse.user.entity.User;
@@ -26,6 +28,8 @@ public class PaymentController {
     private final PaymentService paymentService;
     private final ProductService productService;
     private final StoreService storeService;
+
+    private final ReviewService reviewService;
 
     // 오늘 베스트 상품 조회
     @GetMapping("/best/today")
@@ -60,6 +64,7 @@ public class PaymentController {
 
             if (product != null) {
                 orderData.put("productName", product.getProductname());
+                orderData.put("productNum", product.getProductnum());
                 int productPrice = Integer.parseInt(product.getProductprice());
 
                 orderData.put("productPrice", productPrice);
@@ -100,7 +105,13 @@ public class PaymentController {
 
     @GetMapping("/check")
     public boolean paymentExist(@RequestParam String userid, @RequestParam long productnum){
-        return paymentService.isExistUseridAndProductnum(userid, productnum);
+        Review review = reviewService.findAllByByUseridAndProductnum(userid, productnum);
+        boolean flag = false;
+        if(review != null){
+            flag = true;
+        }
+
+        return flag;
     }
 
 

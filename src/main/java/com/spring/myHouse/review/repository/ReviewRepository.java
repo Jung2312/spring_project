@@ -13,6 +13,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     boolean existsByUseridAndProductnum(String userid, long productnum);
 
+    Review findAllByUseridAndProductnum(String userid, long productnum);
+
     @Query("SELECT COUNT(r) FROM Review r WHERE r.productnum = :productnum")
     long countByProductNum(Long productnum);
 }
