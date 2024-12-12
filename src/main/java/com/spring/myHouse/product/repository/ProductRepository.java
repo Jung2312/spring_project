@@ -1,6 +1,7 @@
 package com.spring.myHouse.product.repository;
 
 import com.spring.myHouse.product.entity.Product;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -27,4 +28,8 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     List<Product> findByCategoryAndPriceRange(@Param("categorynum") Long categorynum, @Param("minPrice") String minPrice, @Param("maxPrice") String maxPrice);
 
     List<Product> findByProductnameContainingIgnoreCase(String productname);
+
+    // 처음 20개 제품만 반환하는 쿼리
+    @Query("SELECT p FROM Product p ORDER BY p.productnum ASC")
+    List<Product> findTop20Products(Pageable pageable); // Pageable을 인자로 받음
 }
