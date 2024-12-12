@@ -1,8 +1,12 @@
 package com.spring.myHouse.payment.entity;
 
+import com.spring.myHouse.product.entity.Product;
+import com.spring.myHouse.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -23,7 +27,7 @@ public class Payment {
     private Long payrepair;
 
     @CreationTimestamp
-    private String paydate;
+    private LocalDateTime paydate;
 
     private Long payprice;
 }

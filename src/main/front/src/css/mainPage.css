@@ -154,6 +154,10 @@
         font-size: 14px;
     }
 }
+.view-comment img {
+    filter: invert(63%) sepia(5%) saturate(0%) hue-rotate(165deg) brightness(91%) contrast(99%);
+    color: #959595;
+}
 
 /* 좋아요 버튼이 눌렸을 때 빨간색으로 필터링 */
 .like.liked img {

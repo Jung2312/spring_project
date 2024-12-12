@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ex from '../img/exProfile.png';
 import like from '../img/like.png';
 import redlike from '../img/redLike.png';
-import comment from '../img/comment.png';
+import view from '../img/view.png';
 import '../css/community.css';
 import axios from "axios";
 import Header from "../header";
@@ -140,8 +140,8 @@ function Recommend() {
                                 />
                                 <span>{post.postlike}</span>
                             </div>
-                            <div className="comment">
-                                <img className="comment-img" src={comment} alt="댓글"/>
+                            <div className="view-comment">
+                                <img className="comment-img " src={view} alt="댓글"/>
                                 <span>{post.postview}</span>
                             </div>
                         </div>
@@ -154,20 +154,18 @@ function Recommend() {
                         {/* 댓글 내용 */}
                         <div className="comment-section">
                             {replies[post.postnum] && replies[post.postnum].length > 0 ? (
-                                replies[post.postnum].map((reply) => (
-                                    <div className="comment" key={reply.replynum}>
-                                        <img className="comment-profile"
-                                             src={`${process.env.PUBLIC_URL}/profileImg/${post.profileimage}`}
-                                             alt="프로필 사진"
-                                             onError={(e) => {
-                                                 e.target.src = `${process.env.PUBLIC_URL}/profileImg/defaultProfile.png`;
-                                             }}/>
-                                        <div className="comment-content">
-                                            <div><span className="name">{reply.userid}</span></div>
-                                            <span className="comment-text">{reply.replycontent}</span>
-                                        </div>
+                                <div className="comment">
+                                    <img className="comment-profile"
+                                         src={`${process.env.PUBLIC_URL}/profileImg/${post.profileimage}`}
+                                         alt="프로필 사진"
+                                         onError={(e) => {
+                                             e.target.src = `${process.env.PUBLIC_URL}/profileImg/defaultProfile.png`;
+                                         }}/>
+                                    <div className="comment-content">
+                                        <div><span className="name">{replies[post.postnum][0].userid}</span></div>
+                                        <span className="comment-text">{replies[post.postnum][0].replycontent}</span>
                                     </div>
-                                ))
+                                </div>
                             ) : (
                                 <div className="comment">
                                     <img className="comment-profile"

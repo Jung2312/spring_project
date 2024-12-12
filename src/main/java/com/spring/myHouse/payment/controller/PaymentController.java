@@ -8,11 +8,9 @@ import com.spring.myHouse.review.entity.Review;
 import com.spring.myHouse.review.service.ReviewService;
 import com.spring.myHouse.store.entity.Store;
 import com.spring.myHouse.store.service.StoreService;
-import com.spring.myHouse.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
