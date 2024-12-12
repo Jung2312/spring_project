@@ -87,7 +87,7 @@ function AppRouter() {
             <Route path="/productDetail/:productnum" element={<ProductDetail />} />
             <Route path="/shoppingInformation/:storename" element={<ShoppingInformation />} />
             <Route path="/shopping/shoppingBest" element={<ShoppingBest />} />
-            <Route path="/payment" element={<Payment />} />
+            <Route path="/payment/:productnum" element={<Payment />} />
             <Route path="/purchaseHistory" element={<PurchaseHistory />} />
             <Route path="/ContestRegistration" element={<ContestRegistration />} />
             <Route path="/ContestEdit/:contestnum" element={<ContestEdit />} />

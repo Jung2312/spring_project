@@ -31,11 +31,16 @@ function PurchaseHistory() {
                                 <div className="purchaseH-history-product-name-box">
                                     <div className="purchaseH-history-product-name-title purchaseH-table-item"><span>상품</span></div>
                                     <div className="purchaseH-history-product-name purchaseH-table-item"><span>받침대: 자작나무 원목 받침대</span></div>
+                                    <div className="purchaseH-history-product-price-title purchaseH-table-item"><span>개수</span></div>
+                                    <div className="purchaseH-history-product-price purchaseH-table-item"><span>1개</span></div>
+                                </div>
+                                <div className="purchaseH-history-product-price-title-box">
                                     <div className="purchaseH-history-product-price-title purchaseH-table-item"><span>금액</span></div>
                                     <div className="purchaseH-history-product-price purchaseH-table-item"><span>129,000원</span></div>
                                 </div>
                                 <div className="purchaseH-history-delivery-price-box">
-                                    <div className="purchaseH-history-delivery-price-title purchaseH-table-item"><span>배송비</span></div>
+                                    <div className="purchaseH-history-delivery-price-title purchaseH-table-item">
+                                        <span>배송비</span></div>
                                     <div className="purchaseH-history-delivery-price purchaseH-table-item"><span>10,000원</span></div>
                                 </div>
                                 <div className="purchaseH-history-sale-price-box">
