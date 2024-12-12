@@ -4,6 +4,8 @@ import com.spring.myHouse.product.entity.Product;
 import com.spring.myHouse.product.repository.ProductRepository;
 import com.spring.myHouse.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,10 +52,9 @@ public class ProductService {
         return productRepository.findByProductnameContainingIgnoreCase(query);
     }
 
-    // 모든 제품을 반환하는 메서드
-    public List<Product> getAllProducts() {
-        // Iterable을 List로 변환 (Stream을 이용한 방법)
-        return StreamSupport.stream(productRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
+    // 처음 20개의 제품만 반환하는 메서드
+    public List<Product> getTop20Products() {
+        Pageable pageable = PageRequest.of(0, 20);  // 0번째 페이지에서 20개 데이터만 요청
+        return productRepository.findTop20Products(pageable);
     }
 }
