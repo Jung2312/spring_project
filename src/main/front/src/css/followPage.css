@@ -76,6 +76,28 @@
     font-size: 15px;
 }
 
+.followPage_profile_content_follow_button {
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.followPage_profile_content_follow_button.following {
+    background-color: #35C5F0;
+    color: white;
+}
+
+.followPage_profile_content_follow_button.not-following {
+    background-color: white;
+    color: #35C5F0;
+    border: 1px solid #35C5F0;
+}
+
+
 .followPage_post_section {
     margin-left: 80px;
     display: flex;

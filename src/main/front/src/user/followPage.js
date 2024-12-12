@@ -21,11 +21,54 @@ function FollowPage() {
     const [followerCount, setFollowerCount] = useState(0);  // 팔로워 수
     const [followingCount, setFollowingCount] = useState(0);  // 팔로잉 수
     const userid = sessionStorage.getItem("userid");
+    const [isFollowing, setIsFollowing] = useState(false); // 팔로우 상태 관리
     const navigate = useNavigate();
 
     const location = useLocation();  // useLocation 훅을 사용하여 state에서 userId를 받음
     const userIdFromState = location.state?.userId;  // 전달된 userId
     const userId = userIdFromState || sessionStorage.getItem("userid");  // state에서 받아오지 못하면 sessionStorage에서 가져옴
+
+    // 팔로우 상태 확인
+    const checkFollowStatus = async () => {
+        try {
+            const response = await axios.get('http://localhost:80/follow/status', {
+                params: { userid, target: userId },
+            });
+            setIsFollowing(response.data.following); // 응답 키 "following" 사용
+        } catch (error) {
+            console.error('팔로우 상태 확인 중 오류:', error);
+        }
+    };
+
+    useEffect(() => {
+        if (userid && userId) {
+            checkFollowStatus();
+        }
+    }, [userid, userId]);
+
+// 팔로우 버튼 클릭 핸들러
+    const handleFollowToggle = async () => {
+        if (!userid) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
+
+        try {
+            const response = await axios.post('http://localhost:80/follow/toggle', {
+                userid,
+                following: userId,
+            });
+            const { following: isFollowing, message } = response.data;
+
+            // 알림 메시지 표시
+            alert(message);
+
+            // 페이지 새로고침
+            window.location.reload();
+        } catch (error) {
+            console.error('팔로우 상태 변경 중 오류:', error);
+        }
+    };
 
     // 사용자 정보 가져오기
     useEffect(() => {
@@ -162,11 +205,20 @@ function FollowPage() {
                         <div className="followPage_profile_content">
                             <span className="followPage_profile_content_name">{userName}</span>
                             <div className="followPage_profile_content_follower_following">
-                                <span>팔로워</span><span className="followPage_profile_follower_number">{followerCount}</span>
+                                <span>팔로워</span><span
+                                className="followPage_profile_follower_number">{followerCount}</span>
                                 <span style={{margin: '0 10px'}}> | </span>
-                                <span>팔로잉</span><span className="followPage_profile_following_number">{followingCount}</span>
+                                <span>팔로잉</span><span
+                                className="followPage_profile_following_number">{followingCount}</span>
                             </div>
-                            <button className="followPage_profile_content_follow_button">팔로우</button>
+                            <button
+                                className={`followPage_profile_content_follow_button ${
+                                    isFollowing ? 'following' : 'not-following'
+                                }`}
+                                onClick={handleFollowToggle}
+                            >
+                                {isFollowing ? '팔로잉' : '팔로우'}
+                            </button>
                             <span className="followPage_profile_content_intro">{userIntro}</span>
                         </div>
                     </div>
