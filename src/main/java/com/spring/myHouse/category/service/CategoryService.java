@@ -20,7 +20,7 @@ public class CategoryService {
 
     // 특정 majorCategory에 해당하는 subCategory들을 반환
     public List<Category> getSubCategoriesByMajorCategory(String majorCategory) {
-        return categoryRepository.findByMajorcategory(majorCategory);
+        return categoryRepository.findAllByMajorcategory(majorCategory);
     }
 
     // 상점 번호를 기준으로 메인 카테고리를 조회하는 메서드
