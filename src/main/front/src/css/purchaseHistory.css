@@ -29,6 +29,11 @@
         .purchaseH-history-product-name-box,
         .purchaseH-history-delivery-price-box,
         .purchaseH-history-sale-price-box,
+        .purchaseH-history-product-price-title-box{
+            display: flex;
+            width: 100%;
+            border-bottom: 1px #b3b3b3 solid;
+        }
         .purchaseH-history-total-price-box{
             display: flex;
             width: 100%;

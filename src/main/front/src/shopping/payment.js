@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useEffect, useRef, useState} from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import css from '../css/payment.css';
 import Header from "../header";
@@ -12,14 +12,69 @@ function Payment() {
     const navigate = useNavigate();
     const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
     const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
+
     const [zipcode, setZipcode] = useState("");
     const [mainAddress, setMainAddress] = useState("");
     const [detailAddress, setDetailAddress] = useState("");
-    const [paymentMethod, setPaymentMethod] = useState(null); // 결제 수단 선택 상태
-    const [productData, setProductData] = useState(null);
-    const [count, setCount] = useState(1); // 수량
+    const [paymentMethod, setPaymentMethod] = useState(""); // 결제 수단 선택 상태
+
+    const { productnum } = useParams();  // URL에서 productnum 추출
+    const [productData, setProductData] = useState([]);
+    const [Count, setCount] = useState(1); // 수량
+
     const [isAllAgreeChecked, setIsAllAgreeChecked] = useState(false);
     const [isAgreeChecked, setIsAgreeChecked] = useState(false);
+
+    const [userData, setUserData] = useState([]);
+    const [email, setEmail] = useState("");
+    const [domain, setDomain] = useState("");
+    const [selectedDomain, setSelectedDomain] = useState("직접입력");
+
+    const [couponList, setCouponList] = useState([]); // 쿠폰 목록
+    const [selectedCoupon, setSelectedCoupon] = useState(null); // 선택된 쿠폰 정보
+
+    const [mileage, setMileage] = useState(0); // 유저 마일리지
+    const [inputMileage, setInputMileage] = useState(0); // 입력된 마일리지 값
+
+    const mainRef = useRef(null);
+
+    // 페이지 마운트 시 기본적으로 mainRef 위치로 이동
+    useEffect(() => {
+        mainRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, []);
+
+    // 서버에서 사용자 데이터 가져옴
+    useEffect(() => {
+        const userid = sessionStorage.getItem("userid");
+        fetch(`http://localhost:80/user/info?userid=${userid}`) // Spring Boot API URL
+            .then(res => res.json())
+            .then(data => {
+                setUserData(data);
+                // 이메일 초기 값 나누어 설정
+                const [emailPart, domainPart] = data.email.split("@");
+                setEmail(emailPart);
+                setDomain(domainPart);
+            })
+            .catch(err => console.error('Fetch error: ', err));
+    }, []);
+
+    // select box 변경 핸들러
+    const handleDomainSelectChange = (e) => {
+        const value = e.target.value;
+        setSelectedDomain(value);
+
+        if (value === "직접입력") {
+            setDomain(""); // 직접 입력 선택 시 공란
+        } else {
+            setDomain(value); // 선택된 옵션 값
+        }
+    };
+
+    // domain input 변경 핸들러
+    const handleDomainInputChange = (e) => {
+        setDomain(e.target.value);
+        setSelectedDomain("직접입력"); // 사용자가 직접 입력하면 select는 "직접입력"으로 변경
+    };
 
     // 결제 수단 선택 클릭 처리
     const handlePaymentMethodClick = (method) => {
@@ -29,14 +84,6 @@ function Payment() {
         } else {
             setPaymentMethod(method); // 새로운 결제 수단을 선택
         }
-    };
-
-    // 총 결제 금액
-    const calculateTotalPayment = () => {
-        const deliveryCost = 10000; // 배송비
-        const couponDiscount = 0; // 쿠폰 할인
-        const mileageDiscount = 0; // 마일리지 할인
-        return productData.productprice * count + deliveryCost - couponDiscount - mileageDiscount;
     };
 
     // 체크박스 변경 핸들러
@@ -124,54 +171,90 @@ function Payment() {
             merchant_uid: `merchant_${new Date().getTime()}`,
             name: productData.productname,
             amount: formatPrice(calculateTotalPayment()), // 결제 금액
-            buyer_email: "buyer@domain.com",
-            buyer_name: "홍길동",
-            buyer_tel: "01012345678",
-            buyer_addr: "서울시 강남구",
-            buyer_postcode: "123-456",
+            buyer_email: userData.email,
+            buyer_name: userData.name,
+            buyer_tel: userData.phone,
+            buyer_addr: userData.address,
+            buyer_postcode: userData.postcode,
         }, function(rsp) {
             if (rsp.success) {
                 alert("결제가 완료되었습니다.");
-                navigate(`/payment`);
+                navigate(`/purchaseHistory`);
             } else {
                 alert("결제 실패: " + rsp.error_msg);
             }
         });
     };
 
+
     // 상품번호로 상품 내용 가져오기
-    // 저장된 상품번호로 상품 정보 가져오기
     useEffect(() => {
-        const savedProductNum = sessionStorage.getItem('buyNowProductNum');
-        if (savedProductNum) {
-            const { productnum, count } = JSON.parse(savedProductNum);
-            // 수량 저장
-            setCount(count);
-            // 서버에서 상품 정보 가져오기
-            fetch(`http://localhost:80/product/productDetail?productnum=${productnum}`)
-                .then(res => {
-                    if (!res.ok) {
-                        throw new Error('response error');
-                    }
-                    return res.json();
-                })
-                .then(data => {
-                    setProductData(data);
-                })
-                .catch(err => {
-                    console.error('Fetch error:', err);
-                });
-        } else {
-            console.error('No product data found in sessionStorage');
-        }
-    }, []);
+        // 해당 상품 정보를 fetch
+        fetch(`http://localhost:80/product/productDetail?productnum=${productnum}`)
+            .then(res => res.json())
+            .then(data => setProductData(data))
+            .catch(err => console.error('Fetch error:', err));
+    }, [productnum]);
 
     // 3자리마다 , 넣기
     const formatPrice = (price) => {
-        return price.toLocaleString('ko-KR');
+        return Number(price).toLocaleString('ko-KR');
     };
+
+    // 총 결제 금액
+    const calculateTotalPayment = () => {
+        const deliveryCost = 10000; // 배송비
+        const couponDiscount = 0; // 쿠폰 할인
+        const mileageDiscount = 0; // 마일리지 할인
+        return productData.productprice * Count + deliveryCost - couponDiscount - mileageDiscount;
+    };
+
+    // 소지한 쿠폰 가져오기
+    useEffect(() => {
+        const userid = sessionStorage.getItem("userid");
+        fetch(`http://localhost:80/couponhistory/couponlist?userid=${userid}`) // Spring Boot API URL
+            .then(res => res.json())
+            .then(data => setCouponList(data))
+            .catch(err => console.error('Fetch error: ', err));
+    }, []);
+
+    // 쿠폰 사용 버튼 클릭 핸들러
+    const handleCouponUse = (coupon) => {
+        setSelectedCoupon(coupon); // 선택된 쿠폰 저장
+        setIsCouponModalOpen(false); // 모달 닫기
+    };
+
+    // 쿠폰 취소 버튼 클릭 핸들러
+    const handleCouponCancel = () => {
+        setSelectedCoupon(null); // 선택된 쿠폰 초기화
+    };
+
+    // 마일리지 가져오기
+    useEffect(() => {
+        const userid = sessionStorage.getItem("userid");
+        fetch(`http://localhost:80/mileage/mileageCount?userid=${userid}`) // Spring Boot API URL
+            .then(res => res.json())
+            .then(data => setMileage(data))
+            .catch(err => console.error('Fetch error: ', err));
+    }, []);
+
+    // 입력 값 변경 핸들러
+    const handleMileageInput = (e) => {
+        const inputValue = e.target.value;
+
+        // 입력된 값이 0 이상이고 사용 가능한 마일리지보다 크지 않으면 입력값을 업데이트
+        if (inputValue >= 0 && inputValue <= mileage) {
+            setInputMileage(inputValue);
+        }
+    };
+
+    // "전체 사용" 버튼 클릭 핸들러
+    const handleUseAllMileage = () => {
+        setInputMileage(mileage); // 전체 사용 시 사용 가능한 마일리지 값을 입력란에 넣기
+    };
+    
     return(
-        <div className="payment-body">
+        <div className="payment-body" ref={mainRef}>
             <Header/>
             <div className="payment-main-box">
                 <section className="payment-main">
@@ -215,9 +298,9 @@ function Payment() {
                                                     </div>
                                                 </div>
                                                 <div className="payment-order-product-cost-box">
-                                                    <div className="payment-order-product-cost"><span>{formatPrice(productData.productprice * count)}원</span>
+                                                    <div className="payment-order-product-cost"><span>{formatPrice(productData.productprice * Count)}원</span>
                                                     </div>
-                                                    <div className="payment-order-product-count"><span>{count}개</span></div>
+                                                    <div className="payment-order-product-count"><span>{Count}개</span></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -238,22 +321,39 @@ function Payment() {
                                 <div className="payment-order-user-form-content">
                                     <div className="payment-order-user-name-box">
                                         <div className="payment-order-user-name-text"><span>이름</span></div>
-                                        <div className="payment-order-user-name-input"><input name="user-name"
-                                                                                              type="text"/>
+                                        <div className="payment-order-user-name-input">
+                                            <input name="user-name" type="text" value={userData.name} readOnly/>
                                         </div>
                                     </div>
                                     <div className="payment-order-user-email-box">
                                         <div className="payment-order-user-email-text"><span>이메일</span></div>
                                         <div className="payment-order-user-email-input-box">
-                                            <div className="payment-order-user-email-input"><input name="email"
-                                                                                                   type="text"/></div>
+                                            <div className="payment-order-user-email-input">
+                                                <input name="email"
+                                                       type="text"
+                                                       value={email}
+                                                       onChange={(e) => setEmail(e.target.value)}
+                                                       readOnly/>
+                                            </div>
                                             <div className="payement-order-user-email-at"><span>@</span></div>
+                                            <div className="payment-order-user-email-domain-input">
+                                                <input name="domain"
+                                                       type="text"
+                                                       value={domain}
+                                                       onChange={handleDomainInputChange}
+                                                       disabled={selectedDomain !== "직접입력"} // 직접 입력 선택 시만 활성화
+                                                />
+                                            </div>
                                             <div className="payment-order-user-email-domain">
-                                                <select name="domain" id="domain-select">
+                                                <select name="domain-select"
+                                                        id="domain-select"
+                                                        value={selectedDomain}
+                                                        onChange={handleDomainSelectChange}>
                                                     <option value="직접입력">직접입력</option>
                                                     <option value="naver.com">naver.com</option>
                                                     <option value="daum.net">daum.net</option>
                                                     <option value="gmail.com">gmail.com</option>
+                                                    <option value="nate.com">nate.com</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -262,11 +362,11 @@ function Payment() {
                                         <div className="payment-order-user-phone-text"><span>휴대전화</span></div>
                                         <div className="payment-order-user-phone-input-box">
                                             <div className="payment-order-user-phone-id-num-input">
-                                                <input name="phone-id-number" type="number" value="010"/>
-                                            </div>
-                                            <div className="payment-order-user-phone-dash-text"><span>-</span></div>
-                                            <div className="payment-order-user-phone-serial-num-input">
-                                                <input name="phone-serial-number" type="number"/>
+                                                <input name="phone-number"
+                                                       type="number"
+                                                       value={userData.phone}
+                                                       readOnly
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -279,7 +379,6 @@ function Payment() {
                         <div className="payment-order-delivery-section">
                             <div className="payment-order-delivery">
                                 <span className="payment-order-delivery-title">배송지</span>
-                                <button className="payment-order-delivery-same-fill-btn">내 정보 불러오기</button>
                             </div>
                         </div>
                         <section className="payment-order-delivery-form-section">
@@ -294,11 +393,7 @@ function Payment() {
                                         <div className="payment-order-user-phone-text"><span>휴대전화</span></div>
                                         <div className="payment-order-user-phone-input-box">
                                             <div className="payment-order-user-phone-id-num-input">
-                                                <input name="phone-id-number" type="number" value="010"/>
-                                            </div>
-                                            <div className="payment-order-user-phone-dash-text"><span>-</span></div>
-                                            <div className="payment-order-user-phone-serial-num-input">
-                                                <input name="phone-serial-number" type="number"/>
+                                                <input name="phone-number" type="number"/>
                                             </div>
                                         </div>
                                     </div>
@@ -344,42 +439,59 @@ function Payment() {
                             </div>
                         </div>
                         <section className="payment-order-coupon-form-section">
-                            <div className="payment-order-coupon-content">
-                                <div className="payment-order-coupon-box">
-                                    <div className="payment-coupon-detail">
-                                        <div className="payment-order-coupon-sale-cost"><span>3,000원</span></div>
-                                        <div className="payment-order-coupon-received-from">
-                                            <span>[겨울 맞이 포근한 집 콘테스트]</span></div>
-                                        <div className="payment-order-coupon-use-condition">
-                                            <span>최소 주문 금액 100,000원</span></div>
-                                    </div>
-                                    <div className="payment-coupon-cancel-btn-box">
-                                        <button className="payment-coupon-cancel-btn">X</button>
+                            {selectedCoupon ? (
+                                <div className="payment-order-coupon-content">
+                                    <div className="payment-order-coupon-box">
+                                        <div className="payment-coupon-detail">
+                                            <div className="payment-order-coupon-sale-cost">
+                                                <span>{formatPrice(selectedCoupon.couponprice)}원</span>
+                                            </div>
+                                            <div className="payment-order-coupon-received-from">
+                                                <span>[{selectedCoupon.couponname}]</span>
+                                            </div>
+                                            <div className="payment-order-coupon-use-condition">
+                                                <span>최소 주문 금액 {formatPrice(selectedCoupon.useminprice)}원</span>
+                                            </div>
+                                        </div>
+                                        <div className="payment-coupon-cancel-btn-box">
+                                            <button
+                                                className="payment-coupon-cancel-btn"
+                                                onClick={handleCouponCancel}
+                                            >
+                                                X
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            ) : (
+                                <div>선택된 쿠폰이 없습니다.</div>
+                            )}
                         </section>
                         {/*쿠폰 끝*/}
 
                         {/*마일리지*/}
-                        <div className="payment-order-miliage-section">
-                            <div className="payment-order-miliage">
-                                <span className="payment-order-miliage-title">마일리지</span>
-                                <span className="payment-order-miliage-sub-title" style={{color: '#7D7D7D'}}>3만원 이상 구매 시 사용할 수 있어요.(배송비 제외)</span>
+                        <div className="payment-order-mileage-section">
+                            <div className="payment-order-mileage">
+                                <span className="payment-order-mileage-title">마일리지</span>
+                                <span className="payment-order-mileage-sub-title" style={{color: '#7D7D7D'}}>3만원 이상 구매 시 사용할 수 있어요.(배송비 제외)</span>
                             </div>
                         </div>
-                        <section className="payment-order-miliage-form-section">
-                            <div className="payment-order-miliage-content">
-                                <div className="payment-order-miliage-box">
-                                    <div className="payment-order-miliage-input-box">
-                                        <input name="payment-miliage" type="text" value="0"/>
+                        <section className="payment-order-mileage-form-section">
+                            <div className="payment-order-mileage-content">
+                                <div className="payment-order-mileage-box">
+                                    <div className="payment-order-mileage-input-box">
+                                        <input name="payment-mileage"
+                                               type="number"
+                                               value={formatPrice(inputMileage)}
+                                               onChange={handleMileageInput}
+                                        />
                                     </div>
-                                    <div className="payment-order-miliage-use-all-btn-box">
-                                        <button className="payment-order-miliage-use-all-btn">전체 사용</button>
+                                    <div className="payment-order-mileage-use-all-btn-box">
+                                        <button className="payment-order-mileage-use-all-btn" onClick={handleUseAllMileage}>전체 사용</button>
                                     </div>
                                 </div>
-                                <div className="payment-order-miliage-available-box">
-                                    <div className="payment-order-miliage-available"><span>사용 가능 포인트 0 P</span></div>
+                                <div className="payment-order-mileage-available-box">
+                                    <div className="payment-order-mileage-available"><span>사용 가능 포인트 {(mileage-inputMileage)} P</span></div>
                                 </div>
                             </div>
                         </section>
@@ -416,31 +528,41 @@ function Payment() {
                     <Modal isOpen={isCouponModalOpen} style={couponModalStyle}
                            onRequestClose={() => setIsCouponModalOpen(false)}>
                         <section className="payment-coupon-modal-section">
-                            <div className="payment-coupon-modal-title"><span>사용 가능한 쿠폰</span></div>
-                            <div className="payment-coupon-modal-content">
-                                <div className="payment-coupon-modal-box">
-                                    <div className="payment-coupon-modal-sale-cost"><span>3,000원</span></div>
-                                    <div className="payment-coupon-modal-received-from"><span>[겨울 맞이 포근한 집 콘테스트]</span>
-                                    </div>
-                                    <div className="payment-coupon-modal-use-condition"><span>최소 주문 금액 100,000원</span>
-                                    </div>
-                                </div>
-                                <div className="payment-coupon-modal-use-btn-box">
-                                    <button className="payment-coupon-modal-use-btn">사용하기</button>
-                                </div>
-                            </div>
-                            <div className="payment-coupon-modal-content">
-                                <div className="payment-coupon-modal-box">
-                                    <div className="payment-coupon-modal-sale-cost"><span>3,000원</span></div>
-                                    <div className="payment-coupon-modal-received-from"><span>[겨울 맞이 포근한 집 콘테스트]</span>
-                                    </div>
-                                    <div className="payment-coupon-modal-use-condition"><span>최소 주문 금액 100,000원</span>
-                                    </div>
-                                </div>
-                                <div className="payment-coupon-modal-use-btn-box">
-                                    <button className="payment-coupon-modal-use-btn">사용하기</button>
-                                </div>
-                            </div>
+                            <div className="payment-coupon-modal-title"><span>보유 중인 쿠폰</span></div>
+
+                            {couponList.length > 0 ? (
+                                couponList.map((coupon, index) => {
+                                    // 최소 사용 금액과 상품 금액을 비교하여 사용 가능한지 체크
+                                    const isCouponAvailable = coupon.useminprice <= productData.productprice;
+
+                                    return (
+                                        <div key={index} className="payment-coupon-modal-content">
+                                            <div className="payment-coupon-modal-box">
+                                                <div className="payment-coupon-modal-sale-cost">
+                                                    <span>{formatPrice(coupon.couponprice)}원</span>
+                                                </div>
+                                                <div className="payment-coupon-modal-received-from">
+                                                    <span>[{coupon.couponname}]</span>
+                                                </div>
+                                                <div className="payment-coupon-modal-use-condition">
+                                                    <span>최소 주문 금액 {formatPrice(coupon.useminprice)}원</span>
+                                                </div>
+                                            </div>
+                                            <div className="payment-coupon-modal-use-btn-box">
+                                                <button
+                                                    className={`payment-coupon-modal-use-btn ${isCouponAvailable ? '' : 'disabled'}`}  // 조건에 따라 클래스 추가
+                                                    onClick={() => isCouponAvailable && handleCouponUse(coupon)}  // 사용 가능 시만 클릭
+                                                    disabled={!isCouponAvailable}  // 조건에 맞지 않으면 비활성화
+                                                >
+                                                    {isCouponAvailable ? '사용하기' : '사용불가'}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            ) : (
+                                <div>사용 가능한 쿠폰이 없습니다.</div>
+                            )}
                         </section>
                     </Modal>
                 </section>
@@ -450,19 +572,19 @@ function Payment() {
                         <div className="payment-total-cost-bill-box">
                             <div className="payment-total-product-cost-box">
                                 <div className="payment-total-product-cost-text"><span>총 상품금액</span></div>
-                                <div className="payment-total-product-cost">{formatPrice(productData.productprice * count)}원</div>
+                                <div className="payment-total-product-cost">{formatPrice(productData.productprice * Count)}원</div>
                             </div>
                             <div className="payment-total-delivery-cost-box">
                                 <div className="payment-total-delivery-cost-text"><span>총 배송비</span></div>
-                                <div className="payment-total-delivery-cost">{formatPrice(10000)}</div>
+                                <div className="payment-total-delivery-cost">{formatPrice(10000)}원</div>
                             </div>
                             <div className="payment-total-coupon-cost-box">
                                 <div className="payment-total-coupon-cost-text"><span>쿠폰 적용</span></div>
-                                <div className="payment-total-coupon-cost">{formatPrice(3000)}원</div>
+                                <div className="payment-total-coupon-cost">{selectedCoupon ? formatPrice(selectedCoupon.couponprice) : '0'}원</div>
                             </div>
-                            <div className="payment-total-miliage-cost-box">
-                                <div className="payment-total-miliage-cost-text"><span>마일리지 적용</span></div>
-                                <div className="payment-total-miliage-cost">{formatPrice(0)}원</div>
+                            <div className="payment-total-mileage-cost-box">
+                                <div className="payment-total-mileage-cost-text"><span>마일리지 적용</span></div>
+                                <div className="payment-total-mileage-cost">{formatPrice(inputMileage)}원</div>
                             </div>
                         </div>
                         <div className="payment-total-cost-box">

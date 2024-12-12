@@ -80,11 +80,7 @@ function ProductDetail() {
 
     // 바로구매 버튼
     const handleBuyNow = () => {
-        sessionStorage.setItem('buyNowProductNum', JSON.stringify({
-            productnum: productnum,
-            count: count,
-        }));
-        navigate(`/payment`);  // 상품번호를 URL 파라미터로 전달
+        navigate(`/payment/${productnum}`);  // 상품번호를 URL 파라미터로 전달
     };
 
     // 별점 기본값 설정

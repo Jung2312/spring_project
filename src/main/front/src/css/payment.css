@@ -18,7 +18,7 @@
         .payment-order-delivery,
         .payment-order-product,
         .payment-order-coupon,
-        .payment-order-miliage,
+        .payment-order-mileage,
         .payment-order-pay{
             border-bottom: 1px #D5D5D5 solid;
             padding: 20px 0;
@@ -27,7 +27,7 @@
             .payment-order-delivery-title,
             .payment-order-product-title,
             .payment-order-coupon-title,
-            .payment-order-miliage-title,
+            .payment-order-mileage-title,
             .payment-order-pay-title{
                 font-size: 20px;
                 font-weight: bold;
@@ -35,7 +35,7 @@
             .payment-order-delivery-same-fill-btn,
             .payment-order-product-count-title,
             .payment-order-coupon-btn,
-            .payment-order-miliage-sub-title{
+            .payment-order-mileage-sub-title{
                 margin-left: 40px;
                 display: flex;
                 align-items: center;
@@ -56,7 +56,7 @@
     .payment-order-delivery-form-section,
     .payment-order-product-form-section,
     .payment-order-coupon-form-section,
-    .payment-order-miliage-form-section,
+    .payment-order-mileage-form-section,
     .payment-order-pay-form-section{
         margin: 30px 0;
         .payment-order-user-name-box,
@@ -80,6 +80,7 @@
         .payment-order-user-email-input-box,
         .payment-order-user-phone-input-box{
             display: flex;
+            align-items: center;
             div{
                 margin-right: 10px;
             }
@@ -87,7 +88,7 @@
                 font-size: 14px;
                 border-radius: 5px;
                 padding: 5px;
-                height: 30px;
+                height: 40px;
             }
             option{
                 font-size: 14px;
@@ -100,7 +101,9 @@
         .payment-order-user-destination-input,
         .payment-order-delivery-address-main-box,
         .payment-order-delivery-address-detail-box,
-        .payment-order-miliage-input-box{
+        .payment-order-mileage-input-box,
+        .payment-order-user-email-domain-input,
+        .payment-order-user-phone-id-num-input{
             input{
                 border: 1px #B3B3B3 solid;
                 border-radius: 5px;
@@ -108,12 +111,6 @@
                 height: 40px;
                 padding: 0 10px;
             }
-        }
-        .payment-order-user-phone-id-num-input input{
-            width: 30px;
-        }
-        .payment-order-user-phone-serial-num-input input{
-            width: 171px;
         }
         .payment-order-delivery-address-zipcode-box{
             button{
@@ -199,7 +196,7 @@
         }
     }
     .payment-order-coupon,
-    .payment-order-miliage-use-all-btn-box{
+    .payment-order-mileage-use-all-btn-box{
         display: flex;
         align-items: center;
         button{
@@ -228,14 +225,14 @@
             cursor: pointer;
         }
     }
-    .payment-order-miliage-box{
+    .payment-order-mileage-box{
         display: flex;
         margin-bottom: 20px;
-        .payment-order-miliage-use-all-btn-box{
+        .payment-order-mileage-use-all-btn-box{
             margin-left: 10px;
         }
     }
-    .payment-order-miliage-available-box span{
+    .payment-order-mileage-available-box span{
         font-size: 16px;
     }
     .payment-order-pay-card-box{
@@ -338,7 +335,7 @@
         .payment-total-product-cost-box,
         .payment-total-delivery-cost-box,
         .payment-total-coupon-cost-box,
-        .payment-total-miliage-cost-box{
+        .payment-total-mileage-cost-box{
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
