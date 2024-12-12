@@ -162,7 +162,7 @@ function MyShoppingPage() {
                                         alt={item.productName}
                                         className="myShoppingPageOrderImg"
                                     />
-                                    <div className="myShoppingPageOrderDetails">
+                                    <div onClick={() => navigate(`/productDetail/${item.productNum}`)} className="myShoppingPageOrderDetails" >
                                         <span className="myShoppingPageOrderTitle">{item.storeName}</span>
 
                                         <span className="myShoppingPageOrderTitle">

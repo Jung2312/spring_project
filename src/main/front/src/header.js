@@ -385,13 +385,6 @@ function Header() {
                             나의 쇼핑
                         </a>
                         <a
-                            href="/myPage/myreview"
-                            id="mypage_header_myreview"
-                            className={isActive("/myPage/myreview") ? "active" : ""}
-                        >
-                            나의 리뷰
-                        </a>
-                        <a
                             href="/myPage/setting"
                             id="mypage_header_setting"
                             className={isActive("/myPage/setting") ? "active" : ""}

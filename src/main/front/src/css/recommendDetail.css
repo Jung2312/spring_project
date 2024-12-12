@@ -69,14 +69,9 @@
 }
 
 .post-detail-like-btn {
-    background: none;
-    border: none;
-    color: #e74c3c;
-    font-size: 15px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+    width: 18px;
+    height: 18px;
+    margin-right: 5px;
 }
 
 .post-detail-like-btn:hover {

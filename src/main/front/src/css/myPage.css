@@ -223,7 +223,7 @@
 
 .myPage-profile-img {
     width: 137px;
-    height: auto;
+    height: 137px;
     border-radius: 50%;
 }
 
@@ -332,10 +332,6 @@
 
 .profile_profile_image {
     margin-bottom: 10px;
-}
-
-.followPage-profile-img {
-    width: 154px;
 }
 
 .profile_profile_content {

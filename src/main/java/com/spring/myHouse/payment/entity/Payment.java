@@ -1,5 +1,7 @@
 package com.spring.myHouse.payment.entity;
 
+import com.spring.myHouse.product.entity.Product;
+import com.spring.myHouse.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;

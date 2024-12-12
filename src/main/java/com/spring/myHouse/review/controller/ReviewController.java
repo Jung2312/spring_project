@@ -88,22 +88,24 @@ public class ReviewController {
 
         String fileName = null;
         if (reviewimage != null && !reviewimage.isEmpty()) {
-            reviewimage.getOriginalFilename();
-        }
-        String uploadDir = "C:\\spring_project\\src\\main\\front\\public\\postImg\\";
-        File uploadPath = new File(uploadDir);
-        String newFileName = null;
-        if (!uploadPath.exists()) {
-            uploadPath.mkdirs();
+            fileName = reviewimage.getOriginalFilename();
         }
 
+        String newFileName = null;
         if(fileName != null){
+            String uploadDir = "C:\\spring_project\\src\\main\\front\\public\\postImg\\";
+            File uploadPath = new File(uploadDir);
+
             String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
             UUID uuid = UUID.randomUUID();
 
             newFileName = uuid.toString() + extension;
-            String filePath = uploadDir + newFileName;
 
+            if (!uploadPath.exists()) {
+                uploadPath.mkdirs();
+            }
+
+            String filePath = uploadDir + newFileName;
             try{ // 파일 저장
                 reviewimage.transferTo(new File(filePath));
             } catch (Exception e) {

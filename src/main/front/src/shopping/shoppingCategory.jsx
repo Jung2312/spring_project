@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../css/shoppingCategory.css";
 import ex from '../img/product_basic.png';
 import Header from '../header.js';
@@ -8,7 +9,7 @@ function ShoppingCategory() {
     const [subCategories, setSubCategories] = useState({});
     const [expandedMajor, setExpandedMajor] = useState(null);
     const [products, setProducts] = useState([]);
-
+    const navigate = useNavigate();
     const selectCateogory = sessionStorage.getItem("selectedCategory");
 
     useEffect(() => {
@@ -49,8 +50,19 @@ function ShoppingCategory() {
 
         fetch(`http://localhost:80/product/category/${categorynum}`)
             .then(response => response.json())
-            .then(data => setProducts(data))
+            .then(data => {
+                console.log("Fetched products:", data); // 데이터 확인
+                setProducts(data);
+            })
             .catch(err => console.error("Error fetching products:", err));
+    };
+
+    // 숫자를 콤마 형식으로 변환하는 함수
+    const formatNumberWithCommas = (number) => {
+        if (typeof number !== "number") {
+            return "0"; // 기본값 설정
+        }
+        return number.toLocaleString("ko-KR");
     };
 
     return (
@@ -91,9 +103,12 @@ function ShoppingCategory() {
 
                 <section className="category-product-info">
                     {products.length > 0 && (
-                        <div className="category-product-list">
+                        <div className="category-product-list" >
                             {products.map((product, index) => (
-                                <div key={index} className="category-product-card">
+                                <div key={index} className="category-product-card" onClick={() => {
+                                    console.log('Navigating to:', `/productDetail/${product.productnum}`);
+                                    navigate(`/productDetail/${product.productnum}`);
+                                }}>
                                     <img
                                         src={
                                             product.productmainimage.startsWith('https://')
@@ -108,7 +123,7 @@ function ShoppingCategory() {
                                     />
                                     <h2 className="category-product-name">{product.productname}</h2>
                                     <p className="category-product-store">{product.storeName}</p>
-                                    <p className="category-product-price">{product.productprice}</p>
+                                    <p className="category-product-price">{formatNumberWithCommas(parseInt(product.productprice, 10))}</p>
                                 </div>
                             ))}
                         </div>

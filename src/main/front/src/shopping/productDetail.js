@@ -63,7 +63,9 @@ function ProductDetail() {
     const productInfoRef = useRef(null);
     const reviewRef = useRef(null);
 
-    const openModal = () => setIsModalOpen(true);
+    const openModal = () => {
+        setIsModalOpen(true);
+    }
     const closeModal = () => setIsModalOpen(false);
 
     const userid = sessionStorage.getItem('userid');
@@ -106,6 +108,8 @@ function ProductDetail() {
 
     // 상품 정보
     useEffect(() => {
+        // productnum이 제대로 전달되었는지 확인
+        console.log('Product number:', productnum);
         fetch(`http://localhost:80/product/productDetail?productnum=${productnum}`)
             .then(res => {
                 if (!res.ok) {
@@ -345,6 +349,7 @@ function ProductDetail() {
             formData.append('reviewimage', imageFile); // 선택한 파일 첨부
         }
 
+
         try {
             const response = await fetch("http://localhost:80/review/save", {
                 method: "POST",
@@ -353,6 +358,7 @@ function ProductDetail() {
 
             if (response.ok) {
                 alert("작성이 완료되었습니다."); // 서버 응답 메시지 표시
+                window.location.reload();
             } else {
                 alert('리뷰를 이미 작성한 상품입니다.');
             }
@@ -640,7 +646,7 @@ function ProductDetail() {
                                 <div key={review.reviewnum}>
                                     <div>
                                         <img
-                                            src={`${process.env.PUBLIC_URL}/profileImg/defaultProfile.png`}
+                                            src={`${process.env.PUBLIC_URL}/profileImg/${review.profileimage}`}
                                             className="contestProfileImg"
                                             alt="profileImg"
                                         />
@@ -672,7 +678,7 @@ function ProductDetail() {
                         )}
 
                         {/* 패이지네이션 */}
-                        <div className="pagination">
+                        <div className="pagination2">
                             {currentPage > 1 && <button onClick={handlePrev}>&laquo;</button>}
                             {visiblePageNumbers.map((page) => (
                                 <button

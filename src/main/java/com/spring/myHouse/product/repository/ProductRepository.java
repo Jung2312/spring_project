@@ -19,7 +19,7 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     Long countByStorenum(Long storenum);
 
     Product findByProductnum(Long productnum);
-  
+
     // 특정 카테고리 번호와 상점 번호에 해당하는 상품 목록 조회
     List<Product> findByCategoryCategorynumAndStorenum(Long categorynum, Long storenum);
 

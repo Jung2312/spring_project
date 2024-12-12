@@ -205,7 +205,7 @@ function MyPage() {
                         </div>
                         <div className="myPage_profile_content_section">
                             <div className="myPage_profile_content_name">
-                                <span>{userInfo ? `${userInfo.name}님` : "로딩중..."}</span>
+                                <span>{userInfo ? `${userInfo.name}님` : "팔로우/팔로워가 없습니다."}</span>
                             </div>
                             <div className="myPage_profile_content_follower_following">
                                 <span onClick={handleFollowerClick} style={{cursor: "pointer"}}>팔로워</span><span className="myPage_profile_follower_number">{followerCount}</span>
@@ -218,7 +218,7 @@ function MyPage() {
                         </div>
                     </div>
                     <div className="myPage_profile_introduce_section">
-                        <span className="myPage_profile_introduce">{userInfo ? `${userInfo.introduce}` : "로딩중..."}</span>
+                        <span className="myPage_profile_introduce">{userInfo ? `${userInfo.introduce}` : "팔로우/팔로워가 없습니다."}</span>
                     </div>
                     <hr style={{width: '1080px', border: '0.5px solid #D5D5D5'}}></hr>
                     <div className="myPage_profile_activity">
@@ -327,7 +327,7 @@ function MyModal({ isOpen, closeModal, content }) {
             </div>
 
             {loading ? (
-                <div>로딩 중...</div>
+                <div>팔로우/팔로워가 없습니다.</div>
             ) : (
                 <ul className="modal-list">
                     {userInfoList.length > 0 ? (

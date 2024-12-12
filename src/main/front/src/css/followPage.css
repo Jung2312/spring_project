@@ -26,10 +26,13 @@
 
 .followPage_profile_image {
     margin-bottom: 10px;
+    border-radius: 50%;
 }
 
 .followPage-profile-img {
-    width: 154px;
+    width: 137px;
+    height: 137px;
+    border-radius: 50%;
 }
 
 .followPage_profile_content {

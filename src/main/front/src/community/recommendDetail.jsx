@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import '../css/recommendDetail.css';
+import like from '../img/like.png';
+import redlike from '../img/redLike.png';
+import axios from 'axios';
 import Header from "../header";
 
 const PostDetail = () => {
     const { postnum } = useParams(); // URL에서 postnum 가져오기
-    const [post, setPost] = useState(null); // 단일 게시글 데이터
+    const [post, setPost] = useState([]); // 단일 게시글 데이터
     const [likes, setLikes] = useState(0);
+    const [likedPosts, setLikedPosts] = useState([]);
+    const [heartColor, setHeartColor] = useState("white");
     const [follows, setFollows] = useState(false);
     const [isEditing, setIsEditing] = useState(false); // 수정 모드 상태 추가
     const [editedPostContent, setEditedPostContent] = useState(''); // 수정된 내용 저장
@@ -30,6 +35,8 @@ const PostDetail = () => {
                 const data = await response.json();
                 setPost(data);
                 setLikes(data.postlike); // 초기 좋아요 수 설정
+                setLikedPosts(data.isLiked); // 게시글 좋아요 상태 초기화
+                setHeartColor(data.isLiked ? "red" : "white"); // 하트 색상 초기화
                 setEditedPostContent(data.postcontent); // 수정할 내용 초기화
                 setEditedPostTitle(data.posttitle); // 수정할 제목 초기화
                 setHashtags(data.hashtaglist ? data.hashtaglist.split(",") : []); // 수정할 해시태그 초기화
@@ -91,9 +98,63 @@ const PostDetail = () => {
             .catch((error) => console.error("댓글 작성 중 오류:",error));
     };
 
-    const handleLike = () => {
-        setLikes((prevLikes) => prevLikes + 1);
+    useEffect(() => {
+        const fetchLikedPosts = async () => {
+            try {
+                const response = await axios.get('http://localhost:80/liked/user', {
+                    params: { userid: loggedInUserId },
+                });
+                setLikedPosts(response.data|| []); // 사용자가 좋아요한 게시글 ID 목록
+            } catch (error) {
+                console.error("좋아요 데이터 가져오기 실패:", error);
+            }
+        };
+
+        if (loggedInUserId) fetchLikedPosts();
+    }, [loggedInUserId, likedPosts]);
+
+    const handleLikeToggle = async (postnum) => {
+        if (!loggedInUserId) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
+
+        // 좋아요 상태를 즉시 변경
+        const isLiked = likedPosts.includes(postnum);
+
+        setLikedPosts((prevLikedPosts) =>
+            isLiked
+                ? prevLikedPosts.filter((id) => id !== postnum)  // 좋아요 취소
+                : [...prevLikedPosts, postnum]  // 좋아요 추가
+        );
+
+        // 좋아요 수를 바로 반영하도록 post 상태 업데이트
+        setPost((prevPost) => ({
+            ...prevPost,
+            postlike: prevPost.postlike + (isLiked ? -1 : 1), // 기존 좋아요 수에서 +1 또는 -1
+        }));
+
+        // 서버에 좋아요 상태 요청
+        try {
+            const response = await axios.post(
+                `http://localhost:80/recommend/like`,
+                null, // Request body 필요 없음
+                {
+                    params: { postnum },
+                    headers: {
+                        userid: loggedInUserId, // 헤더로 userid 전달
+                    },
+                }
+            );
+
+            if (response.status !== 200) {
+                throw new Error("좋아요 처리 실패");
+            }
+        } catch (error) {
+            console.error("좋아요 처리 중 오류:", error);
+        }
     };
+
 
     // 컴포넌트 마운트 시 팔로우 상태를 가져옴
     useEffect(() => {
@@ -128,6 +189,9 @@ const PostDetail = () => {
             alert("로그인이 필요합니다.");
             return;
         }
+
+        // 페이지 새로고침
+        window.location.reload();
 
         try {
             const response = await fetch("http://localhost:80/follow/toggle", {
@@ -272,12 +336,14 @@ const PostDetail = () => {
                         />
                         <span className="post-detail-author-id">{post.userid}</span>
 
-                        <button
-                            onClick={handleFollow}
-                            className={`post-detail-follow-btn ${follows ? 'following' : 'follow'}`}
-                        >
-                            {follows ? '팔로잉' : '팔로우'}
-                        </button>
+                        {post.userid !== loggedInUserId && (
+                            <button
+                                className={`post-detail-follow-btn ${follows ? 'following' : 'follow'}`}
+                                onClick={handleFollow}
+                            >
+                                {follows ? '팔로잉' : '팔로우'}
+                            </button>
+                        )}
                     </div>
 
                     {/* 수정, 삭제 버튼 */}
@@ -384,12 +450,13 @@ const PostDetail = () => {
                     {/* 수정 모드일 때는 좋아요, 조회수, 댓글 입력은 숨김 처리 */}
                     {!isEditing && (
                         <div className="post-detail-stats">
-                            <button
+                            <img
                                 className="post-detail-like-btn"
-                                onClick={handleLike}
-                            >
-                                ♥️ {likes}
-                            </button>
+                                src={(likedPosts && likedPosts.includes(post.postnum)) ? redlike : like}  // likedPosts가 배열일 때만 includes 호출
+                                alt="좋아요"
+                                onClick={() => handleLikeToggle(post.postnum)}
+                            />
+                            <span>{post.postlike}</span>
                             <span className="post-detail-view">조회수: {post.postview}</span>
                             <span className="post-detail-date">작성일: {post.postdate}</span>
                         </div>
