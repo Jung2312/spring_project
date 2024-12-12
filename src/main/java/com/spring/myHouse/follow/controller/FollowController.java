@@ -46,6 +46,7 @@ public class FollowController {
         // 응답을 Map 형태로 반환
         Map<String, Object> response = new HashMap<>();
         response.put("Following", isFollowing);
+        response.put("message", isFollowing ? "팔로우가 완료되었습니다." : "팔로우가 취소되었습니다.");
 
         return response;
     }
