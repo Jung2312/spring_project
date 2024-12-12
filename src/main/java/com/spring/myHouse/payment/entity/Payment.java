@@ -30,15 +30,4 @@ public class Payment {
     private LocalDateTime paydate;
 
     private Long payprice;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "productnum", insertable = false, updatable = false)
-    private Product product;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "storenum", insertable = false, updatable = false)
-    private Store store;
-
-    // storenum 필드를 직접 사용할 경우
-    private Long storenum;
 }

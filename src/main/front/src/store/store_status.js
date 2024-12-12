@@ -12,54 +12,74 @@ import {
 // Chart.js 모듈 등록
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
-function StoreStatus({ paymentData }) {
-    if (!paymentData || paymentData.length === 0) {
-        return <div>매출 데이터가 없습니다.</div>;
-    }
+function StoreStatus() {
+    // X값
+    const labels = ["2017", "2018", "2019", "2020", "2021", "2022", "2023"];
 
-    // 월별 판매 개수 계산
-    const monthlySales = Array(12).fill(0); // 12개월 초기화
-    paymentData.forEach((payment) => {
-        const month = new Date(payment.payDate).getMonth(); // 0부터 시작
-        monthlySales[month] += 1; // 판매 개수 증가
-    });
-
-    const labels = Array.from({ length: 12 }, (_, i) => `${i + 1}월`);
-    const salesData = monthlySales.map((count) => Math.min(count, 20)); // 최대 20개
-
+    // 데이터셋
     const data = {
         labels,
         datasets: [
             {
-                label: "월별 판매 개수 (최대 20개)",
-                data: salesData,
+                label: "React",
+                data: [32, 42, 51, 60, 51, 95, 97],
                 backgroundColor: "#0CD3FF",
                 borderColor: "#0CD3FF",
+                borderWidth: 1,
+            },
+            {
+                label: "Angular",
+                data: [37, 42, 41, 37, 31, 44, 42],
+                backgroundColor: "#a6120d",
+                borderColor: "#a6120d",
+                borderWidth: 1,
+            },
+            {
+                label: "Vue",
+                data: [60, 54, 54, 28, 27, 49, 52],
+                backgroundColor: "#FFCA29",
+                borderColor: "#FFCA29",
                 borderWidth: 1,
             },
         ],
     };
 
+    // 옵션 설정
     const options = {
         responsive: true,
         plugins: {
-            legend: { position: "top" },
-            tooltip: { enabled: true },
+            legend: {
+                position: "top",
+            },
+            tooltip: {
+                enabled: true,
+            },
         },
         scales: {
-            x: { beginAtZero: true },
+            x: {
+                beginAtZero: true,
+            },
             y: {
                 beginAtZero: true,
-                max: 20, // 세로축 최대값 20 설정
-                ticks: { stepSize: 2 }, // 눈금 단위
             },
         },
     };
 
+    const monthlyChart = () => {
+
+    }
     return (
-        <div>
-            <h2>월별 판매 개수</h2>
-            <Bar data={data} options={options} />
+        <div className="status_container">
+            {/* 월별 상태 섹션 (작년/올해) */}
+            <div className="monthly_status_section">
+                <h2>월별 매출 현황</h2>
+                <Bar data={data} options={options} />
+            </div>
+            {/* 판매 및 제품 섹션 (상위 5개만 출력) */}
+            <div className="sales_product_section">
+                <p>상품별 판매량</p>
+                <Bar data={data} options={options} />
+            </div>
         </div>
     );
 }

@@ -22,37 +22,6 @@ function StoreManagement() {
     const [productInfo, setProductInfo] = useState([]);
     const [productData, setProductData] = useState({ productcount: null, productInfo: [] });
     const [inventoryInfo, setInventoryInfo] = useState([]);
-    const [paymentData, setPaymentData] = useState([]);
-
-    const fetchPaymentData = async () => {
-        try {
-            const storenum = sessionStorage.getItem("storenum");  // storenum 사용
-            const response = await fetch(`http://localhost:80/payment/list?storenum=${storenum}`, {
-                method: 'GET',
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log("API Response:", data); // API 응답 확인
-                if (data.orders) {
-                    // 상점의 제품만 필터링
-                    const filteredData = data.orders.filter(order => order.storenum === parseInt(storenum));
-                    setPaymentData(filteredData);
-                } else {
-                    console.error("Unexpected response structure:", data);
-                }
-            } else {
-                console.error("Failed to fetch payment data, status:", response.status);
-            }
-        } catch (error) {
-            console.error("Error fetching payment data:", error);
-        }
-    };
-
-
-    useEffect(() => {
-        fetchPaymentData();
-    }, []);
 
     // 컴포넌트가 렌더링될 때 로그인 여부를 확인하고, 로그인된 경우 사용자 정보 가져오기
     useEffect(() => {
@@ -228,7 +197,7 @@ function StoreManagement() {
                     {/*컴포넌트에 값 전달*/}
                     {activeMenu === "상품 관리" && <StoreProduct productData={productData} />}
                     {activeMenu === "재고 관리" && <StoreInventory productData={productData} inventoryInfo={inventoryInfo} />}
-                    {activeMenu === "매출 현황" && <StoreStatus productData={productData} paymentData={paymentData}  />}
+                    {activeMenu === "매출 현황" && <StoreStatus />}
                     {activeMenu === "정보 변경" && <InfoUpdate />}
                 </section>
             </div>
