@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -46,5 +48,12 @@ public class ProductService {
 
     public List<Product> searchProducts(String query) {
         return productRepository.findByProductnameContainingIgnoreCase(query);
+    }
+
+    // 모든 제품을 반환하는 메서드
+    public List<Product> getAllProducts() {
+        // Iterable을 List로 변환 (Stream을 이용한 방법)
+        return StreamSupport.stream(productRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
     }
 }
