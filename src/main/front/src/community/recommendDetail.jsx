@@ -190,6 +190,8 @@ const PostDetail = () => {
             return;
         }
 
+        // 페이지 새로고침
+        window.location.reload();
 
         try {
             const response = await fetch("http://localhost:80/follow/toggle", {
