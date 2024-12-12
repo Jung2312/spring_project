@@ -774,6 +774,13 @@
     margin-top: 20px;
 }
 
+.pagination2 {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 20px;
+}
+
 .pagination2 button {
     padding: 5px 10px;
     width: 40px;
