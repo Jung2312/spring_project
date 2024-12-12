@@ -18,6 +18,7 @@ function FollowPage() {
     const [replies, setReplies] = useState({});
     const [userName, setUserName] = useState("");  // 사용자 이름
     const [userIntro, setUserIntro] = useState("");  // 사용자 소개글
+    const [profileImage, setProfileImage] = useState(""); // 프로필 이미지 상태 추가
     const [followerCount, setFollowerCount] = useState(0);  // 팔로워 수
     const [followingCount, setFollowingCount] = useState(0);  // 팔로잉 수
     const userid = sessionStorage.getItem("userid");
@@ -77,6 +78,7 @@ function FollowPage() {
                 const response = await axios.get(`http://localhost:80/user/info?userid=${userId}`);
                 setUserName(response.data.name);  // 사용자 이름
                 setUserIntro(response.data.introduce);  // 사용자 소개글
+                setProfileImage(response.data.profileimage); // 프로필 이미지 상태 업데이트
             } catch (error) {
                 console.error("사용자 정보를 가져오는 중 오류가 발생했습니다.", error);
             }
@@ -200,7 +202,11 @@ function FollowPage() {
                 <div className="followPage_profile_section">
                     <div className="followPage_profile_box">
                         <div className="followPage_profile_image">
-                            <img className="followPage-profile-img" src={nongdamgom} alt="프로필 사진"/>
+                            <img className="followPage-profile-img"
+                                 src={`${process.env.PUBLIC_URL}/profileImg/${profileImage}`} alt="프로필 사진"
+                                 onError={(e) => {
+                                     e.target.src = ex;
+                                 }}/>
                         </div>
                         <div className="followPage_profile_content">
                             <span className="followPage_profile_content_name">{userName}</span>
