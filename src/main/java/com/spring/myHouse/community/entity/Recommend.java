@@ -23,7 +23,7 @@ public class Recommend {
     private String postcontent;
 
     @CreationTimestamp
-    private Date postdate;
+    private String postdate;
     private Long postview;
     private Long postlike;
     private String hashtaglist;

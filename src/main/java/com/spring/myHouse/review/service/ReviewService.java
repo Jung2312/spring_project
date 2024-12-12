@@ -24,6 +24,10 @@ public class ReviewService {
         return reviewRepository.existsByUseridAndProductnum(userid, productnum);
     }
 
+    public Review findAllByByUseridAndProductnum(String userid, long productnum) {
+        return reviewRepository.findAllByUseridAndProductnum(userid, productnum);
+    }
+
     public long getReviewCountByProductNum(Long productnum) {
         return reviewRepository.countByProductNum(productnum);
     }

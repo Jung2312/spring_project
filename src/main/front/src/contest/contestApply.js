@@ -49,7 +49,7 @@ function ContestApply() {
         if (userid === null) {
             alert("로그인을 진행하세요.");
         } else if (userid === joinuserid) {
-            alert("자신의 참여작에는 투표할 수 없습니다.");
+            alert("자신의 참여작에는 투표 할 수 없습니다.");
         } else {
             fetch('http://localhost:80/contest/like', {
                 method: "POST",

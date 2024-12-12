@@ -128,7 +128,7 @@ function RecommendPostPage() {
                 alert("작성되었습니다.");
                 setSelectedFile(null);
                 setPreviewImage(null);
-                navigate("/recommend");
+                navigate("/community/recommend");
             } else {
                 throw new Error("작성 실패. 다시 시도해주세요.");
             }

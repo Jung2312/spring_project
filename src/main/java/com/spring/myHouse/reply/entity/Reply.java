@@ -24,5 +24,5 @@ public class Reply {
     private Long postnum;
 
     @CreationTimestamp
-    private LocalDateTime replydate;
+    private String replydate;
 }
