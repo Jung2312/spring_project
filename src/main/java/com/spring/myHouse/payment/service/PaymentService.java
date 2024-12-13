@@ -2,6 +2,7 @@ package com.spring.myHouse.payment.service;
 
 import com.spring.myHouse.contest.entity.Contest;
 import com.spring.myHouse.contest.repository.ContestRepository;
+import com.spring.myHouse.payment.controller.PaymentController;
 import com.spring.myHouse.payment.entity.Payment;
 import com.spring.myHouse.payment.repository.PaymentRepository;
 import com.spring.myHouse.product.entity.Product;
@@ -23,12 +24,11 @@ public class PaymentService {
     // 오늘 베스트 (오늘 날짜 기준)
     public List<Map<String, Object>> getTodayBest() {
         // 오늘 날짜 가져오기
-        LocalDate today = LocalDate.now(); // 시간 제거
-
+        String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         // 오늘 날짜와 결제 날짜 비교
         List<Payment> todayPayments = paymentRepository.findAll()
                 .stream()
-                .filter(payment -> payment.getPaydate().toLocalDate().equals(today)) // 날짜만 비교
+                .filter(payment -> payment.getPaydate().equals(today)) // 오늘 결제 내역만 필터링
                 .collect(Collectors.toList());
 
         return getBestProducts(todayPayments);
@@ -40,12 +40,15 @@ public class PaymentService {
         return getBestProducts(allPayments);
     }
 
-    // 상품별로 구매 횟수를 기준으로 정렬하여 베스트 상품 리스트 반환
     private List<Map<String, Object>> getBestProducts(List<Payment> payments) {
-        // 상품별로 결제된 횟수 카운트
+        // 상품별로 결제 횟수 및 마지막 결제 날짜 카운트
         Map<Long, Long> productCount = new HashMap<>();
+        Map<Long, LocalDate> lastPaymentDate = new HashMap<>();
+
         for (Payment payment : payments) {
-            productCount.put(payment.getProductnum(), productCount.getOrDefault(payment.getProductnum(), 0L) + 1);
+            Long productNum = payment.getProductnum();
+            productCount.put(productNum, productCount.getOrDefault(productNum, 0L) + 1);
+            lastPaymentDate.put(productNum, payment.getPaydate());
         }
 
         // 구매 횟수를 기준으로 내림차순 정렬
@@ -63,12 +66,12 @@ public class PaymentService {
                 productData.put("productName", product.getProductname());
                 productData.put("productPrice", product.getProductprice());
                 productData.put("productMainImage", product.getProductmainimage());
-                productData.put("purchaseCount", entry.getValue()); // 구매 횟수
+                productData.put("purchaseCount", entry.getValue());
+                productData.put("lastPaymentDate", lastPaymentDate.get(entry.getKey())); // 마지막 결제 날짜 추가
 
                 bestProducts.add(productData);
             }
         }
-
         return bestProducts;
     }
 

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Data
@@ -17,7 +18,7 @@ public class Search {
     private long searchnum;
 
     @CreationTimestamp
-    private LocalDate searchdate;
+    private Date searchdate;
 
     private long productnum;
 }
