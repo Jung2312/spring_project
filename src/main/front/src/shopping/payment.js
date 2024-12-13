@@ -171,7 +171,7 @@ function Payment() {
             pay_method: 'card',
             merchant_uid: `${new Date().getTime()}`.slice(0, 10),
             name: productData.productname,
-            amount: 100, // 결제 금액
+            amount: formatPrice(calculateTotalPayment()), // 결제 금액
             buyer_email: userData.email,
             buyer_name: userData.name,
             buyer_tel: userData.phone,
