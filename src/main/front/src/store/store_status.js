@@ -1,84 +1,77 @@
-import React from "react";
-import { Bar } from "react-chartjs-2";
-import {
-    Chart as ChartJS,
-    BarElement,
-    CategoryScale,
-    LinearScale,
-    Tooltip,
-    Legend,
-} from "chart.js";
+import React, {useEffect, useState} from "react";
+import axios from "axios";
 
-// Chart.js 모듈 등록
-ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+function StoreStatus({ productData }) {
+    const { productInfo } = productData;
+    const [payProducts, setPayProducts] = useState([]);
 
-function StoreStatus() {
-    // X값
-    const labels = ["2017", "2018", "2019", "2020", "2021", "2022", "2023"];
-
-    // 데이터셋
-    const data = {
-        labels,
-        datasets: [
-            {
-                label: "React",
-                data: [32, 42, 51, 60, 51, 95, 97],
-                backgroundColor: "#0CD3FF",
-                borderColor: "#0CD3FF",
-                borderWidth: 1,
-            },
-            {
-                label: "Angular",
-                data: [37, 42, 41, 37, 31, 44, 42],
-                backgroundColor: "#a6120d",
-                borderColor: "#a6120d",
-                borderWidth: 1,
-            },
-            {
-                label: "Vue",
-                data: [60, 54, 54, 28, 27, 49, 52],
-                backgroundColor: "#FFCA29",
-                borderColor: "#FFCA29",
-                borderWidth: 1,
-            },
-        ],
+    // 서버에서 결제 데이터 가져오기
+    const fetchProducts = async () => {
+        try {
+            const response = await axios.get("http://localhost:80/payment/best/all");
+            console.log("response:", response.data);
+            setPayProducts(response.data);
+        } catch (error) {
+            console.error("Error fetching best products:", error);
+        }
     };
 
-    // 옵션 설정
-    const options = {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: "top",
-            },
-            tooltip: {
-                enabled: true,
-            },
-        },
-        scales: {
-            x: {
-                beginAtZero: true,
-            },
-            y: {
-                beginAtZero: true,
-            },
-        },
-    };
+    useEffect(() => {
+        fetchProducts();
+    }, []);
 
-    const monthlyChart = () => {
-
+    // 로딩 중 상태 처리
+    if ( productInfo.length === 0 ) {
+        return <div>로딩중...</div>;
     }
+
+    // 상품별 판매 데이터 매핑
+    const soldCountMap = payProducts.reduce((map, product) => {
+        map[product.productNum] = product.purchaseCount;
+        return map;
+    }, {});
+
+    // 판매 데이터가 있는 상품만 필터링 및 정렬
+    const filteredProductInfo = productInfo
+        .filter(product => soldCountMap[product.productnum] > 0)
+        .sort((a, b) => soldCountMap[b.productnum] - soldCountMap[a.productnum]); // 판매 개수로 내림차순 정렬
+
+
     return (
-        <div className="status_container">
-            {/* 월별 상태 섹션 (작년/올해) */}
-            <div className="monthly_status_section">
-                <h2>월별 매출 현황</h2>
-                <Bar data={data} options={options} />
-            </div>
+        <div className="status-container">
             {/* 판매 및 제품 섹션 (상위 5개만 출력) */}
-            <div className="sales_product_section">
-                <p>상품별 판매량</p>
-                <Bar data={data} options={options} />
+            <div className="status-main-box">
+                <div className="status-count-box count-box">
+                    <span>매출 순위</span>
+                </div>
+                <div className="status-table-box table-box">
+                    <table className="status-table">
+                        <colgroup>
+                            <col width="20%"/>
+                            <col width="20%"/>
+                            <col width="60%"/>
+                            <col width="20%"/>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>순위</th>
+                            <th>상품번호</th>
+                            <th>상품명</th>
+                            <th>팔린 개수</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {filteredProductInfo.map((product, index) => (
+                            <tr className="status-table-data-box" key={index}>
+                                <td className="status-table-item">{index + 1}</td>
+                                <td className="status-table-item">{product.productnum}</td>
+                                <td className="status-table-item">{product.productname}</td>
+                                <td className="status-table-item">{soldCountMap[product.productnum]}</td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

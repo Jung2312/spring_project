@@ -65,8 +65,8 @@ function ShoppingBest() {
     // 오늘 베스트와 역대 베스트 선택 시 초기화
     const handleButtonClick = (buttonType) => {
         setSelectedButton(buttonType);
-        setProducts([]); // 기존 목록 초기화
         fetchBestProducts(buttonType);
+        setProducts([]); // 기존 목록 초기화
     };
 
     const fetchBestProducts = async (type) => {
@@ -89,6 +89,7 @@ function ShoppingBest() {
             console.error("Error fetching best products:", error);
         }
     };
+
     useEffect(() => {
         fetchBestProducts(selectedButton); // 초기 로드
     }, []);
