@@ -4,6 +4,7 @@ import axios, {post} from 'axios';
 import logo from '../img/myhouse_logo.png';
 import DaumPostCode from 'react-daum-postcode';
 import css from '../css/signup.css';
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
     const [inputStore, setInputStore] = useState({
@@ -19,6 +20,8 @@ function Signup() {
     });
 
     const [selectedStoreNum, setSelectedStoreNum] = useState(null); // 선택된 storeNum
+
+    const navigate = useNavigate();
 
     const [isPostcodeModalOpen, setIsPostcodeModalOpen] = useState(false);
     const [isStoreSearchModalOpen, setIsStoreSearchModalOpen] = useState(false);
@@ -117,6 +120,7 @@ function Signup() {
                 addressDetail: inputStore.addressdetail, // 여기를 추가
             });
             alert("회원가입이 완료되었습니다."); // 성공 메시지
+            navigate("/login");
         } catch (error) {
             alert(error.response?.data || '회원가입 중 오류가 발생했습니다.');
         }

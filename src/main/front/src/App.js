@@ -86,6 +86,7 @@ function AppRouter() {
             <Route path="/shopping/shoppingCategory" element={<ShoppingCategory />} />
             <Route path="/myPage/myShoppingPage" element={<MyShoppingPage />} />
             <Route path="/shopping/productDetail/:productnum" element={<ProductDetail />} />
+            <Route path="/shoppingInformation/productDetail/:productnum" element={<ProductDetail />} />
             <Route path="/community/productDetail/:productnum" element={<ProductDetail />} />
             <Route path="/contest/productDetail/:productnum" element={<ProductDetail />} />
             <Route path="/productDetail/:productnum" element={<ProductDetail />} />
