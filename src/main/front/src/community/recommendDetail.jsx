@@ -93,7 +93,8 @@ const PostDetail = () => {
             .then((newReply) => {
                 console.log("작성된 댓글:", newReply);
                 setReplies([...replies, newReply]); // 새 댓글 추가
-                setNewComment(""); // 입력 필드 초기화
+                setNewComment(""); // 입력 필드
+                window.location.reload();
             })
             .catch((error) => console.error("댓글 작성 중 오류:",error));
     };
