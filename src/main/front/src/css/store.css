@@ -123,6 +123,7 @@ a{
             td {
                 border: 1px #B9B9B9 solid;
                 padding: 10px;
+                text-align: center;
             }
         }
     }

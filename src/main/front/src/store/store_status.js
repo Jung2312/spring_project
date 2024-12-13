@@ -47,7 +47,7 @@ function StoreStatus({ productData }) {
                 <div className="status-table-box table-box">
                     <table className="status-table">
                         <colgroup>
-                            <col width="20%"/>
+                            <col width="10%"/>
                             <col width="20%"/>
                             <col width="60%"/>
                             <col width="20%"/>
