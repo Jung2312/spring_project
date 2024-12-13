@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,11 +23,12 @@ public class PaymentService {
     // 오늘 베스트 (오늘 날짜 기준)
     public List<Map<String, Object>> getTodayBest() {
         // 오늘 날짜 가져오기
-        String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        LocalDate today = LocalDate.now(); // 시간 제거
 
+        // 오늘 날짜와 결제 날짜 비교
         List<Payment> todayPayments = paymentRepository.findAll()
                 .stream()
-                .filter(payment -> payment.getPaydate().equals(today)) // 오늘 결제 내역만 필터링
+                .filter(payment -> payment.getPaydate().toLocalDate().equals(today)) // 날짜만 비교
                 .collect(Collectors.toList());
 
         return getBestProducts(todayPayments);

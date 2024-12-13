@@ -197,7 +197,7 @@ function StoreManagement() {
                     {/*컴포넌트에 값 전달*/}
                     {activeMenu === "상품 관리" && <StoreProduct productData={productData} />}
                     {activeMenu === "재고 관리" && <StoreInventory productData={productData} inventoryInfo={inventoryInfo} />}
-                    {activeMenu === "매출 현황" && <StoreStatus />}
+                    {activeMenu === "매출 현황" && <StoreStatus productData={productData} />}
                     {activeMenu === "정보 변경" && <InfoUpdate />}
                 </section>
             </div>

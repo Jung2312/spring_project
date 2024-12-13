@@ -50,7 +50,7 @@ a{
     }
 }
 
-.product-container, .inventory-container {
+.product-container, .inventory-container, .status-container{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -87,19 +87,19 @@ a{
         background-color: #4cae4c;
     }
 
-    .product-main-box, .inventory-main-box {
+    .product-main-box, .inventory-main-box, .status-main-box {
         width: 80%;
     }
 
-    .product-count-box, .inventory-count-box {
+    .product-count-box, .inventory-count-box, .status-count-box {
         margin: 30px 0;
         color: #595D60;
     }
 
-    .product-table-box, .inventory-table-box {
+    .product-table-box, .inventory-table-box, .status-table-box {
         border-radius: 10px;
 
-        .product-table, .inventory-table {
+        .product-table, .inventory-table, .status-table {
             width: 100%;
             border-collapse: collapse;
             box-shadow: 0 0 0 1px #B9B9B9;
