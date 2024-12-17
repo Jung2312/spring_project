@@ -18,7 +18,7 @@ public class Search {
     private long searchnum;
 
     @CreationTimestamp
-    private Date searchdate;
+    private LocalDate searchdate;
 
     private long productnum;
 }
