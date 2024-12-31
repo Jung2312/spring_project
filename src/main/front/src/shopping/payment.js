@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import css from '../css/payment.css';
 import Header from "../header";
@@ -13,18 +13,25 @@ function Payment() {
     const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
     const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
 
+    // 우편번호, 주소
     const [zipcode, setZipcode] = useState("");
     const [mainAddress, setMainAddress] = useState("");
     const [detailAddress, setDetailAddress] = useState("");
-    const [paymentMethod, setPaymentMethod] = useState(""); // 결제 수단 선택 상태
+    
+    // 결제 수단 선택 상태
+    const [paymentMethod, setPaymentMethod] = useState("");
 
-    const { productnum } = useParams();  // URL에서 productnum 추출
+    // 상품번호, 상품 상세 데이터, 상품 개수
+    const location = useLocation();
+    // const { productnum } = useParams();  // URL에서 productnum 추출
+    // const [Count, setCount] = useState(1); // 수량
     const [productData, setProductData] = useState([]);
-    const [Count, setCount] = useState(1); // 수량
+    const { productNum, productName, productPrice, productCount } = location.state || {};
 
     const [isAllAgreeChecked, setIsAllAgreeChecked] = useState(false);
     const [isAgreeChecked, setIsAgreeChecked] = useState(false);
 
+    // 회원 정보
     const [userData, setUserData] = useState([]);
     const [email, setEmail] = useState("");
     const [domain, setDomain] = useState("");
@@ -185,9 +192,9 @@ function Payment() {
                 const paymentData = {
                     payordernum: rsp.merchant_uid, // 주문 번호 
                     userid: userid, // 사용자 ID
-                    productnum: productData.productnum, // 상품 번호
+                    productnum: productNum, // 상품 번호
                     payprice: rsp.paid_amount, // 결제 금액
-                    payrepair: Count, // 구매한 개수
+                    payrepair: productCount, // 구매한 개수
                     paydate: new Date().toISOString().slice(0, 10) // 결제 날짜 (현재 시간)
                 };
 
@@ -213,11 +220,11 @@ function Payment() {
     // 상품번호로 상품 내용 가져오기
     useEffect(() => {
         // 해당 상품 정보를 fetch
-        fetch(`http://localhost:80/product/productDetail?productnum=${productnum}`)
+        fetch(`http://localhost:80/product/productDetail?productnum=${productNum}`)
             .then(res => res.json())
             .then(data => setProductData(data))
             .catch(err => console.error('Fetch error:', err));
-    }, [productnum]);
+    }, [productNum]);
 
     // 3자리마다 , 넣기
     const formatPrice = (price) => {
@@ -229,7 +236,7 @@ function Payment() {
         const deliveryCost = 2500; // 배송비
 
         const mileageDiscount = inputMileage; // 마일리지 할인
-        let price = productData.productprice * Count + deliveryCost - mileageDiscount;
+        let price = productData.productprice * productCount + deliveryCost - mileageDiscount;
 
         if(selectedCoupon != null){
             price = price - selectedCoupon.couponprice; // 쿠폰 할인
@@ -295,7 +302,7 @@ function Payment() {
                         <div className="payment-order-product-section">
                             <div className="payment-order-product">
                                 <span className="payment-order-product-title">주문상품</span>
-                                <span className="payment-order-product-count-title">1건</span>
+                                <span className="payment-order-product-count-title">{productCount}건</span>
                             </div>
                         </div>
                         <section className="payment-order-product-form-section">
@@ -327,9 +334,9 @@ function Payment() {
                                                     </div>
                                                 </div>
                                                 <div className="payment-order-product-cost-box">
-                                                    <div className="payment-order-product-cost"><span>{formatPrice(productData.productprice * Count)}원</span>
+                                                    <div className="payment-order-product-cost"><span>{formatPrice(productData.productprice * productCount)}원</span>
                                                     </div>
-                                                    <div className="payment-order-product-count"><span>{Count}개</span></div>
+                                                    <div className="payment-order-product-count"><span>{productCount}개</span></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -601,7 +608,7 @@ function Payment() {
                         <div className="payment-total-cost-bill-box">
                             <div className="payment-total-product-cost-box">
                                 <div className="payment-total-product-cost-text"><span>총 상품금액</span></div>
-                                <div className="payment-total-product-cost">{formatPrice(productData.productprice * Count)}원</div>
+                                <div className="payment-total-product-cost">{formatPrice(productData.productprice * productCount)}원</div>
                             </div>
                             <div className="payment-total-delivery-cost-box">
                                 <div className="payment-total-delivery-cost-text"><span>총 배송비</span></div>

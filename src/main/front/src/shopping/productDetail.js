@@ -82,7 +82,15 @@ function ProductDetail() {
 
     // 바로구매 버튼
     const handleBuyNow = () => {
-        navigate(`/payment/${productnum}`);  // 상품번호를 URL 파라미터로 전달
+        const purchaseData = {
+            productNum: productData.productnum, // 상품 ID
+            productName: productData.productname, // 상품 이름
+            productPrice: productData.productprice, // 상품 가격
+            productCount: count, // 현재 선택된 상품 개수
+        };
+        console.log()
+
+        navigate("/payment", { state: purchaseData });  // 상품번호를 URL 파라미터로 전달
     };
 
     // 별점 기본값 설정
