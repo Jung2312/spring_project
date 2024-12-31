@@ -10,7 +10,7 @@ function Cart() {
     const [cart, setCart] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]); // 체크된 상품의 ID 저장
     const [totalPrice, setTotalPrice] = useState(0);
-    const deliveryFee = 10000; // 고정 배송비
+    const deliveryFee = 2500; // 고정 배송비
     const userid = sessionStorage.getItem("userid");
     const formatPrice = (price) => {
         return price.toLocaleString(); // 쉼표
