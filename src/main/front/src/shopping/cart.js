@@ -72,6 +72,18 @@ function Cart() {
         }
     };
 
+    // 상품 구매하기 버튼 핸들러
+    const handlePurchase = () => {
+        if(!userid){
+            alert("로그인을 진행하세요.");
+            navigate('/login');
+            return;
+        }
+
+        const selectedProducts = cart.filter((item) => selectedItems.includes(item.productnum)); // 선택된 상품 데이터 추출
+        navigate("/payment", { state: { selectedProducts } }); // 선택된 상품 배열을 state로 전달
+    };
+
     return (
         <div>
             <Header/>
@@ -156,7 +168,7 @@ function Cart() {
                         <span>결제금액</span>
                         <span>{formatPrice(totalPrice + (selectedItems.length > 0 ? deliveryFee : 0))}원</span>
                     </div>
-                    <button className="purchase-button" disabled={selectedItems.length === 0}>
+                    <button className="purchase-button" disabled={selectedItems.length === 0} onClick={handlePurchase}>
                         상품 구매하기
                     </button>
                 </div>

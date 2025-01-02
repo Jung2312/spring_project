@@ -26,7 +26,7 @@ function Payment() {
     // const { productnum } = useParams();  // URL에서 productnum 추출
     // const [Count, setCount] = useState(1); // 수량
     const [productData, setProductData] = useState([]);
-    const { productNum, productName, productPrice, productCount } = location.state || {};
+    const { productNum, productCount } = location.state || {};
 
     const [isAllAgreeChecked, setIsAllAgreeChecked] = useState(false);
     const [isAgreeChecked, setIsAgreeChecked] = useState(false);

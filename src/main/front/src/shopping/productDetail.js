@@ -82,10 +82,14 @@ function ProductDetail() {
 
     // 바로구매 버튼
     const handleBuyNow = () => {
+        if(!userid){
+            alert("로그인을 진행하세요.");
+            navigate('/login');
+            return;
+        }
+
         const purchaseData = {
             productNum: productData.productnum, // 상품 ID
-            productName: productData.productname, // 상품 이름
-            productPrice: productData.productprice, // 상품 가격
             productCount: count, // 현재 선택된 상품 개수
         };
         console.log()
